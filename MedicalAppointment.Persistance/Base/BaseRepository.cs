@@ -16,7 +16,7 @@ namespace MedicalAppointment.Persistance.Base
             medical_AppointmentContext = medicalAppointmentContext;
             this.entities = medical_AppointmentContext.Set<TEntity>();
         }
-        public async Task<OperationResult> Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<OperationResult> Exists(Expression<Func<TEntity, bool>> filter)
         {
             OperationResult result = new OperationResult();
 
@@ -28,30 +28,90 @@ namespace MedicalAppointment.Persistance.Base
             catch (Exception ex) 
             {
                 result.Success = false;
-                result.Message = $"Ocurrió el error {ex.Message} verificando que existe el registro.";
+                result.Message = $"Ocurrió un error {ex.Message} verificando que existe el registro.";
             }
 
             return result;
         }
-        public Task<OperationResult> GetAll()
+        public virtual async Task<OperationResult> GetAll()
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+            try
+            {
+                var datos = await this.entities.ToListAsync();
+                result.Data = datos;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ocurrió un error {ex.Message} obteniendo todos los datos.";
+            }
+
+            return result;
         }
-        public Task<OperationResult> GetEntityBy(int id)
+        public virtual async Task<OperationResult> GetEntityBy(int Id)
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                var entity = await this.entities.FindAsync(Id);
+                result.Data = entity;
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ocurrió un error {ex.Message} obteniendo la entidad.";
+            }
+            return result;
         }
-        public Task<OperationResult> Remove(TEntity entity)
+        public virtual async Task<OperationResult> Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                entities.Remove(entity);
+                await medical_AppointmentContext.SaveChangesAsync();
+            }
+            catch( Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ocurrió un error {ex.Message} eliminando la entidad.";
+            }
+            return result;
         }
-        public Task<OperationResult> Save(TEntity entity)
+        public virtual async Task<OperationResult> Save(TEntity entity)
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                entities.Add(entity);
+                await medical_AppointmentContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ocurrió un error {ex.Message} guardando la entidad.";
+            }
+            return result;
         }
-        public Task<OperationResult> Update(TEntity entity)
+        public virtual async Task<OperationResult> Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                entities.Update(entity);
+                await medical_AppointmentContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ocurrió un error {ex.Message} actualizando la entidad.";
+            }
+            return result;
         }
     }
 }
