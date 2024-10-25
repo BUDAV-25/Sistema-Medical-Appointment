@@ -8,7 +8,7 @@ namespace MedicalAppointment.Domain.Entities.system
     public class Roles : BaseEntity
     {
         [Key]
-        private int RoleID { get; set; }
-        private string? RoleName { get; set; }
+        public int RoleID { get; set; }
+        public string? RoleName { get; set; }
     }
 }
