@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Persistance.Repositories.appointments
 {
-    internal class AppointmentsRepository
+    public sealed class AppointmentsRepository
     {
     }
 }

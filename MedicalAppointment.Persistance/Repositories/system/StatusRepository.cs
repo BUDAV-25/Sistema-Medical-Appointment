@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Persistance.Repositories.system
 {
-    internal class StatusRepository
+    public sealed class StatusRepository
     {
     }
 }

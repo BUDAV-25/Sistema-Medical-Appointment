@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.appointments
 {
-    public interface IDoctorAvailability : IBaseRepository<DoctorAvailability>
+    public interface IDoctorAvailabilityRepository : IBaseRepository<DoctorAvailability>
     {
 
         //Define los horarios en los que un médico estará disponible para recibir citas.
