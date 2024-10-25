@@ -6,5 +6,7 @@ namespace MedicalAppointment.Persistance.Interfaces.system
 {
     public interface IStatusRepository : IBaseRepository<Status>
     {
+
+
     }
 }

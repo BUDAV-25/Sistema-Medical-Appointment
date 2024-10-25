@@ -8,10 +8,10 @@ namespace MedicalAppointment.Domain.Entities.appointments
     public class Appointments : BaseEntity
     {
         [Key]
-        private int AppointmentID { get; set; }
-        private int PatientID { get; set; }
-        private int DoctorID { get; set; }
-        private DateTime AppointmentDate { get; set; }
-        private int StatusID { get; set; }
+        public int AppointmentID { get; set; }
+        public int PatientID { get; set; }
+        public int DoctorID { get; set; }
+        public DateTime AppointmentDate { get; set; }
+        public int StatusID { get; set; }
     }
 }

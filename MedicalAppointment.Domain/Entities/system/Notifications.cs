@@ -7,9 +7,9 @@ namespace MedicalAppointment.Domain.Entities.system
     public class Notifications
     {
         [Key]
-        private int NotificationID { get; set; }
-        private int UserID {get;set;}
-        private string? Message {get;set;}
-        private DateTime? SentAt { get;set;}
+        public int NotificationID { get; set; }
+        public int UserID {get;set;}
+        public string? Message {get;set;}
+        public DateTime? SentAt { get;set;}
     }
 }

@@ -8,11 +8,11 @@ namespace MedicalAppointment.Domain.Entities.users
     public class Users : BaseEntity
     {
         [Key]
-        private int UserID { get; set; }
-        private string? FirstName { get; set; }
-        private string? LastName { get; set;}
-        private string? Email { get; set; }
-        private string? Password { get; set; }
-        private int RoleID { get; set; }
+        public int UserID { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set;}
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public int RoleID { get; set; }
     }
 }

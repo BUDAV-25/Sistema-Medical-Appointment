@@ -1,15 +1,17 @@
 ﻿using MedicalAppointment.Domain.Entities.appointments;
 using MedicalAppointment.Domain.Repositories;
+using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.appointments
 {
     public interface IDoctorAvailability : IBaseRepository<DoctorAvailability>
     {
-        void SetDoctorAvailability(int doctorId, DateTime startDateTime, DateTime endDateTime);
-        List<DateTime> GetDoctorAvailability(int doctorId, DateTime startDate, DateTime endDate);
-        void BlockDoctorTimeSlot(int doctorId, DateTime startDateTime, DateTime endDateTime);
-        bool IsDoctorAvailable(int doctorId, DateTime dateTime);
 
+        //Define los horarios en los que un médico estará disponible para recibir citas.
+        Task<OperationResult> SetDoctorAvailability(int doctorId, DateTime startDateTime, DateTime endDateTime);
+
+        //Bloquea un periodo de tiempo específico en la agenda de un médico para evitar que se hagan citas (por ejemplo, si tiene vacaciones, eventos, etc.).
+        Task<OperationResult> BlockDoctorTimeSlot(int doctorId, DateTime startDateTime, DateTime endDateTime);
 
     }
 }

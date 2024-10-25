@@ -8,15 +8,15 @@ namespace MedicalAppointment.Domain.Entities.users
     public class Patients : BaseEntity
     {
         [Key]
-        private int PatientID { get; set; }
-        private DateOnly? DateOfBirth { get; set; }
-        private char? Gender { get; set; }
-        private string? PhoneNumber { get; set; }
-        private string? Address { get; set; }
-        private string? EmergencyContactName { get; set; }
-        private string? EmergencyContactPhone { get; set; }
-        private char? BloodType { get; set; }
-        private string? Allergies { get; set; }
-        private int InsuranceProviderID { get; set; }
+        public int PatientID { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
+        public char? Gender { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? EmergencyContactName { get; set; }
+        public string? EmergencyContactPhone { get; set; }
+        public char? BloodType { get; set; }
+        public string? Allergies { get; set; }
+        public int InsuranceProviderID { get; set; }
     }
 }
