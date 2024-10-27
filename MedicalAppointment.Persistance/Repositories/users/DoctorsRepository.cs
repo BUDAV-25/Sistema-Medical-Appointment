@@ -3,7 +3,10 @@ using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.users;
+using MedicalAppointment.Persistance.Models.users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
@@ -12,10 +15,12 @@ namespace MedicalAppointment.Persistance.Repositories.users
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<DoctorsRepository> logger = logger;
-        public async override Task<OperationResult>Save(Doctors entity)
+        public async override Task<OperationResult> Save(Doctors entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
+            try
+            {
+                if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -29,25 +34,25 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
                 return result;
             }
-            if(entity.LicenseNumber == null)
+            if (string.IsNullOrEmpty(entity.LicenseNumber) || entity.LicenseNumber.Length > 50)
             {
                 result.Success = false;
-                result.Message = "La licencia del doctor es requerida";
+                result.Message = "La licencia del doctor es requerida y no puede ser mayor 50 caracteres.";
                 return result;
             }
-            if(entity.PhoneNumber == null)
+            if (string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
             {
                 result.Success = false;
-                result.Message = "Es necesario el número telefónico";
+                result.Message = "Es necesario el número telefónico y no puede ser mayor a 15 caracteres.";
                 return result;
             }
-            if(entity.YearsOfExperience <= 0)
+            if (entity.YearsOfExperience <= 0)
             {
                 result.Success = false;
                 result.Message = "Es necesario saber los años de experiencia";
                 return result;
             }
-            if(entity.Education == null)
+            if (string.IsNullOrEmpty(entity.Education))
             {
                 result.Success = false;
                 result.Message = "Es requerida la educación del doctor";
@@ -60,16 +65,14 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
                 return result;
             }
-            if (await base.Exists(doctor => doctor.DoctorID == entity.DoctorID && doctor.SpecialtyID == entity.SpecialtyID))
+            if (await base.Exists(doctor => doctor.DoctorID == entity.DoctorID))
             {
                 result.Success = false;
                 result.Message = "El doctor ya  está registrado";
                 return result;
             }
 
-            try
-            {
-                result = await base.Save(entity);
+            result = await base.Save(entity);
             }
             catch (Exception ex)
             {
@@ -80,10 +83,13 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             return result;
         }
-        public async override Task<OperationResult>Update(Doctors entity)
+        public async override Task<OperationResult> Update(Doctors entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
+
+            try
+            {
+                if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -102,40 +108,38 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
                 return result;
             }
-            if (entity.LicenseNumber == null)
-            {
-                result.Success = false;
-                result.Message = "La licencia del doctor es requerida";
-                return result;
-            }
-            if (entity.PhoneNumber == null)
-            {
-                result.Success = false;
-                result.Message = "Es necesario el número telefónico";
-                return result;
-            }
+            if (string.IsNullOrEmpty(entity.LicenseNumber) || entity.LicenseNumber.Length > 50)
+                {
+                    result.Success = false;
+                    result.Message = "La licencia del doctor es requerida y no puede ser mayor 50 caracteres.";
+                    return result;
+                }
+            if (string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
+                {
+                    result.Success = false;
+                    result.Message = "Es necesario el número telefónico y no puede ser mayor a 15 caracteres.";
+                    return result;
+                }
             if (entity.YearsOfExperience <= 0)
             {
                 result.Success = false;
                 result.Message = "Es necesario saber los años de experiencia";
                 return result;
             }
-            if (entity.Education == null)
-            {
-                result.Success = false;
-                result.Message = "Es requerida la educación del doctor";
-                return result;
+            if (string.IsNullOrEmpty(entity.Education))
+                {
+                    result.Success = false;
+                    result.Message = "Es requerida la educación del doctor";
+                    return result;
             }
-            if (entity.LicenseExpirationDate == null)
+                if (entity.LicenseExpirationDate == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la fecha en que expira la licencia";
 
                 return result;
             }
-            try
-            {
-                Doctors? doctorUpdate = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
+            Doctors? doctorUpdate = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
                 doctorUpdate.SpecialtyID = entity.SpecialtyID;
                 doctorUpdate.LicenseNumber = entity.LicenseNumber;
                 doctorUpdate.PhoneNumber = entity.PhoneNumber;
@@ -158,11 +162,13 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             return result;
         }
-        public async override Task<OperationResult>Remove(Doctors entity)
+        public async override Task<OperationResult> Remove(Doctors entity)
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
+            try
+            {
+                if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -174,9 +180,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 result.Message = "Es requerido el ID del doctor para realizar esta acción";
                 return result;
             }
-            try
-            {
-                Doctors? doctorToRemove = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
+            Doctors? doctorToRemove = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
                 doctorToRemove.IsActive = false;
                 doctorToRemove.UpdatedAt = entity.UpdatedAt;
                 doctorToRemove.UserUpdate = entity.UserUpdate;
@@ -191,24 +195,66 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             return result;
         }
-       /* public async override Task<OperationResult> GetAll(Doctors entity)
+        public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
 
             try
             {
-                result.Data = await (from doctor in medical_AppointmentContext.Doctors
+                result.Data = await (from user in medical_AppointmentContext.Users
+                                     join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
-                                     join availability in medical_AppointmentContext.DoctorAvailability on doctor.AvailabilityModeId equals availability.AvailabilityID
                                      where doctor.IsActive == true
                                      orderby doctor.CreatedAt descending
-                                     select new DoctorSpecialtyAvailabilityModel()
+                                     select new UserDoctorModel()
                                      {
-
-                                     });
+                                         FirstName = user.FirstName,
+                                         LastName = user.LastName,
+                                         SpecialtyName = specialty.SpecialtyName,
+                                         LicenseNumber = doctor.LicenseNumber,
+                                         PhoneNumber = doctor.PhoneNumber,
+                                         Email = user.Email
+                                     }).AsNoTracking()
+                                     .ToListAsync();
             }
-        }*/
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.Message = "Error al obtener los doctores";
+                logger.LogError(result.Message, e.ToString());
+            }
+            return result;
+        }
+        public async override Task<OperationResult> GetEntityBy(int Id)
+        {
+            OperationResult result = new OperationResult();
 
+            try
+            {
+                result.Data = await (from user in medical_AppointmentContext.Users
+                                     join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                     join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
+                                     where doctor.IsActive == true
+                                     && doctor.DoctorID == Id
+                                     select new UserDoctorModel()
+                                     {
+                                         FirstName = user.FirstName,
+                                         LastName = user.LastName,
+                                         SpecialtyName = specialty.SpecialtyName,
+                                         LicenseNumber = doctor.LicenseNumber,
+                                         PhoneNumber = doctor.PhoneNumber,
+                                         Email = user.Email
+                                     }).AsNoTracking()
+                                     .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error obteniendo el Doctor.";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
         public Task<OperationResult> FindDoctorSpecialty(short specialtyID)
         {
             throw new NotImplementedException();
