@@ -7,6 +7,7 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Models;
+using MedicalAppointment.Persistance.Models.appointments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
@@ -158,6 +159,35 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
         }
 
+        public async override Task<OperationResult> GetAll()
+        {
+
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
+                                     join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+                                     select new DoctorAvailabilityModel()
+
+                                     {
+                                         AvailableDate = availability.AvailableDate,
+                                         StartTime = availability.StartTime,
+                                         EndTime = availability.EndTime
+
+                                     }).AsNoTracking()
+                                     .ToListAsync();
+                                     
+            }
+            catch(Exception ex)
+            {
+                result.Success=false;
+                result.Message = "Error al obtener las disponibilidades";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+
         
         public async override Task<OperationResult> GetEntityBy(int ID)
         {
@@ -165,24 +195,23 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
             try
             {
-                result.Data = await (from availability in medicalAppointmentContext.DoctorAvailability
-                                     join doctor in medicalAppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+                result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
+                                     join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
                                      where availability.AvailabilityID == ID
                                      select new DoctorAvailabilityModel()
                                      {
-                                         AvailabilityID = availability.AvailabilityID,
-                                         DoctorID = doctor.DoctorID,
+
                                          AvailableDate = availability.AvailableDate, 
                                          StartTime = availability.StartTime,
                                          EndTime = availability.EndTime
 
                                      }).AsNoTracking()
-                           .ToListAsync();
+                                      .ToListAsync();
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "";
+                result.Message = "Error al obtener el dato espesifico";
                 logger.LogError(result.Message, ex.ToString());
             }
 

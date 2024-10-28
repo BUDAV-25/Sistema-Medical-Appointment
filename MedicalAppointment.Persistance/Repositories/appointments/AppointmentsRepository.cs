@@ -118,19 +118,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 return result;
             }
 
-            if (entity.CreatedAt <= null)
-            {
-                result.Success = false;
-                result.Message = "La fecha de creacion es requerida";
-                return result;
-            }
-
-            if (entity.UpdatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha de actualizacion es requerida";
-                return result;
-            }
             
             try
             {
@@ -198,15 +185,16 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
                 result.Success = false;
                 result.Message = "Error al remover el Appointment";
-                return result;
+                logger.LogError(result.Message, ToString());
             }
+            return result;
         }
-
+        /*
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
         }
-
+        */
 
 
 
