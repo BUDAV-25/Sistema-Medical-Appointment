@@ -6,6 +6,7 @@ using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
+using MedicalAppointment.Persistance.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
@@ -157,41 +158,37 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
         }
 
-        /*
-        public async override Task<OperationResult> GetEntityBy(int AvailabilityID)
+        
+        public async override Task<OperationResult> GetEntityBy(int ID)
         {
             OperationResult result = new OperationResult();
 
             try
             {
-                result.Data = await (from availability in medicalAppointmentContext
-                                     join doctor in medicalAppointmentContext.Doctors on availability.DoctorId equals doctor.Id
-                                     where availability.Id == AvailabilityID
+                result.Data = await (from availability in medicalAppointmentContext.DoctorAvailability
+                                     join doctor in medicalAppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+                                     where availability.AvailabilityID == ID
                                      select new DoctorAvailabilityModel()
                                      {
-                                         AvailabilityId = availability.Id,
-                                         DoctorId = doctor.Id,
-                                         DoctorName = doctor.Name,
-                                         StartDateTime = availability.StartDateTime,
-                                         EndDateTime = availability.EndDateTime,
-                                         IsAvailable = availability.IsAvailable,
-                                         CreatedAt = availability.CreatedAt,
-                                         ModifiedAt = availability.ModifiedAt
-                                     }).FirstOrDefaultAsync();
+                                         AvailabilityID = availability.AvailabilityID,
+                                         DoctorID = doctor.DoctorID,
+                                         AvailableDate = availability.AvailableDate, 
+                                         StartTime = availability.StartTime,
+                                         EndTime = availability.EndTime
 
-                result.Success = result.Data != null;
-                result.Message = result.Data != null ? "Doctor availability data retrieved successfully." : "No availability found with the specified ID.";
+                                     }).AsNoTracking()
+                           .ToListAsync();
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Error retrieving doctor availability data.";
+                result.Message = "";
                 logger.LogError(result.Message, ex.ToString());
             }
 
             return result;
         }
-        */
+        
 
 
         public Task<OperationResult> BlockDoctorTimeSlot(int doctorId, DateTime startDateTime, DateTime endDateTime)
