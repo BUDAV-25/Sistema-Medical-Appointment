@@ -3,6 +3,7 @@
 using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Domain.Repositories;
 using MedicalAppointment.Domain.Result;
+using MedicalAppointment.Persistance.Interfaces.system;
 
 namespace MedicalAppointment.Persistance.Interfaces.system
 {

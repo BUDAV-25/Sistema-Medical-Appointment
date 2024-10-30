@@ -13,6 +13,10 @@ namespace MedicalAppointment.Persistance.Interfaces.system
         //Este método permite a los médicos enviar recordatorios personalizados, usando plantillas predefinidas o mensajes específicos para cada paciente
         Task<OperationResult> ScheduleCustomReminder(int patientId, int appointmentId, int? templateId, string? customMessage, DateTime sendDateTime);
 
+        //Obtener las notificaciones para un rango de fecha
+        Task<OperationResult> GetNotificationsByDateRange(DateTime startDate, DateTime endDate);
+
+
 
     }
 }

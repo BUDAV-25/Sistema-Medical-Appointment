@@ -1,10 +1,13 @@
 ﻿
 
 using MedicalAppointment.Domain.Entities.appointments;
+using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
+using MedicalAppointment.Persistance.Models.appointments;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
@@ -189,16 +192,89 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             }
             return result;
         }
-        /*
+        
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await (from appointments in medical_AppointmentContext.Appointments
+                                     join patient in medical_AppointmentContext.Patients on appointments.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctors on appointments.DoctorID equals doctor.DoctorID
+
+                                     select new AppointmentsModel()
+
+                                     { AppointmentID = appointments.AppointmentID,
+                                         PatientID = patient.PatientID,
+                                         DoctorID = appointments.DoctorID,
+                                         AppointmentDate = appointments.AppointmentDate,
+                                         StatusID = appointments.StatusID
+
+                                     }).AsNoTracking()
+                                     .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error al obtener los datos";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
         }
-        */
+
+        public async override Task<OperationResult> GetEntityBy(int ID)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await (from appointments in medical_AppointmentContext.Appointments
+                                     join patient in medical_AppointmentContext.Patients on appointments.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctors on appointments.DoctorID equals doctor.DoctorID
+                                     where appointments.AppointmentID == ID
+                                     select new AppointmentsModel()
+
+                                     {
+                                         AppointmentID = appointments.AppointmentID,
+                                         PatientID = patient.PatientID,
+                                         DoctorID = appointments.DoctorID,
+                                         AppointmentDate = appointments.AppointmentDate,
+                                         StatusID = appointments.StatusID
+
+                                     }).AsNoTracking()
+                                     .ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error al obtener el GetEntityBy";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+
+        }
+
 
 
 
         public Task<OperationResult> ConfirmOrRejectAppointment(int appointmentId, bool isConfirmed, string? reason)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationResult> GetAppointmentsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationResult> GetAppointmentsByDoctor(int doctorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationResult> GetAppointmentsByPatient(int patientId)
         {
             throw new NotImplementedException();
         }

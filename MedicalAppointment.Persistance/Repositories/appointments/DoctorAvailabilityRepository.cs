@@ -188,7 +188,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             return result;
         }
 
-        
+
         public async override Task<OperationResult> GetEntityBy(int ID)
         {
             OperationResult result = new OperationResult();
@@ -217,15 +217,28 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
             return result;
         }
-        
 
+        public Task<OperationResult> SetDoctorAvailability(int doctorId, DateTime startDateTime, DateTime endDateTime)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<OperationResult> BlockDoctorTimeSlot(int doctorId, DateTime startDateTime, DateTime endDateTime)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult> SetDoctorAvailability(int doctorId, DateTime startDateTime, DateTime endDateTime)
+        public Task<OperationResult> GetAvailabilityByDoctor(int doctorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationResult> GetAvailabilityForDate(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationResult> UpdateAvailabilityForDoctor(int doctorId, List<DoctorAvailability> availabilities)
         {
             throw new NotImplementedException();
         }

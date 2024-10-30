@@ -11,6 +11,15 @@ namespace MedicalAppointment.Persistance.Interfaces.appointments
         //Metodo para confirmar o rechazar la cita
         Task<OperationResult> ConfirmOrRejectAppointment(int appointmentId, bool isConfirmed, string? reason);
 
+        //Obtener el Appoinment en un rango de fecha dada
+        Task<OperationResult> GetAppointmentsByDateRange(DateTime startDate, DateTime endDate);
+
+        //Obtener el Appointment por doctor
+        Task<OperationResult> GetAppointmentsByDoctor(int doctorId);
+
+        //Obtener el Appointment por paciente
+        Task<OperationResult> GetAppointmentsByPatient(int patientId);
+
     }
 }
 
