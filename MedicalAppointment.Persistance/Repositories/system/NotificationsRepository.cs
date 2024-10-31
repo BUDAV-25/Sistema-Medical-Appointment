@@ -42,7 +42,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.Message == null)
+            if (string.IsNullOrEmpty(entity.Message))
             {
                 result.Success = false;
                 result.Message = "Se requiere un mensaje";
@@ -97,14 +97,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.UserID <= 0)
-            { 
-                result.Success = false;
-                result.Message = "El UserID es requerido";
-                return result;
-            }
-
-            if (entity.Message == null)
+            if (string.IsNullOrEmpty(entity.Message))
             { 
                 result.Success = false;
                 result.Message = "Se requiere un mensaje";
@@ -123,7 +116,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 Notifications? notificationsToUpdate = await medical_AppointmentContext.Notifications.FindAsync(entity.NotificationID);
 
                 notificationsToUpdate.NotificationID = entity.NotificationID;
-                notificationsToUpdate.UserID = entity.UserID;
                 notificationsToUpdate.Message = entity.Message;
                 notificationsToUpdate.SentAt = entity.SentAt;
 
@@ -139,7 +131,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
 
         }
-
+        /*
         public async override Task<OperationResult> Remove(Notifications entity)
         {
             OperationResult result = new OperationResult();
@@ -160,14 +152,13 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             try
             {
-                Notifications? notificationsToUpdate = await medical_AppointmentContext.Notifications.FindAsync(entity.NotificationID);
+                Notifications? notificationsToRemove = await medical_AppointmentContext.Notifications.FindAsync(entity.NotificationID);
 
-                notificationsToUpdate.NotificationID = entity.NotificationID;
-                notificationsToUpdate.UserID = entity.UserID;
-                notificationsToUpdate.Message = entity.Message;
-                notificationsToUpdate.SentAt = entity.SentAt;
+                notificationsToRemove.NotificationID = entity.NotificationID;
+                notificationsToRemove.Message = entity.Message;
+                notificationsToRemove.SentAt = entity.SentAt;
 
-                result = await base.Update(notificationsToUpdate);
+                await base.Update(notificationsToRemove);
 
             }
             catch (Exception ex)
@@ -178,9 +169,11 @@ namespace MedicalAppointment.Persistance.Repositories.system
             }
 
             return result;
-
+        
             }
-        // Pendiente de revision
+        */
+
+
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
