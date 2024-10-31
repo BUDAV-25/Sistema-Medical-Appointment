@@ -6,12 +6,10 @@ using MedicalAppointment.Persistance.Interfaces.users;
 using MedicalAppointment.Persistance.Models.users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Reflection;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
-    public class PatientsRepository(MedicalAppointmentContext medicalAppointmentContext,
+    public sealed class PatientsRepository(MedicalAppointmentContext medicalAppointmentContext,
         Logger<PatientsRepository> logger) : BaseRepository<Patients>(medicalAppointmentContext), IPatientsRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
@@ -19,9 +17,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
         public async override Task<OperationResult> Save(Patients entity)
         {
             OperationResult result = new OperationResult();
-            try
-            {
-                if (entity == null)
+            if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -87,7 +83,9 @@ namespace MedicalAppointment.Persistance.Repositories.users
                     return result;
                 }
 
-            result = await base.Save(entity);
+            try
+            {
+                result = await base.Save(entity);
             }
             catch (Exception ex)
             {
@@ -100,9 +98,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
         public async override Task<OperationResult> Update(Patients entity)
         {
             OperationResult result = new OperationResult();
-            try
-            {
-                if (entity == null)
+            if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -166,8 +162,11 @@ namespace MedicalAppointment.Persistance.Repositories.users
             {
                 result.Success = false;
                 result.Message = "Es requerido el seguro del paciente";
+                return result;
             }
-            Patients? patients = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
+            try
+            {
+                Patients? patients = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
                 patients.DateOfBirth = entity.DateOfBirth;
                 patients.Gender = entity.Gender;
                 patients.PhoneNumber = entity.PhoneNumber;
@@ -193,9 +192,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
         {
             OperationResult result = new OperationResult();
 
-            try
-            {
-                if (entity == null)
+            if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
@@ -207,7 +204,9 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 result.Message = "Es requerido el ID del paciente para realizar esta acción";
                 return result;
             }
-            Patients? patientsToRemove = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
+            try
+            {
+                Patients? patientsToRemove = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
                 patientsToRemove.IsActive = false;
                 patientsToRemove.UpdatedAt = entity.UpdatedAt;
                 patientsToRemove.UserUpdate = entity.UserUpdate;
@@ -280,22 +279,107 @@ namespace MedicalAppointment.Persistance.Repositories.users
             catch (Exception ex)
             {
                 result.Success = false;
+                result.Message = "Error al obtener el paciente";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+
+        public async Task<OperationResult> FindBloodType(char bloodType)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await(from user in medical_AppointmentContext.Users
+                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
+                                    where patient.IsActive == true
+                                    && patient.BloodType == bloodType
+                                    select new UserPatientModel()
+                                    {
+                                        FirstName = user.FirstName,
+                                        LastName = user.LastName,
+                                        DateOfBirth = patient.DateOfBirth,
+                                        Gender = patient.Gender,
+                                        PhoneNumber = patient.PhoneNumber,
+                                        Email = user.Email,
+                                        Address = patient.Address,
+                                        BloodType = patient.BloodType
+                                    }).AsNoTracking()
+                                     .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
                 result.Message = "Error al obtener los pacientes";
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
         }
-        public void FindBloodType(char bloodType)
+        public async Task<OperationResult> FindInsuranceProvider(int insuranceProviderId)
         {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await(from user in medical_AppointmentContext.Users
+                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
+                                    where patient.IsActive == true
+                                    && patient.InsuranceProviderID == insuranceProviderId
+                                    select new UserPatientModel()
+                                    {
+                                        FirstName = user.FirstName,
+                                        LastName = user.LastName,
+                                        DateOfBirth = patient.DateOfBirth,
+                                        Gender = patient.Gender,
+                                        PhoneNumber = patient.PhoneNumber,
+                                        Email = user.Email,
+                                        Address = patient.Address,
+                                        BloodType = patient.BloodType
+                                    }).AsNoTracking()
+                                     .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error al obtener los pacientes";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
         }
-        public void FindGender(char gender)
+        public async Task<OperationResult> FindGender(char gender)
         {
-            throw new NotImplementedException();
-        }
-        public void FindInsuranceProvider(int insuranceProviderId)
-        {
-            throw new NotImplementedException();
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await(from user in medical_AppointmentContext.Users
+                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
+                                    where patient.IsActive == true
+                                    && patient.Gender == gender
+                                    select new UserPatientModel()
+                                    {
+                                        FirstName = user.FirstName,
+                                        LastName = user.LastName,
+                                        DateOfBirth = patient.DateOfBirth,
+                                        Gender = patient.Gender,
+                                        PhoneNumber = patient.PhoneNumber,
+                                        Email = user.Email,
+                                        Address = patient.Address,
+                                        BloodType = patient.BloodType
+                                    }).AsNoTracking()
+                                     .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error al obtener los pacientes";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
         }
     }
 }
