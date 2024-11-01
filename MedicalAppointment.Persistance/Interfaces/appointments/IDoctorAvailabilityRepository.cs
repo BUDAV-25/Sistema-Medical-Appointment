@@ -23,5 +23,6 @@ namespace MedicalAppointment.Persistance.Interfaces.appointments
         //Actualizar la disponibilidad del solo para el doctor
         Task<OperationResult> UpdateAvailabilityForDoctor(int doctorId, List<DoctorAvailability> availabilities);
 
+
     }
 }
