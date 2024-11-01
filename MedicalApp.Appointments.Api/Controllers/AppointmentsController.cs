@@ -7,16 +7,16 @@ namespace MedicalApp.Appointments.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : ControllerBase
+    public class AppointmentsController : ControllerBase
     {
         private readonly IAppointmentsRepository _appointmentsRepository;
-        public AppointmentController(IAppointmentsRepository appointmentsRepository)
+
+        public AppointmentsController (IAppointmentsRepository appointmentsRepository)
         {
             _appointmentsRepository = appointmentsRepository;
-
-
-
         }
+
+        //GetAll
         [HttpGet("GetAllAppointments")]
         public async Task<IActionResult> Get()
         {
@@ -26,31 +26,30 @@ namespace MedicalApp.Appointments.Api.Controllers
             {
                 return BadRequest(result);
             }
+
             return Ok(result);
-
-
         }
 
-        // GET api/<AppointmentController>/5
+        // GET api/<AppointmentsController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<AppointmentController>
-        [HttpPost]
+        // POST api/<AppointmentsController>
+        [HttpPost("SaveAppointments")]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<AppointmentController>/5
+        // PUT api/<AppointmentsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<AppointmentController>/5
+        // DELETE api/<AppointmentsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
