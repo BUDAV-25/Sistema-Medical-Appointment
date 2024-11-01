@@ -17,7 +17,7 @@ namespace MedicalApp.Appointments.Api.Controllers
 
 
         }
-        [HttpGet("GettAppointment")]
+        [HttpGet("GetAllAppointments")]
         public async Task<IActionResult> Get()
         {
             var result = await _appointmentsRepository.GetAll();
