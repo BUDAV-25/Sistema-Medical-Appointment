@@ -19,7 +19,6 @@ namespace MedicalAppointment.Persistance.Interfaces.appointments
 
         //Obtener el Appointment por paciente
         Task<OperationResult> GetAppointmentsByPatient(int patientId);
-
     }
 }
 

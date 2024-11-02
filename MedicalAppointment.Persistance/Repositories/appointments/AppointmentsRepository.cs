@@ -278,6 +278,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             throw new NotImplementedException();
         }
+
     }
 }
 

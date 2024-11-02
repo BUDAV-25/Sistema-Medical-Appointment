@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalAppointment.Domain.Entities.appointments;
+using MedicalAppointment.Persistance.Interfaces.appointments;
+using MedicalAppointment.Persistance.Repositories.appointments;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +11,23 @@ namespace MedicalApp.Appointments.Api.Controllers
     [ApiController]
     public class DoctorAvailabilityController : ControllerBase
     {
-        // GET: api/<DoctorAvailabilityController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IDoctorAvailabilityRepository _doctorAvailabityrepository;
+
+        public DoctorAvailabilityController(IDoctorAvailabilityRepository doctorAvailabityrepository)
         {
-            return new string[] { "value1", "value2" };
+            _doctorAvailabityrepository = doctorAvailabityrepository;
+        }
+        // GET: api/<DoctorAvailabilityController>
+        [HttpGet("GetAllDoctorAvailabity")]
+        public async Task<IActionResult> Get()
+        {
+            var result = await _doctorAvailabityrepository.GetAll();
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // GET api/<DoctorAvailabilityController>/5
@@ -23,9 +38,15 @@ namespace MedicalApp.Appointments.Api.Controllers
         }
 
         // POST api/<DoctorAvailabilityController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveDoctorAvailability")]
+        public async Task<IActionResult> Post([FromBody] DoctorAvailability doctorAvailability)
         {
+            var result = await _doctorAvailabityrepository.Save(doctorAvailability);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // PUT api/<DoctorAvailabilityController>/5
@@ -35,9 +56,15 @@ namespace MedicalApp.Appointments.Api.Controllers
         }
 
         // DELETE api/<DoctorAvailabilityController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("RemoveDoctorAvailability")]
+        public async Task<IActionResult> Delete([FromBody] DoctorAvailability doctorAvailability)
         {
+            var result = await _doctorAvailabityrepository.Remove(doctorAvailability);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
