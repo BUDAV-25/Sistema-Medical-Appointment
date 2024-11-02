@@ -7,11 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{5EF8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{865E7646-882C-4EA6-9B49-785100C987ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Domain", "MedicalAppointment.Domain\MedicalAppointment.Domain.csproj", "{54FF4E83-73F5-43E3-8776-6DC07B4F1784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Domain", "MedicalAppointment.Domain\MedicalAppointment.Domain.csproj", "{54FF4E83-73F5-43E3-8776-6DC07B4F1784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Infraestructure", "MedicalAppointment.Infraestructure\MedicalAppointment.Infraestructure.csproj", "{B19DF510-F8D1-4227-813D-319C258A28B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Infraestructure", "MedicalAppointment.Infraestructure\MedicalAppointment.Infraestructure.csproj", "{B19DF510-F8D1-4227-813D-319C258A28B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Persistance", "MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj", "{8011498E-F05B-47B1-AF58-154471566329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Persistance", "MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj", "{8011498E-F05B-47B1-AF58-154471566329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{1AEC8DA6-8921-49F1-8A0D-3C6BBE971B1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Medical.Api", "MedicalAppointment.Medical.Api\MedicalAppointment.Medical.Api.csproj", "{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +37,14 @@ Global
 		{8011498E-F05B-47B1-AF58-154471566329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8011498E-F05B-47B1-AF58-154471566329}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8011498E-F05B-47B1-AF58-154471566329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +53,8 @@ Global
 		{54FF4E83-73F5-43E3-8776-6DC07B4F1784} = {5EF850C7-975F-4E4D-98AC-04A1B299ACDB}
 		{B19DF510-F8D1-4227-813D-319C258A28B7} = {5EF850C7-975F-4E4D-98AC-04A1B299ACDB}
 		{8011498E-F05B-47B1-AF58-154471566329} = {5EF850C7-975F-4E4D-98AC-04A1B299ACDB}
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F} = {1AEC8DA6-8921-49F1-8A0D-3C6BBE971B1F}
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD} = {1AEC8DA6-8921-49F1-8A0D-3C6BBE971B1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2E915D7-DA40-46B0-8446-6A15DB8A617A}

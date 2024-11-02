@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class UsersRepository(MedicalAppointmentContext medicalAppointmentContext,
-        Logger<UsersRepository> logger) : BaseRepository<Users>(medicalAppointmentContext), IUsersRepository
+        ILogger<UsersRepository> logger) : BaseRepository<Users>(medicalAppointmentContext), IUsersRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<UsersRepository> logger = logger;
