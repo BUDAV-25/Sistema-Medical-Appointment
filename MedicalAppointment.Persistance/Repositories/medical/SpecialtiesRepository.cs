@@ -71,7 +71,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             {
                 Specialties? specialtiesToUpdate = await medicalAppointmentContext.Specialties.FindAsync(entity.SpecialtyID);
                 specialtiesToUpdate.SpecialtyName = entity.SpecialtyName;
-                specialtiesToUpdate.UserUpdate = entity.UserUpdate;
+               // specialtiesToUpdate.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(entity);
             }
@@ -103,7 +103,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
                 Specialties? specialtiesToRemove = await medicalAppointmentContext.Specialties.FindAsync(entity.SpecialtyID);
                 specialtiesToRemove.IsActive = false;
                 specialtiesToRemove.UpdatedAt = entity.UpdatedAt;
-                specialtiesToRemove.UserUpdate = entity.UserUpdate;
+               // specialtiesToRemove.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(entity);
             }

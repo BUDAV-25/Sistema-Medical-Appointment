@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.users
 {
-    public interface IUsersRepository : IBaseRepository<Users>
+    public interface IUsersRepository : IBaseRepository<User>
     {
         Task<OperationResult> FindUserRole(int roleId);
     }

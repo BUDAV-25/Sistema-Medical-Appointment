@@ -14,7 +14,7 @@ namespace MedicalAppointment.Users.Api.Controllers
             doctors_Repository = doctorsRepository;
         }
         // GET: api/<DoctorsController>
-        [HttpGet("GetAllDoctors")]
+        [HttpGet("Get All Doctor")]
         public async Task<IActionResult> Get()
         {
             var result = await doctors_Repository.GetAll();
@@ -25,10 +25,14 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         // GET api/<DoctorsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("Get Doctor by {id}")]
+        public async Task<IActionResult> GetEntityBy(int id)
         {
-            return "value";
+            var result = await doctors_Repository.GetEntityBy(id);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // POST api/<DoctorsController>
@@ -44,14 +48,24 @@ namespace MedicalAppointment.Users.Api.Controllers
 
         // PUT api/<DoctorsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Doctors doctor)
         {
+            var result = await doctors_Repository.Update(doctor);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // DELETE api/<DoctorsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Doctors doctor)
         {
+            var result = await doctors_Repository.Remove(doctor);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

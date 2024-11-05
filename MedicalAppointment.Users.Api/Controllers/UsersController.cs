@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalAppointment.Domain.Entities.users;
+using MedicalAppointment.Persistance.Interfaces.users;
+using MedicalAppointment.Persistance.Repositories.users;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,77 @@ namespace MedicalAppointment.Users.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IUsersRepository user_Repository;
+        public UsersController(IUsersRepository user)
         {
-            return new string[] { "value1", "value2" };
+            user_Repository = user;
+        }
+        // GET: api/<UsersController>
+        [HttpGet("Get All Users")]
+        public async Task<IActionResult> Get()
+        {
+            var result = await user_Repository.GetAll();
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("Get User By {id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await user_Repository.GetEntityBy(id);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        // Find By Roles api<UsersController>/5
+        [HttpGet("Find By Roles")]
+        public async Task<IActionResult> FindByRole(int roleId)
+        {
+            var result = await user_Repository.FindUserRole(roleId);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost ("Save User")]
+        public async Task<IActionResult> Post([FromBody] User user)
         {
+            var result = await user_Repository.Save(user);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("Update User By {id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
+            user.UserID = id;
+            var result = await user_Repository.Update(user);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("Remove User{id}")]
+        public async Task<IActionResult> Delete(User user)
         {
+            var result = await user_Repository.Remove(user);
+
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
+
     }
 }

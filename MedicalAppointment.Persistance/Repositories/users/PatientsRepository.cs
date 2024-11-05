@@ -176,7 +176,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 patients.BloodType = entity.BloodType;
                 patients.Allergies = entity.Allergies;
                 patients.InsuranceProviderID = entity.InsuranceProviderID;
-                patients.UserUpdate = entity.UserUpdate;
+                //patients.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(entity);
             }
@@ -209,7 +209,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 Patients? patientsToRemove = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
                 patientsToRemove.IsActive = false;
                 patientsToRemove.UpdatedAt = entity.UpdatedAt;
-                patientsToRemove.UserUpdate = entity.UserUpdate;
+               // patientsToRemove.UserUpdate = entity.UserUpdate;
 
                 await base.Update(patientsToRemove);
             }
@@ -227,7 +227,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                result.Data = await (from user in medical_AppointmentContext.Users
+                result.Data = await (from user in medical_AppointmentContext.User
                                      join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
                                      join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                      where patient.IsActive == true
@@ -258,7 +258,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                result.Data = await (from user in medical_AppointmentContext.Users
+                result.Data = await (from user in medical_AppointmentContext.User
                                      join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
                                      join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                      where patient.IsActive == true
@@ -291,7 +291,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                result.Data = await(from user in medical_AppointmentContext.Users
+                result.Data = await(from user in medical_AppointmentContext.User
                                     join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
@@ -323,7 +323,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                result.Data = await(from user in medical_AppointmentContext.Users
+                result.Data = await(from user in medical_AppointmentContext.User
                                     join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
@@ -355,7 +355,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                result.Data = await(from user in medical_AppointmentContext.Users
+                result.Data = await(from user in medical_AppointmentContext.User
                                     join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
