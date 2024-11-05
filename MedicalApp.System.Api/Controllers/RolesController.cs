@@ -17,7 +17,7 @@ namespace MedicalApp.System.Api.Controllers
             _rolesRepository = rolesRepository;
         }
 
-        // GET: api/<RolesController>
+        // GetAll Roles
         [HttpGet("GetAllRoles")]
         public async Task<IActionResult> Get()
         {
@@ -30,14 +30,20 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        // GET api/<RolesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GetEntityBy Roles
+        [HttpGet("GetRolesBy{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _rolesRepository.GetEntityBy(id);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<RolesController>
+        // Save Roles
         [HttpPost("SaveRoles")]
         public async Task<IActionResult> Post([FromBody] Roles roles)
         {
@@ -49,16 +55,28 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        // PUT api/<RolesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Update Roles
+        [HttpPut("UpdateRoles{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Roles roles)
         {
+            var result = await _rolesRepository.Update(roles);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<RolesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // Delete Roles
+        [HttpDelete("RemoveRoles")]
+        public async Task<IActionResult> Delete([FromBody] Roles roles)
         {
+            var result = await _rolesRepository.Remove(roles);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

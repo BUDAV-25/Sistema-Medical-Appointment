@@ -19,28 +19,34 @@ namespace MedicalApp.System.Api.Controllers
         }
 
 
-        // GET: api/<StatusController>
+        // GetAll Status
         [HttpGet("GetAllStatus")]
         public async Task<IActionResult> Get()
         {
             var result = await _statusRepository.GetAll();
 
-            if (!result.Success) 
+            if (!result.Success)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
 
-        // GET api/<StatusController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GetEntityBy Status
+        [HttpGet("GetRolesBy{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _statusRepository.GetEntityBy(id);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<RolesController>
-        [HttpPost("SaveRoles")]
+        // Save Status
+        [HttpPost("SaveStatus")]
         public async Task<IActionResult> Post([FromBody] Status status)
         {
             var result = await _statusRepository.Save(status);
@@ -51,16 +57,30 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        // PUT api/<StatusController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Update Status
+        [HttpPut("UpdateStatus{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Status status)
         {
+            var result = await _statusRepository.Update(status);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<StatusController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // Delete Status
+        [HttpDelete("RemoveStatus")]
+        public async Task<IActionResult> Delete([FromBody] Status status)
         {
+            var result = await _statusRepository.Remove(status);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

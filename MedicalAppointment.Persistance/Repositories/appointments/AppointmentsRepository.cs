@@ -16,12 +16,12 @@ using System.Runtime.CompilerServices;
 namespace MedicalAppointment.Persistance.Repositories.appointments
 {
     public sealed class AppointmentsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<AppointmentsRepository> logger) : BaseRepository<Appointments>(medicalAppointmentContext), IAppointmentsRepository
+        ILogger<AppointmentsRepository> logger) : BaseRepository<Appointment>(medicalAppointmentContext), IAppointmentsRepository
     {
 
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<AppointmentsRepository> logger = logger;
-        public async override Task<OperationResult> Save(Appointments entity)
+        public async override Task<OperationResult> Save(Appointment entity)
         {
             OperationResult result = new OperationResult();
             if (entity == null)
@@ -74,7 +74,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             return result;
         }
 
-        public async override Task<OperationResult> Update(Appointments entity)
+        public async override Task<OperationResult> Update(Appointment entity)
         {
             OperationResult result = new OperationResult();
 
@@ -124,7 +124,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             
             try
             {
-                Appointments? appointmentsToUpdate = await medical_AppointmentContext.Appointments.FindAsync(entity.AppointmentID);
+                Appointment? appointmentsToUpdate = await medical_AppointmentContext.Appointments.FindAsync(entity.AppointmentID);
 
                 appointmentsToUpdate.AppointmentID = entity.AppointmentID;
                 appointmentsToUpdate.PatientID = entity.PatientID;
@@ -150,7 +150,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
     }
 
-        public async override Task<OperationResult> Remove(Appointments entity)
+        public async override Task<OperationResult> Remove(Appointment entity)
         {
             OperationResult result = new OperationResult();
 
@@ -170,7 +170,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
             try
             {
-                Appointments? appointmentsToRemove = await medical_AppointmentContext.Appointments.FindAsync(entity.AppointmentID);
+                Appointment? appointmentsToRemove = await medical_AppointmentContext.Appointments.FindAsync(entity.AppointmentID);
 
                 appointmentsToRemove.AppointmentID = entity.AppointmentID;
                 appointmentsToRemove.PatientID = entity.PatientID;

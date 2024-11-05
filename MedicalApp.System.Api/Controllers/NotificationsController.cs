@@ -17,8 +17,8 @@ namespace MedicalApp.System.Api.Controllers
             _notificationsRepository = notificationRepository;
         }
 
-        // GET: api/<NotificationsController>
-        [HttpGet("GetAllNotification")]
+        // GetAll Notifications
+        [HttpGet("GetAllNotifications")]
         public async Task<IActionResult> Get()
         {
             var result = await _notificationsRepository.GetAll();
@@ -30,14 +30,20 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        // GET api/<NotificationsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // Get Entity By Notifications
+        [HttpGet("GetNotificationsBy{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _notificationsRepository.GetEntityBy(id);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<NotificationsController>
+        // Save Notifications
         [HttpPost("SaveNotifications")]
         public async Task<IActionResult> Post([FromBody] Notifications notifications)
         {
@@ -49,16 +55,30 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        // PUT api/<NotificationsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Update Notifications
+        [HttpPut("UpdateNotifications{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Notifications notifications)
         {
+            var result = await _notificationsRepository.Update(notifications);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<NotificationsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // Remove Notifications
+        [HttpDelete("RemoveNotifications")]
+        public async Task<IActionResult> Delete([FromBody] Notifications notifications)
         {
+            var result = await _notificationsRepository.Remove(notifications);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

@@ -28,13 +28,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.NotificationID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El ID es requerido";
-                return result;
-            }
-
             if (entity.UserID <= 0) 
             {
                 result.Success = false;

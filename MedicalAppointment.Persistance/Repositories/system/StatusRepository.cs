@@ -28,23 +28,20 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.StatusID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el StatusID";
-                return result;
-            }
 
-            if (string.IsNullOrEmpty(entity.StatusName) || entity.StatusName.Length == 50)
+
+            if (string.IsNullOrEmpty(entity.StatusName))
             {
                 result.Success = false;
-                result.Message = "El Status requiere un nombre no mayor a 50 caracteres";
+                result.Message = "El Status requiere no puedes estar vacio ni null";
                 return result;
             }
 
             try
             {
-                result = await base.Save(entity);
+                await base.Save(entity);
+                result.Data = entity;
+                result.Message = "Status saved succefully!";
             }
             catch (Exception ex)
             {
@@ -151,7 +148,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          StatusID = status.StatusID,
                                          StatusName = status.StatusName
 
-                                     }).AsNoTracking()
+                                     })
                                         .ToListAsync();
 
             }

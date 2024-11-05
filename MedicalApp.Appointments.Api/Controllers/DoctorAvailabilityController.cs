@@ -17,7 +17,7 @@ namespace MedicalApp.Appointments.Api.Controllers
         {
             _doctorAvailabityrepository = doctorAvailabityrepository;
         }
-        // GET: api/<DoctorAvailabilityController>
+        // GetAll DoctorAvailability
         [HttpGet("GetAllDoctorAvailabity")]
         public async Task<IActionResult> Get()
         {
@@ -30,14 +30,20 @@ namespace MedicalApp.Appointments.Api.Controllers
             return Ok(result);
         }
 
-        // GET api/<DoctorAvailabilityController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GetEntityBy DoctorAvailability
+        [HttpGet("GetEntityBy{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _doctorAvailabityrepository.GetEntityBy(id);
+
+            if (!result.Success) 
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<DoctorAvailabilityController>
+        // Save DoctorAvailability
         [HttpPost("SaveDoctorAvailability")]
         public async Task<IActionResult> Post([FromBody] DoctorAvailability doctorAvailability)
         {
@@ -49,13 +55,20 @@ namespace MedicalApp.Appointments.Api.Controllers
             return Ok(result);
         }
 
-        // PUT api/<DoctorAvailabilityController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Update DoctorAvailability
+        [HttpPut("UpdateDoctorAvailability")]
+        public async Task<IActionResult> Put(int id, [FromBody] DoctorAvailability doctorAvailability)
         {
+            var result = await _doctorAvailabityrepository.Update(doctorAvailability);
+
+            if (!result.Success) 
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<DoctorAvailabilityController>/5
+        // Remove DoctorAvailability
         [HttpDelete("RemoveDoctorAvailability")]
         public async Task<IActionResult> Delete([FromBody] DoctorAvailability doctorAvailability)
         {

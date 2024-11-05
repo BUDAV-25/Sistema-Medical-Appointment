@@ -6,7 +6,7 @@ using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.appointments
 {
-    public interface IAppointmentsRepository : IBaseRepository <Appointments>
+    public interface IAppointmentsRepository : IBaseRepository <Appointment>
     {
         //Metodo para confirmar o rechazar la cita
         Task<OperationResult> ConfirmOrRejectAppointment(int appointmentId, bool isConfirmed, string? reason);

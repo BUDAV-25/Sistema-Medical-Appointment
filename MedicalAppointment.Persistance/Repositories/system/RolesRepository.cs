@@ -29,13 +29,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.RoleID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el RoleID";
-                return result;
-            }
-
             if (string.IsNullOrEmpty(entity.RoleName) || entity.RoleName.Length > 50)
             {
                 result.Success = false;
@@ -67,7 +60,9 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             try
             {
-                result = await base.Save(entity);
+                await base.Save(entity);
+                result.Data = entity;
+                result.Message = "role Saved Suceffully! ";
             }
             catch (Exception ex)
             {
@@ -80,7 +75,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
         }
 
 
-
         public async override Task<OperationResult> Update(Roles entity)
         {
 
@@ -90,13 +84,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
-                return result;
-            }
-
-            if (entity.RoleID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el RoleID";
                 return result;
             }
 
@@ -126,7 +113,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 Roles? rolesToUpdate = await medical_AppointmentContext.Roles.FindAsync(entity.RoleID);
 
-                rolesToUpdate.RoleID = entity.RoleID;
                 rolesToUpdate.RoleName = entity.RoleName;
                 rolesToUpdate.UpdatedAt = entity.UpdatedAt;
                 rolesToUpdate.IsActive = entity.IsActive;
