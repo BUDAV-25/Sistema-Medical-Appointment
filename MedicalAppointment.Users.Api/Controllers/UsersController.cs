@@ -1,9 +1,6 @@
 ﻿using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Persistance.Interfaces.users;
-using MedicalAppointment.Persistance.Repositories.users;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MedicalAppointment.Users.Api.Controllers
 {
