@@ -8,6 +8,6 @@ namespace MedicalAppointment.Domain.Entities.system
     {
         [Key]
         public int StatusID { get; set; }
-        public string StatusName { get; set; }
+        public string? StatusName { get; set; }
     }
 }
