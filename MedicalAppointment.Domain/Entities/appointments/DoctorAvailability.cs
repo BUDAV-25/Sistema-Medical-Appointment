@@ -9,6 +9,6 @@ namespace MedicalAppointment.Domain.Entities.appointments
         private int DoctorID { get; set; }
         private DateOnly AvailableDate { get; set; }
         private TimeOnly StartTime { get; set; }
-        private TimeOnly EndTime { get; set;}
+        private TimeOnly EndTime { get; set; }
     }
 }
