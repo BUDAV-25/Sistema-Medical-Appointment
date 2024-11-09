@@ -172,7 +172,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
         }
 
-        // Pendiente de revision
+        
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();

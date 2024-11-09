@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Configuration\Roles\" />
-    <Folder Include="Response\Configuration\Roles\" />
+    <Folder Include="Dtos\appointments\Appointments\" />
+    <Folder Include="Response\appointments\Appointments\" />
   </ItemGroup>
 
   <ItemGroup>

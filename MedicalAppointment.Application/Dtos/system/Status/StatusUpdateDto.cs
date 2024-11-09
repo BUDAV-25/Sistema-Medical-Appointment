@@ -1,6 +1,4 @@
-﻿
-
-namespace MedicalAppointment.Application.Dtos.Configuration.Status
+﻿namespace MedicalAppointment.Application.Dtos.system.Status
 {
     public class StatusUpdateDto : StatusBaseDto
     {

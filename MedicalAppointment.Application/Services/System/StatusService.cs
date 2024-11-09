@@ -1,14 +1,14 @@
 ﻿
 
 using MedicalAppointment.Application.Base;
-using MedicalAppointment.Application.Dtos.Configuration.Status;
-using MedicalAppointment.Application.Response.Configuration.Status;
 using MedicalAppointment.Persistance.Interfaces.system;
 using Microsoft.Extensions.Logging;
 using MedicalAppointment.Domain.Entities.system;
-using MedicalAppointment.Application.Contracts;
+using MedicalAppointment.Application.Response.system.Status;
+using MedicalAppointment.Application.Dtos.system.Status;
+using MedicalAppointment.Application.Contracts.system;
 
-namespace MedicalAppointment.Application.Services.Configuration
+namespace MedicalAppointment.Application.Services.System
 {
     public class StatusService : IStatusService
     {
@@ -21,8 +21,8 @@ namespace MedicalAppointment.Application.Services.Configuration
                 throw new ArgumentNullException(nameof(statusRepository));
             }
 
-            this._statusRepository = statusRepository;
-            this._logger = logger;
+            _statusRepository = statusRepository;
+            _logger = logger;
         }
         public async Task<StatusResponse> GetAll()
         {
@@ -44,7 +44,7 @@ namespace MedicalAppointment.Application.Services.Configuration
                 statusResponse.IsSuccess = result.Success;
                 statusResponse.Model = statuses;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 statusResponse.IsSuccess = false;
                 statusResponse.Messages = "Error obteniendo los status";
@@ -61,12 +61,12 @@ namespace MedicalAppointment.Application.Services.Configuration
             try
             {
                 var result = await _statusRepository.GetEntityBy(id);
-                
+
                 Status status = (Status)result.Data;
 
                 StatusGetDto statusGetDto = new StatusGetDto()
                 {
-                    StatusID = status.StatusID, 
+                    StatusID = status.StatusID,
                     StatusName = status.StatusName
                 };
                 statusResponse.IsSuccess = result.Success;
@@ -90,20 +90,18 @@ namespace MedicalAppointment.Application.Services.Configuration
 
             try
             {
-                Status status = new Status();  
+                Status status = new Status();
                 status.StatusID = dto.StatusID;
                 status.StatusName = dto.StatusName;
 
                 var result = await _statusRepository.Save(status);
-                statusResponse.IsSuccess = false;
-                statusResponse.Messages = "Error guardando el Status";
-                
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                statusResponse.IsSuccess = false;
+                statusResponse.Messages = "Error guardando el Status";
+                _logger.LogError (statusResponse.Messages, ex.ToString());
             }
 
             return statusResponse;
@@ -131,7 +129,7 @@ namespace MedicalAppointment.Application.Services.Configuration
                 statusResponse.IsSuccess = false;
                 statusResponse.Messages = "Error actualizando el Status";
                 _logger.LogError(statusResponse.Messages, ex.ToString());
-                
+
             }
             return statusResponse;
         }

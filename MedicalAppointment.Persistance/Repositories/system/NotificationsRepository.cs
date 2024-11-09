@@ -228,10 +228,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
         }
 
 
-
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public Task<OperationResult> GetNotificationsByDateRange(DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();

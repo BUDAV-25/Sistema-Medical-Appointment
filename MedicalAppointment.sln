@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Persista
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{501879A5-3E6E-410A-A212-0A678F667DAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalApp.System.Api", "MedicalApp.System.Api\MedicalApp.System.Api.csproj", "{36B79349-9A66-46C2-BB3E-6431469C43C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.System.Api", "MedicalApp.System.Api\MedicalAppointment.System.Api.csproj", "{36B79349-9A66-46C2-BB3E-6431469C43C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalApp.Appointments.Api", "MedicalApp.Appointments.Api\MedicalApp.Appointments.Api.csproj", "{5817D6DC-5DAA-4E8B-B3DF-B3DE6B968D30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointments.Api", "MedicalApp.Appointments.Api\MedicalAppointment.Appointments.Api.csproj", "{5817D6DC-5DAA-4E8B-B3DF-B3DE6B968D30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{493673A9-D673-43C0-A0EA-CEA6266F84D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{493673A9-D673-43C0-A0EA-CEA6266F84D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

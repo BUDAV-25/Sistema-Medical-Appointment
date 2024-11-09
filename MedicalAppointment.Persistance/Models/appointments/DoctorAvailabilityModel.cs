@@ -5,9 +5,9 @@ namespace MedicalAppointment.Persistance.Models
     public sealed class DoctorAvailabilityModel
     {
 
-        public DateOnly AvailableDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public DateTime AvailableDate { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
 
     }
 }
