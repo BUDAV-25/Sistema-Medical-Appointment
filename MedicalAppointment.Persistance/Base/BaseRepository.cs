@@ -16,22 +16,9 @@ namespace MedicalAppointment.Persistance.Base
             medical_AppointmentContext = medicalAppointmentContext;
             this.entities = medical_AppointmentContext.Set<TEntity>();
         }
-        public virtual async Task<OperationResult> Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
         {
-            OperationResult result = new OperationResult();
-
-            try
-            {
-                var exists = await this.entities.AnyAsync(filter);
-                result.Data = exists;
-            }
-            catch (Exception ex) 
-            {
-                result.Success = false;
-                result.Message = $"Ocurrió un error {ex.Message} verificando que existe el registro.";
-            }
-
-            return result;
+            return await this.entities.AnyAsync(filter);
         }
         public virtual async Task<OperationResult> GetAll()
         {

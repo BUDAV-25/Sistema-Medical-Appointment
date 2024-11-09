@@ -8,8 +8,8 @@ namespace MedicalAppointment.Domain.Entities.Insurance
     public class NetworkType : BaseEntity
     {
         [Key]
-        private int NetworkTypeId { get; set; }
-        private string? Name { get; set; }
-        private string? Description { get; set; }
+        public int NetworkTypeId { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
     }
 }

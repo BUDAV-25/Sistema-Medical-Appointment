@@ -8,7 +8,7 @@ namespace MedicalAppointment.Domain.Entities.medical
     public class Specialties : BaseEntity
     {
         [Key]
-        private short SpecialtyID { get; set; }
-        private string? SpecialtyName { get; set; }
+        public short SpecialtyID { get; set; }
+        public string? SpecialtyName { get; set; }
     }
 }
