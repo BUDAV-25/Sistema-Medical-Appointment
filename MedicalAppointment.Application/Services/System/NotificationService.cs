@@ -14,17 +14,19 @@ namespace MedicalAppointment.Application.Services.System
     public class NotificationService : INotificationService
     {
         private readonly INotificationsRepository _notificationsRepository;
-        private ILogger _logger;
+        private ILogger <NotificationService> _logger;
+        private readonly INotificationService _notificationService;
 
-        public NotificationService(INotificationsRepository notificationsRepository, ILogger logger)
+        public NotificationService(INotificationsRepository notificationsRepository, ILogger<NotificationService> logger, INotificationService notificationService)
         {
             if (notificationsRepository is null)
             {
                 throw new ArgumentNullException(nameof(notificationsRepository));
             }
 
-            this._notificationsRepository = notificationsRepository;
-            this._logger = logger;
+            _notificationsRepository = notificationsRepository;
+            _logger = logger;
+            _notificationService = notificationService;
         }
 
         public async Task<NotificationResponse> GetAll()
@@ -110,9 +112,33 @@ namespace MedicalAppointment.Application.Services.System
             return notificationResponse;
         }
 
-        public Task<NotificationResponse> UpdateAsync(NotificationUpdateDto dto)
+        public async Task<NotificationResponse> UpdateAsync(NotificationUpdateDto dto)
         {
-            throw new NotImplementedException();
+            NotificationResponse notificationResponse = new NotificationResponse();
+
+            try
+            {
+                var result = await _notificationsRepository.GetEntityBy(dto.NotificationID);
+
+
+                Notifications notifications = (Notifications)result.Data;
+                NotificationGetDto notificationGetDto = new NotificationGetDto()
+                {
+                    Message = notifications.Message,
+                    SentAt = (DateTime)notifications.SentAt
+                };
+                notificationResponse.IsSuccess = result.Success;
+                notificationResponse.Model = notificationGetDto;
+
+            }
+            catch (Exception ex)
+            {
+                notificationResponse.IsSuccess = false;
+                notificationResponse.Messages = "Error obteniendo la notificacion by ID";
+                _logger.LogError(notificationResponse.Messages, ex.ToString());
+            }
+            return notificationResponse;
         }
+           
     }
 }

@@ -13,8 +13,10 @@ namespace MedicalAppointment.Application.Services.System
     public class StatusService : IStatusService
     {
         private readonly IStatusRepository _statusRepository;
-        private readonly ILogger _logger;
-        public StatusService(IStatusRepository statusRepository, ILogger<StatusService> logger)
+        private readonly ILogger<StatusService> _logger;
+        private readonly IStatusService _statusService;
+        
+        public StatusService(IStatusRepository statusRepository, ILogger<StatusService> logger, IStatusService statusService)
         {
             if (statusRepository is null)
             {
@@ -23,6 +25,7 @@ namespace MedicalAppointment.Application.Services.System
 
             _statusRepository = statusRepository;
             _logger = logger;
+            _statusService = statusService;
         }
         public async Task<StatusResponse> GetAll()
         {
@@ -117,7 +120,6 @@ namespace MedicalAppointment.Application.Services.System
 
                 Status statusToUpdate = (Status)resultEntity.Data;
 
-                statusToUpdate.StatusID = dto.StatusID;
                 statusToUpdate.StatusName = dto.StatusName;
 
                 var result = await _statusRepository.Update(statusToUpdate);

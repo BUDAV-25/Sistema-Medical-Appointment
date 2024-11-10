@@ -1,31 +1,35 @@
 ﻿
 
 using MedicalAppointment.Application.Base;
+using MedicalAppointment.Application.Contracts.system;
 using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Application.Response.system.Roles;
+using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Persistance.Interfaces.system;
+using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Application.Services.System
 {
-    public class RolesService : IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>
+    public class RolesService : IRolesService
     {
         private readonly IRolesRepository _rolesRepository;
-        private ILogger _logger;
-        public RolesService(IRolesRepository rolesRepository, ILogger logger)
+        private readonly ILogger<RolesService> _logger;
+        private readonly IRolesService _rolesService;
+
+        public RolesService(IRolesRepository rolesRepository, ILogger<RolesService> logger, IRolesService rolesService)
         {
             if (rolesRepository is null)
             {
                 throw new ArgumentNullException(nameof(rolesRepository));
-                
             }
 
-            this._rolesRepository= rolesRepository;
-            this._logger = logger;
+            _rolesRepository = rolesRepository;
+            _logger = logger;
+            _rolesService = rolesService;
         }
-
-        async Task<RolesResponse> IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>.GetAll()
+        public async Task<RolesResponse> GetAll()
         {
             RolesResponse rolesResponse = new RolesResponse();
 
@@ -50,10 +54,9 @@ namespace MedicalAppointment.Application.Services.System
                 _logger.LogError(rolesResponse.Messages, ex.ToString());
             }
             return rolesResponse;
-
         }
 
-        async Task<RolesResponse> IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>.GetById(int id)
+        public async Task<RolesResponse> GetById(int id)
         {
             RolesResponse rolesResponse = new RolesResponse();
 
@@ -74,14 +77,14 @@ namespace MedicalAppointment.Application.Services.System
             }
             catch (Exception ex)
             {
-                rolesResponse.IsSuccess= false;
+                rolesResponse.IsSuccess = false;
                 rolesResponse.Messages = "Error obteniendo el RoleID";
                 _logger.LogError(rolesResponse.Messages, ex.ToString());
             }
             return rolesResponse;
         }
 
-        async Task<RolesResponse> IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>.SaveAsync(RolesSaveDto dto)
+        public async Task<RolesResponse> SaveAsync(RolesSaveDto dto)
         {
             RolesResponse rolesResponse = new RolesResponse();
 
@@ -107,7 +110,7 @@ namespace MedicalAppointment.Application.Services.System
             return rolesResponse;
         }
 
-        async Task<RolesResponse> IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>.UpdateAsync(RolesUpdateDto dto)
+        public async Task<RolesResponse> UpdateAsync(RolesUpdateDto dto)
         {
             RolesResponse rolesResponse = new RolesResponse();
 
@@ -117,7 +120,6 @@ namespace MedicalAppointment.Application.Services.System
 
                 Roles rolesToUpdate = (Roles)resultEntity.Data;
 
-                rolesToUpdate.RoleID = dto.RoleID;
                 rolesToUpdate.RoleName = dto.RoleName;
                 rolesToUpdate.UpdatedAt = dto.UpdateAt;
                 rolesToUpdate.IsActive = dto.IsActive;
@@ -133,3 +135,6 @@ namespace MedicalAppointment.Application.Services.System
         }
     }
 }
+
+
+
