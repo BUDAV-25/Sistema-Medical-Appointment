@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.appointments
 {
-    [Table("Appointments", Schema = "appointments")]
-    public class Appointments : BaseEntity
+    [Table("appointments", Schema = "Appointments")]
+    public class Appointment : BaseEntity
     {
         [Key]
         public int AppointmentID { get; set; }

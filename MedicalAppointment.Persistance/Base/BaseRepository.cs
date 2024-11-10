@@ -20,6 +20,7 @@ namespace MedicalAppointment.Persistance.Base
         {
             return await this.entities.AnyAsync(filter);
         }
+
         public virtual async Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
