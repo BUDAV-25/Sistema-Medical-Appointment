@@ -20,13 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{493673A9-D673-43C0-A0EA-CEA6266F84D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.System.Api", "MedicalApp.System.Api\MedicalAppointment.System.Api.csproj", "{36B79349-9A66-46C2-BB3E-6431469C43C5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointments.Api", "MedicalApp.Appointments.Api\MedicalAppointment.Appointments.Api.csproj", "{5817D6DC-5DAA-4E8B-B3DF-B3DE6B968D30}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{493673A9-D673-43C0-A0EA-CEA6266F84D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Medical.Api", "MedicalAppointment.Medical.Api\MedicalAppointment.Medical.Api.csproj", "{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}"
 EndProject
