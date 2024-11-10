@@ -1,15 +1,9 @@
-using MedicalAppointment.Domain.Base;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MedicalAppointment.Domain.Entities.users
+﻿namespace MedicalAppointment.Persistance.Models.users
 {
-    [Table("Patients", Schema = "users")]
-    public class Patients : BaseEntity
+    public class PatientsModel
     {
-        [Key]
         public int PatientID { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public char? Gender { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
@@ -18,5 +12,6 @@ namespace MedicalAppointment.Domain.Entities.users
         public char? BloodType { get; set; }
         public string? Allergies { get; set; }
         public int InsuranceProviderID { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
