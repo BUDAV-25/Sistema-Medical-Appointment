@@ -1,4 +1,4 @@
-﻿using MedicalAppointment.Domain.Base;
+using MedicalAppointment.Domain.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,7 +23,7 @@ namespace MedicalAppointment.Domain.Entities.Insurance
         public bool IsPreferred { get; set; }
         public int NetworkTypeId { get; set; }
         public string? CustomerSupportContact {  get; set; }
-        public  string? AcceptedRegions { get; set; }
+        public string? AcceptedRegions { get; set; }
         public decimal MaxCoverageAmount { get; set; }
     }
 }

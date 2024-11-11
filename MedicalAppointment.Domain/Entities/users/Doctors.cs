@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using MedicalAppointment.Domain.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.users
 {
     [Table("Doctors", Schema = "users")]
-    public class Doctors
+    public class Doctors : BaseEntity
     {
         [Key]
         public int DoctorID { get; set; }
@@ -17,6 +18,6 @@ namespace MedicalAppointment.Domain.Entities.users
         public decimal? ConsultationFee { get; set; }
         public string? ClinicAddress { get; set; }
         public short AvailabilityModeId { get; set; }
-        public DateOnly? LicenseExpirationDate { get; set; }
+        public DateTime? LicenseExpirationDate { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MedicalAppointment.Domain.Base
+namespace MedicalAppointment.Domain.Base
 {
     public abstract class BaseEntity
     {
