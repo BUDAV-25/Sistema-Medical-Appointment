@@ -92,7 +92,6 @@ namespace MedicalAppointment.Application.Services.System
             {
                 Roles roles = new Roles();
 
-                roles.RoleID = dto.RoleID;
                 roles.RoleName = dto.RoleName;
                 roles.CreatedAt = dto.CreateTime;
                 roles.IsActive = dto.IsActive;

@@ -96,7 +96,6 @@ namespace MedicalAppointment.Application.Services.Appointment
             try
             {
                 DoctorAvailability doctorAvailability = new DoctorAvailability();
-                doctorAvailability.AvailabilityID = dto.AvailabilityID;
                 doctorAvailability.DoctorID = dto.DoctorID;
                 doctorAvailability.AvailableDate = (DateTime)dto.AvailableDate;
                 doctorAvailability.StartTime = (DateTime)dto.StarTime;

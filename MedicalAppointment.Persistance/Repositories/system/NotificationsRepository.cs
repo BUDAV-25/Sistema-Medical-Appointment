@@ -174,7 +174,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
             try
             {
                 result.Data = await (from system in medical_AppointmentContext.Notifications
-                                     join user in medical_AppointmentContext.Users on system.UserID equals user.UserID
+                                     join user in medical_AppointmentContext.User on system.UserID equals user.UserID
 
                                      select new NotificationsModel()
                                      {
@@ -204,7 +204,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
             try
             {
                 result.Data = await (from system in medical_AppointmentContext.Notifications
-                                     join user in medical_AppointmentContext.Users on system.UserID equals user.UserID
+                                     join user in medical_AppointmentContext.User on system.UserID equals user.UserID
                                      where system.NotificationID == ID
 
                                      select new NotificationsModel()

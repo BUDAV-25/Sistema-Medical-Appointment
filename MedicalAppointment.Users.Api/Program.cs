@@ -13,7 +13,7 @@ namespace MedicalAppointment.Users.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalAppDB")));
+            builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
             // -----Registro de cada una de las dependencias-----
             builder.Services.AddScoped<IDoctorsRepository, DoctorsRepository>();

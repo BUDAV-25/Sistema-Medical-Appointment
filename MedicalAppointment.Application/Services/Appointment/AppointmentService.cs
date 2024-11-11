@@ -113,7 +113,6 @@ namespace MedicalAppointment.Application.Services.Configuration
             {
                 EntityAppointment appointment = new EntityAppointment();
 
-                appointment.AppointmentID = dto.AppointmentID;
                 appointment.PatientID = dto.PatientID;
                 appointment.DoctorID = dto.DoctorID;
                 appointment.AppointmentDate = (DateTime)dto.AppointmentDate;

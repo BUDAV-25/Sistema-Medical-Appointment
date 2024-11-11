@@ -94,7 +94,6 @@ namespace MedicalAppointment.Application.Services.System
             try
             {
                 Status status = new Status();
-                status.StatusID = dto.StatusID;
                 status.StatusName = dto.StatusName;
 
                 var result = await _statusRepository.Save(status);

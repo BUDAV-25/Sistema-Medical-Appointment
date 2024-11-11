@@ -96,7 +96,6 @@ namespace MedicalAppointment.Application.Services.System
             try
             {
                 Notifications notifications = new Notifications();
-                notifications.NotificationID = dto.NotificationID;
                 notifications.UserID = dto.UserID;
                 notifications.Message = dto.Message;
                 notifications.SentAt = dto.SentAt;

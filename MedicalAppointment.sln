@@ -1,3 +1,4 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
@@ -20,9 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{493673A9-D673-43C0-A0EA-CEA6266F84D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Medical.Api", "MedicalAppointment.Medical.Api\MedicalAppointment.Medical.Api.csproj", "{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Medical.Api", "MedicalAppointment.Medical.Api\MedicalAppointment.Medical.Api.csproj", "{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.IOC", "MedicalAppointment.IOC\MedicalAppointment.IOC.csproj", "{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +65,10 @@ Global
 		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,8 +80,9 @@ Global
 		{36B79349-9A66-46C2-BB3E-6431469C43C5} = {501879A5-3E6E-410A-A212-0A678F667DAB}
 		{5817D6DC-5DAA-4E8B-B3DF-B3DE6B968D30} = {501879A5-3E6E-410A-A212-0A678F667DAB}
 		{493673A9-D673-43C0-A0EA-CEA6266F84D3} = {5EF850C7-975F-4E4D-98AC-04A1B299ACDB}
-		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F} = {1AEC8DA6-8921-49F1-8A0D-3C6BBE971B1F}
-		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD} = {1AEC8DA6-8921-49F1-8A0D-3C6BBE971B1F}
+		{FCEBF13C-DF0E-4A79-BCFD-5D8533355A8F} = {501879A5-3E6E-410A-A212-0A678F667DAB}
+		{0A01A936-01DA-4EB2-A71A-AFBA76A6E7DD} = {501879A5-3E6E-410A-A212-0A678F667DAB}
+		{64C97B2F-2CD8-4801-8A5D-689ADA9C3FEB} = {5EF850C7-975F-4E4D-98AC-04A1B299ACDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2E915D7-DA40-46B0-8446-6A15DB8A617A}
