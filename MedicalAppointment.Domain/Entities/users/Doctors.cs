@@ -7,16 +7,16 @@ namespace MedicalAppointment.Domain.Entities.users
     public class Doctors
     {
         [Key]
-        private int DoctorID { get; set; }
-        private short SpecialtyID { get; set; }
-        private string? LicenseNumber { get; set; }
-        private string? PhoneNumber { get; set; }
-        private int YearsOfExperience { get; set; }
-        private string? Education { get; set; }
-        private string? Bio {  get; set; }
-        private decimal? ConsultationFee { get; set; }
-        private string? ClinicAddress { get; set; }
-        private short AvailabilityModeId { get; set; }
-        private DateOnly? LicenseExpirationDate { get; set; }
+        public int DoctorID { get; set; }
+        public short SpecialtyID { get; set; }
+        public string? LicenseNumber { get; set; }
+        public string? PhoneNumber { get; set; }
+        public int YearsOfExperience { get; set; }
+        public string? Education { get; set; }
+        public string? Bio {  get; set; }
+        public decimal? ConsultationFee { get; set; }
+        public string? ClinicAddress { get; set; }
+        public short AvailabilityModeId { get; set; }
+        public DateOnly? LicenseExpirationDate { get; set; }
     }
 }

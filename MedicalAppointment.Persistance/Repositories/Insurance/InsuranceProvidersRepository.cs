@@ -144,16 +144,13 @@ namespace MedicalAppointment.Persistance.Repositories.Insurance
                 return result;
             }
 
-            if (string.IsNullOrEmpty(entity.AcceptedRegions) || entity.AcceptedRegions.Length > 255)
-            {
-                result.Success = false;
-                result.Message = "El acceptedregions debe ser requerido y no puede pasar de 255 caracteres";
-                return result;
-            }
+           
 
             try
             {
                 result = await base.Save(entity);
+                
+
             }
             catch (Exception ex)
             {
@@ -440,7 +437,10 @@ namespace MedicalAppointment.Persistance.Repositories.Insurance
             return result;
         }
 
-
+        public Task Save(InsuranceProvidersRepository insures)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

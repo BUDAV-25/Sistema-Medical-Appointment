@@ -2,6 +2,7 @@
 using MedicalAppointment.Domain.Entities.Insurance;
 using MedicalAppointment.Domain.Repositories;
 using MedicalAppointment.Domain.Result;
+using MedicalAppointment.Persistance.Repositories.Insurance;
 
 namespace MedicalAppointment.Persistance.Interfaces.Insurance
 {
@@ -9,7 +10,7 @@ namespace MedicalAppointment.Persistance.Interfaces.Insurance
     {
         Task<OperationResult>GetByCountry(string Country);
         Task<OperationResult> GetByIsPreferred(string isPreferred);
-        
+        Task Save(InsuranceProvidersRepository insures);
     }
 }
 

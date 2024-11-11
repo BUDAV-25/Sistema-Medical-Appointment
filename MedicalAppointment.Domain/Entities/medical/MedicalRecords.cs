@@ -8,11 +8,11 @@ namespace MedicalAppointment.Domain.Entities.medical
     public class MedicalRecords : BaseEntity
     {
         [Key]
-        private int RecordID { get; set; }
-        private int PatientID { get; set; }
-        private int DoctorID { get; set; }
-        private string? Diagnosis {  get; set; }
-        private string? Treatment { get; set; }
-        private DateTime? DateOfVisit { get; set; }
+        public int RecordID { get; set; }
+        public int PatientID { get; set; }
+        public int DoctorID { get; set; }
+        public string? Diagnosis {  get; set; }
+        public string? Treatment { get; set; }
+        public DateTime? DateOfVisit { get; set; }
     }
 }
