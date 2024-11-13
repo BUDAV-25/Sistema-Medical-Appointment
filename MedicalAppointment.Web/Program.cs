@@ -13,9 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
+// Dependencia de Status
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddTransient<IStatusService, StatusService>();
 
+// Dependencia de Notification
+
+builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+
+// Dependencia de Roles
+
+builder.Services.AddScoped<IRolesRepository, RolesRepository>();
+builder.Services.AddTransient<IRolesService, RolesService>();
 
 
 

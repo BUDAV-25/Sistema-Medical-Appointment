@@ -63,15 +63,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _statusRepository.GetEntityBy(id);
 
-                Status status = (Status)result.Data;
-
-                StatusGetDto statusGetDto = new StatusGetDto()
+                if (!result.Success)
                 {
-                    StatusID = status.StatusID,
-                    StatusName = status.StatusName
-                };
-                statusResponse.IsSuccess = result.Success;
-                statusResponse.Data = statusGetDto;
+                    statusResponse.Messages = result.Message;
+                    statusResponse.IsSuccess = result.Success;
+
+                    return statusResponse;
+                }
+
+                statusResponse.Data = result.Data;
 
             }
             catch (Exception ex)

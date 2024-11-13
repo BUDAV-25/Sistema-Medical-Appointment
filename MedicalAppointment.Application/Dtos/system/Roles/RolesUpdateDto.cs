@@ -6,5 +6,7 @@ namespace MedicalAppointment.Application.Dtos.system.Roles
     {
         public int RoleID { get; set; }
         public DateTime UpdateAt { get; set; }
+        public bool IsActive { get; set; }
+
     }
 }
