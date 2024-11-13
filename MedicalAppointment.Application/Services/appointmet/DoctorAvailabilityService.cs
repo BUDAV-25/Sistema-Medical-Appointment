@@ -1,6 +1,4 @@
-﻿
-
-using MedicalAppointment.Application.Base;
+﻿using MedicalAppointment.Application.Base;
 using MedicalAppointment.Application.Contracts.appointments;
 using MedicalAppointment.Application.Dtos.appointments.DoctorAvailability;
 using MedicalAppointment.Application.Response.appointments.DoctorAvailability;
@@ -8,7 +6,7 @@ using MedicalAppointment.Domain.Entities.appointments;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointment.Application.Services.Appointment
+namespace MedicalAppointment.Application.Services.appointmet
 {
     public class DoctorAvailabilityService : IDoctorAvailabilityService
     {
@@ -16,7 +14,7 @@ namespace MedicalAppointment.Application.Services.Appointment
         private readonly ILogger<DoctorAvailabilityService> _logger;
         private readonly IDoctorAvailabilityService _doctorAvailabilityService;
 
-        public DoctorAvailabilityService(IDoctorAvailabilityRepository doctorAvailabilityRepository, ILogger<DoctorAvailabilityService> logger, IDoctorAvailabilityService doctorAvailabilityService) 
+        public DoctorAvailabilityService(IDoctorAvailabilityRepository doctorAvailabilityRepository, ILogger<DoctorAvailabilityService> logger)
         {
             if (doctorAvailabilityRepository is null)
             {
@@ -25,7 +23,7 @@ namespace MedicalAppointment.Application.Services.Appointment
 
             _doctorAvailabilityRepository = doctorAvailabilityRepository;
             _logger = logger;
-            _doctorAvailabilityService = doctorAvailabilityService;
+
         }
         public async Task<DoctorAvailabilityResponse> GetAll()
         {
@@ -46,7 +44,7 @@ namespace MedicalAppointment.Application.Services.Appointment
                 }).ToList();
 
                 doctorAvailabilityResponse.IsSuccess = result.Success;
-                doctorAvailabilityResponse.Model = doctorAvailabilities;
+                doctorAvailabilityResponse.Data = doctorAvailabilities;
             }
             catch (Exception ex)
             {
@@ -76,14 +74,14 @@ namespace MedicalAppointment.Application.Services.Appointment
                 };
 
                 doctorAvailabilityResponse.IsSuccess = false;
-                doctorAvailabilityResponse.Model = doctorAvailabilityGetDto;
+                doctorAvailabilityResponse.Data = doctorAvailabilityGetDto;
 
             }
             catch (Exception ex)
             {
-                doctorAvailabilityResponse.IsSuccess= false;
+                doctorAvailabilityResponse.IsSuccess = false;
                 doctorAvailabilityResponse.Messages = "Error obteniendo la disponibilidad del doctor por su ID";
-                _logger.LogError(doctorAvailabilityResponse.Messages, ex.ToString()); 
+                _logger.LogError(doctorAvailabilityResponse.Messages, ex.ToString());
             }
             return doctorAvailabilityResponse;
 
@@ -115,7 +113,7 @@ namespace MedicalAppointment.Application.Services.Appointment
 
         public async Task<DoctorAvailabilityResponse> UpdateAsync(DoctorAvailabilityUpdateDto dto)
         {
-            DoctorAvailabilityResponse doctorAvailabilityResponse= new DoctorAvailabilityResponse();
+            DoctorAvailabilityResponse doctorAvailabilityResponse = new DoctorAvailabilityResponse();
 
             try
             {
@@ -123,7 +121,7 @@ namespace MedicalAppointment.Application.Services.Appointment
 
                 DoctorAvailability doctorAvailabilityToUpdate = (DoctorAvailability)resultEntity.Data;
 
-                doctorAvailabilityToUpdate.DoctorID= dto.DoctorID;
+                doctorAvailabilityToUpdate.DoctorID = dto.DoctorID;
                 doctorAvailabilityToUpdate.AvailableDate = (DateTime)dto.AvailableDate;
                 doctorAvailabilityToUpdate.StartTime = (DateTime)dto.StarTime;
                 doctorAvailabilityToUpdate.EndTime = (DateTime)dto.EndTime;

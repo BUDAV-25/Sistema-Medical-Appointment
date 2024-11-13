@@ -1,10 +1,7 @@
-﻿
-
-using MedicalAppointment.Application.Base;
+﻿using MedicalAppointment.Application.Base;
 using MedicalAppointment.Application.Contracts.appointments;
 using MedicalAppointment.Application.Dtos.appointments.Appointments;
 using MedicalAppointment.Application.Response.appointments.Appointments;
-using MedicalAppointment.Application.Services;
 using MedicalAppointment.Domain.Entities.appointments;
 using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Domain.Entities.users;
@@ -17,7 +14,7 @@ using EntityAppointment = MedicalAppointment.Domain.Entities.appointments.Appoin
 
 
 
-namespace MedicalAppointment.Application.Services.Configuration
+namespace MedicalAppointment.Application.Services.appointmet
 {
     public class AppointmentService : IAppointmentsService
     {
@@ -25,7 +22,7 @@ namespace MedicalAppointment.Application.Services.Configuration
         private readonly ILogger<AppointmentService> _logger;
         private readonly IAppointmentsService _appointmentsService;
 
-        public AppointmentService(IAppointmentsRepository appointmentsRepository, ILogger<AppointmentService> logger, IAppointmentsService appointmentsService)
+        public AppointmentService(IAppointmentsRepository appointmentsRepository, ILogger<AppointmentService> logger)
         {
             if (appointmentsRepository is null)
             {
@@ -34,7 +31,8 @@ namespace MedicalAppointment.Application.Services.Configuration
 
             _appointmentsRepository = appointmentsRepository;
             _logger = logger;
-            _appointmentsService = appointmentsService;
+
+
         }
 
         public async Task<AppointmentsResponse> GetAll()
@@ -51,13 +49,14 @@ namespace MedicalAppointment.Application.Services.Configuration
                     PatientID = appointments.PatientID,
                     DoctorID = appointments.DoctorID,
                     AppointmentDate = appointments.AppointmentDate,
-                    StatusID = appointments.StatusID,
-                    CreatedAt = appointments.CreatedAt,
+                    StatusID = appointments.StatusID
 
                 }).ToList();
 
                 appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Model = appointment;
+                appointmentsResponse.Data = appointment;
+
+
 
             }
             catch (Exception ex)
@@ -88,11 +87,10 @@ namespace MedicalAppointment.Application.Services.Configuration
                     DoctorID = appointment.DoctorID,
                     AppointmentDate = appointment.AppointmentDate,
                     StatusID = appointment.StatusID,
-                    CreatedAt = appointment.CreatedAt,
                 };
 
                 appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Model = appointmentsGetDto;
+                appointmentsResponse.Data = appointmentsGetDto;
             }
             catch (Exception ex)
             {
@@ -145,9 +143,9 @@ namespace MedicalAppointment.Application.Services.Configuration
 
                 appointmentToUpdate.PatientID = dto.PatientID;
                 appointmentToUpdate.DoctorID = dto.DoctorID;
-                appointmentToUpdate.AppointmentDate = (DateTime)dto.AppointmentDate;
+                appointmentToUpdate.AppointmentDate = dto.AppointmentDate;
                 appointmentToUpdate.StatusID = dto.StatusID;
-                appointmentToUpdate.UpdatedAt = (DateTime)dto.UpdateAt;
+                appointmentToUpdate.UpdatedAt = dto.UpdateAt;
 
             }
             catch (Exception ex)

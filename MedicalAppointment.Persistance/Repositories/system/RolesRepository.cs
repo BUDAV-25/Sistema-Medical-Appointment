@@ -36,33 +36,11 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.CreatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere una fecha de creacion";
-                return result;
-            }
-
-            if (entity.UpdatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere fecha de actualizacion";
-                return result;
-            }
-
-            if (entity.IsActive == null)
-            {
-
-                result.Success = false;
-                result.Message = "Se requiere la activacion";
-                return result;
-            }
-
             try
             {
                 await base.Save(entity);
                 result.Data = entity;
-                result.Message = "role Saved Suceffully! ";
+                result.Message = "Rol guardado correctamente";
             }
             catch (Exception ex)
             {

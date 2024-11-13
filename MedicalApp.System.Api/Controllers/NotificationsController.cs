@@ -1,6 +1,9 @@
-﻿using MedicalAppointment.Domain.Entities.system;
+﻿using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Dtos.system.Notification;
+using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Persistance.Interfaces.system;
 using Microsoft.AspNetCore.Mvc;
+using MedicalAppointment.IOC.Dependencies.System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,20 +13,20 @@ namespace MedicalApp.System.Api.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private readonly INotificationsRepository _notificationsRepository;
+        private readonly INotificationService _notificationService;
 
-        public NotificationsController(INotificationsRepository notificationRepository)
+        public NotificationsController(INotificationService notificationService)
         {
-            _notificationsRepository = notificationRepository;
+            _notificationService = notificationService;
         }
 
         // GetAll Notifications
         [HttpGet("GetAllNotifications")]
         public async Task<IActionResult> Get()
         {
-            var result = await _notificationsRepository.GetAll();
+            var result = await _notificationService.GetAll();
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -34,9 +37,9 @@ namespace MedicalApp.System.Api.Controllers
         [HttpGet("GetNotificationsBy{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _notificationsRepository.GetEntityBy(id);
+            var result = await _notificationService.GetById(id);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -45,10 +48,10 @@ namespace MedicalApp.System.Api.Controllers
 
         // Save Notifications
         [HttpPost("SaveNotifications")]
-        public async Task<IActionResult> Post([FromBody] Notifications notifications)
+        public async Task<IActionResult> Post([FromBody] NotificationSaveDto notificationSaveDto)
         {
-            var result = await _notificationsRepository.Save(notifications);
-            if (!result.Success)
+            var result = await _notificationService.SaveAsync(notificationSaveDto);
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -57,17 +60,18 @@ namespace MedicalApp.System.Api.Controllers
 
         // Update Notifications
         [HttpPut("UpdateNotifications{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Notifications notifications)
+        public async Task<IActionResult> Put(int id, [FromBody] NotificationUpdateDto notificationUpdateDto)
         {
-            var result = await _notificationsRepository.Update(notifications);
+            var result = await _notificationService.UpdateAsync(notificationUpdateDto);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
 
+        /*
         // Remove Notifications
         [HttpDelete("RemoveNotifications")]
         public async Task<IActionResult> Delete([FromBody] Notifications notifications)
@@ -79,6 +83,8 @@ namespace MedicalApp.System.Api.Controllers
                 return BadRequest(result);
             }
             return Ok(result);
+            
         }
+        */
     }
 }

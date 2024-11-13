@@ -6,6 +6,6 @@ namespace MedicalAppointment.Application.Response.appointments.Appointments
 {
     public class AppointmentsResponse : BaseResponse
     {
-        public dynamic? Model { get; set; }
+        public dynamic? Data { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace MedicalAppointment.Application.Services.System
         private readonly ILogger<RolesService> _logger;
         private readonly IRolesService _rolesService;
 
-        public RolesService(IRolesRepository rolesRepository, ILogger<RolesService> logger, IRolesService rolesService)
+        public RolesService(IRolesRepository rolesRepository, ILogger<RolesService> logger)
         {
             if (rolesRepository is null)
             {
@@ -27,7 +27,6 @@ namespace MedicalAppointment.Application.Services.System
 
             _rolesRepository = rolesRepository;
             _logger = logger;
-            _rolesService = rolesService;
         }
         public async Task<RolesResponse> GetAll()
         {
@@ -37,14 +36,14 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _rolesRepository.GetAll();
 
-                List<RolesGetDto> roles = ((List<Roles>)result.Data).Select(roles => new RolesGetDto()
+                if (!result.Success)
                 {
-                    RoleID = roles.RoleID,
-                    RoleName = roles.RoleName,
-                }).ToList();
+                    rolesResponse.Messages = result.Message;
+                    rolesResponse.IsSuccess = result.Success;
+                    return rolesResponse;
+                }
 
-                rolesResponse.IsSuccess = result.Success;
-                rolesResponse.Model = roles;
+                rolesResponse.Data = result.Data;
 
             }
             catch (Exception ex)
@@ -64,15 +63,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _rolesRepository.GetEntityBy(id);
 
-                Roles roles = (Roles)result.Data;
-
-                RolesGetDto rolesGetDto = new RolesGetDto()
+                if (!result.Success)
                 {
-                    RoleID = roles.RoleID,
-                    RoleName = roles.RoleName
-                };
-                rolesResponse.IsSuccess = result.Success;
-                rolesResponse.Model = rolesGetDto;
+                    rolesResponse.Messages = result.Message;
+                    rolesResponse.IsSuccess = result.Success; 
+                    
+                    return rolesResponse;
+                }
+
+                rolesResponse.Data= result.Data;
 
             }
             catch (Exception ex)
@@ -93,8 +92,7 @@ namespace MedicalAppointment.Application.Services.System
                 Roles roles = new Roles();
 
                 roles.RoleName = dto.RoleName;
-                roles.CreatedAt = dto.CreateTime;
-                roles.IsActive = dto.IsActive;
+                roles.CreatedAt = dto.CreatedAt;
 
                 var result = await _rolesRepository.Save(roles);
 
@@ -115,19 +113,30 @@ namespace MedicalAppointment.Application.Services.System
 
             try
             {
-                var resultEntity = await _rolesRepository.GetEntityBy(dto.RoleID);
+                var resultGetById = await _rolesRepository.GetEntityBy(dto.RoleID);
 
-                Roles rolesToUpdate = (Roles)resultEntity.Data;
+                if (!resultGetById.Success)
+                {
+                    rolesResponse.IsSuccess = resultGetById.Success;
+                    rolesResponse.Messages = resultGetById.Message;
 
-                rolesToUpdate.RoleName = dto.RoleName;
-                rolesToUpdate.UpdatedAt = dto.UpdateAt;
-                rolesToUpdate.IsActive = dto.IsActive;
+                    return rolesResponse;
+                }
+
+                Roles roles = new Roles();
+
+                roles.RoleID = dto.RoleID;
+                roles.RoleName = dto.RoleName;
+                roles.UpdatedAt = dto.UpdateAt;
+                roles.IsActive = dto.IsActive;
+                
+                var result = await _rolesRepository.Update(roles);
 
             }
             catch (Exception ex)
             {
                 rolesResponse.IsSuccess = false;
-                rolesResponse.Messages = "Error actualizando el Rol";
+                rolesResponse.Messages = "Error actualizando el rol";
                 _logger.LogError(rolesResponse.Messages, ex.ToString());
             }
             return rolesResponse;

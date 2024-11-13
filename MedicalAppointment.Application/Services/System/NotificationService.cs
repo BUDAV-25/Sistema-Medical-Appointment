@@ -17,7 +17,7 @@ namespace MedicalAppointment.Application.Services.System
         private ILogger <NotificationService> _logger;
         private readonly INotificationService _notificationService;
 
-        public NotificationService(INotificationsRepository notificationsRepository, ILogger<NotificationService> logger, INotificationService notificationService)
+        public NotificationService(INotificationsRepository notificationsRepository, ILogger<NotificationService> logger)
         {
             if (notificationsRepository is null)
             {
@@ -26,7 +26,6 @@ namespace MedicalAppointment.Application.Services.System
 
             _notificationsRepository = notificationsRepository;
             _logger = logger;
-            _notificationService = notificationService;
         }
 
         public async Task<NotificationResponse> GetAll()
@@ -37,18 +36,14 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _notificationsRepository.GetAll();
 
-                List<NotificationGetDto> notifications = ((List<Notifications>)result.Data).Select(notifications => new NotificationGetDto()
-
+                if (!result.Success)
                 {
-                    NotificationID = notifications.NotificationID,
-                    UserID = notifications.UserID,
-                    Message = notifications.Message,
-                    SentAt = (DateTime)notifications.SentAt,
+                    notificationResponse.Messages = result.Message;
+                    notificationResponse.IsSuccess = result.Success;
+                    return notificationResponse;
+                }
+                notificationResponse.Data = result.Data;
 
-                }).ToList();
-
-                notificationResponse.IsSuccess = result.Success;
-                notificationResponse.Model = notifications;
 
             }
             catch (Exception ex)
@@ -68,16 +63,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _notificationsRepository.GetEntityBy(id);
 
-                Notifications notifications = (Notifications)result.Data;
-                NotificationGetDto notificationGetDto = new NotificationGetDto()
+                if (!result.Success)
                 {
-                    NotificationID = notifications.NotificationID,
-                    UserID = notifications.UserID,
-                    Message = notifications.Message,
-                    SentAt = (DateTime)notifications.SentAt
-                };
-                notificationResponse.IsSuccess = result.Success;
-                notificationResponse.Model = notificationGetDto;
+                    notificationResponse.Messages = result.Message;
+                    notificationResponse.IsSuccess = result.Success;
+
+                    return notificationResponse;
+                }
+
+                notificationResponse.Data = result.Data;
 
             }
             catch (Exception ex)
@@ -117,23 +111,31 @@ namespace MedicalAppointment.Application.Services.System
 
             try
             {
-                var result = await _notificationsRepository.GetEntityBy(dto.NotificationID);
+                var resultGetById = await _notificationsRepository.GetEntityBy(dto.NotificationID);
 
-
-                Notifications notifications = (Notifications)result.Data;
-                NotificationGetDto notificationGetDto = new NotificationGetDto()
+                if (!resultGetById.Success)
                 {
-                    Message = notifications.Message,
-                    SentAt = (DateTime)notifications.SentAt
-                };
-                notificationResponse.IsSuccess = result.Success;
-                notificationResponse.Model = notificationGetDto;
+                    notificationResponse.IsSuccess = resultGetById.Success;
+                    notificationResponse.Messages = resultGetById.Message;
+
+                    return notificationResponse;
+                }
+
+                Notifications notifications = new();
+
+                notifications.NotificationID = dto.NotificationID;
+                notifications.UserID = dto.UserID;
+                notifications.Message = dto.Message;
+                notifications.SentAt = dto.SentAt;
+
+                var result = await _notificationsRepository.Update(notifications);
+
 
             }
             catch (Exception ex)
             {
                 notificationResponse.IsSuccess = false;
-                notificationResponse.Messages = "Error obteniendo la notificacion by ID";
+                notificationResponse.Messages = "Error actualizando la notificacion";
                 _logger.LogError(notificationResponse.Messages, ex.ToString());
             }
             return notificationResponse;

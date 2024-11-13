@@ -9,7 +9,7 @@ namespace MedicalAppointment.Application.Response.system.Roles
 {
     public class RolesResponse : BaseResponse
     {
-        public dynamic? Model { get; set; }
+        public dynamic? Data { get; set; }
 
     }
 }

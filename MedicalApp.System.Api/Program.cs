@@ -4,6 +4,8 @@ using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointment.IOC.Dependencies.System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Services.System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
+
+
 // El registro de cada una de las dependencias 
 
 builder.Services.AddStatusDependency();
+
+
 
 
 

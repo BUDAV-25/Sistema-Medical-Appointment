@@ -16,7 +16,7 @@ namespace MedicalAppointment.Application.Services.System
         private readonly ILogger<StatusService> _logger;
         private readonly IStatusService _statusService;
         
-        public StatusService(IStatusRepository statusRepository, ILogger<StatusService> logger, IStatusService statusService)
+        public StatusService(IStatusRepository statusRepository, ILogger<StatusService> logger)
         {
             if (statusRepository is null)
             {
@@ -25,7 +25,7 @@ namespace MedicalAppointment.Application.Services.System
 
             _statusRepository = statusRepository;
             _logger = logger;
-            _statusService = statusService;
+
         }
         public async Task<StatusResponse> GetAll()
         {
@@ -35,17 +35,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _statusRepository.GetAll();
 
-                List<StatusGetDto> statuses = ((List<Status>)result.Data).Select(statuses => new StatusGetDto()
+                if (!result.Success)
                 {
-                    StatusID = statuses.StatusID,
-                    StatusName = statuses.StatusName
+                    statusResponse.Messages = result.Message;
+                    statusResponse.IsSuccess = result.Success;
 
-                }).ToList();
+                    return statusResponse;
+                }
 
-
-
-                statusResponse.IsSuccess = result.Success;
-                statusResponse.Model = statuses;
+                statusResponse.Data = result.Data;
             }
             catch (Exception ex)
             {
@@ -73,7 +71,7 @@ namespace MedicalAppointment.Application.Services.System
                     StatusName = status.StatusName
                 };
                 statusResponse.IsSuccess = result.Success;
-                statusResponse.Model = statusGetDto;
+                statusResponse.Data = statusGetDto;
 
             }
             catch (Exception ex)
@@ -115,13 +113,22 @@ namespace MedicalAppointment.Application.Services.System
 
             try
             {
-                var resultEntity = await _statusRepository.GetEntityBy(dto.StatusID);
+                var resultGetById = await _statusRepository.GetEntityBy(dto.StatusID);
 
-                Status statusToUpdate = (Status)resultEntity.Data;
+                if (!resultGetById.Success) 
+                {
+                    statusResponse.IsSuccess = resultGetById.Success;
+                    statusResponse.Messages = resultGetById.Message;
 
-                statusToUpdate.StatusName = dto.StatusName;
+                    return statusResponse;
+                }
 
-                var result = await _statusRepository.Update(statusToUpdate);
+                Status status = new Status();
+                
+                status.StatusID = dto.StatusID;
+                status.StatusName = dto.StatusName;
+
+                var result = await _statusRepository.Update(status);
 
             }
             catch (Exception ex)
