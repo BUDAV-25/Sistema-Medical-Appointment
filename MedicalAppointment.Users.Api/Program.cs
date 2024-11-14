@@ -16,8 +16,8 @@ namespace MedicalAppointment.Users.Api
             builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalAppDB")));
 
             // -----Registro de cada una de las dependencias-----
-            builder.Services.AddScoped<IDoctorsRepository, DoctorsRepository>();
-            builder.Services.AddScoped<IPatientsRepository, PatientsRepository>();
+            builder.Services.AddScoped<IDoctorRepository, DoctorsRepository>();
+            builder.Services.AddScoped<IPatientRepository, PatientsRepository>();
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
             builder.Services.AddControllers();

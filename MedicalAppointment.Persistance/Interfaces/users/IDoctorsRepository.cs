@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.users
 {
-    public interface IDoctorsRepository : IBaseRepository<Doctors>
+    public interface IDoctorRepository : IBaseRepository<Doctor>
     {
         Task<OperationResult> getDoctorsByAvailabilityMode(short availabilityModeId);
         Task<OperationResult> FindDoctorSpecialty(short specialtyID);

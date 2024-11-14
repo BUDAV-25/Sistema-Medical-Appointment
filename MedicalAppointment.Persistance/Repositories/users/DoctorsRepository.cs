@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class DoctorsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<DoctorsRepository> logger) : BaseRepository<Doctors>(medicalAppointmentContext), IDoctorsRepository
+        ILogger<DoctorsRepository> logger) : BaseRepository<Doctor>(medicalAppointmentContext), IDoctorRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<DoctorsRepository> logger = logger;
-        public async override Task<OperationResult> Save(Doctors entity)
+        public async override Task<OperationResult> Save(Doctor entity)
         {
             OperationResult result = new OperationResult();
             if (entity == null)
@@ -71,7 +71,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             try
             {
-                var doctorCreatedModel = await medical_AppointmentContext.Doctors.AddAsync(entity);
+                var doctorCreatedModel = await medical_AppointmentContext.Doctor.AddAsync(entity);
 
                 result = await base.Save(entity);
                // result.Data = entity;
@@ -85,7 +85,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
 
             return result;
         }
-        public async override Task<OperationResult> Update(Doctors entity)
+        public async override Task<OperationResult> Update(Doctor entity)
         {
             OperationResult result = new OperationResult();
 
@@ -141,7 +141,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             try
             {
-                Doctors? doctorUpdate = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
+                Doctor? doctorUpdate = await medical_AppointmentContext.Doctor.FindAsync(entity.DoctorID);
                 doctorUpdate.SpecialtyID = entity.SpecialtyID;
                 doctorUpdate.LicenseNumber = entity.LicenseNumber;
                 doctorUpdate.PhoneNumber = entity.PhoneNumber;
@@ -164,7 +164,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             return result;
         }
-        public async override Task<OperationResult> Remove(Doctors entity)
+        public async override Task<OperationResult> Remove(Doctor entity)
         {
             OperationResult result = new OperationResult();
 
@@ -182,7 +182,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             try
             {
-                Doctors? doctorToRemove = await medical_AppointmentContext.Doctors.FindAsync(entity.DoctorID);
+                Doctor? doctorToRemove = await medical_AppointmentContext.Doctor.FindAsync(entity.DoctorID);
                 doctorToRemove.IsActive = false;
                 doctorToRemove.UpdatedAt = entity.UpdatedAt;
               //  doctorToRemove.UserUpdate = entity.UserUpdate;
@@ -204,7 +204,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await (from user in medical_AppointmentContext.User
-                                     join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                     join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
                                      where doctor.IsActive == true
                                      orderby doctor.CreatedAt descending
@@ -234,7 +234,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await (from user in medical_AppointmentContext.User
-                                     join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                     join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
                                      where doctor.IsActive == true
                                      && doctor.DoctorID == Id
@@ -265,7 +265,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await(from user in medical_AppointmentContext.User
-                                    join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                    join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                     join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
                                     where doctor.IsActive == true
                                     && doctor.SpecialtyID == specialtyID
@@ -295,7 +295,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await (from user in medical_AppointmentContext.User
-                                     join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                     join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
                                      where doctor.IsActive == true
                                      && doctor.SpecialtyID == specialtyID && doctor.AvailabilityModeId == availabilityModeId
@@ -325,7 +325,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await(from user in medical_AppointmentContext.User
-                                    join doctor in medical_AppointmentContext.Doctors on user.UserID equals doctor.DoctorID
+                                    join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                     join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
                                     where doctor.IsActive == true
                                     && doctor.AvailabilityModeId == availabilityModeId

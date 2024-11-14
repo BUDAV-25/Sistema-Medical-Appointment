@@ -6,18 +6,18 @@ namespace MedicalAppointment.Users.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctorsController : ControllerBase
+    public class DoctorController : ControllerBase
     {
-        private readonly IDoctorsRepository doctors_Repository;
-        public DoctorsController(IDoctorsRepository doctorsRepository) 
+        private readonly IDoctorRepository doctor_Repository;
+        public DoctorController(IDoctorRepository doctorsRepository) 
         {
-            doctors_Repository = doctorsRepository;
+            doctor_Repository = doctorsRepository;
         }
         // GET: api/<DoctorsController>
         [HttpGet("Get All Doctor")]
         public async Task<IActionResult> Get()
         {
-            var result = await doctors_Repository.GetAll();
+            var result = await doctor_Repository.GetAll();
 
             if (!result.Success)
                 return BadRequest(result);
@@ -28,7 +28,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         [HttpGet("Get Doctor by {id}")]
         public async Task<IActionResult> GetEntityBy(int id)
         {
-            var result = await doctors_Repository.GetEntityBy(id);
+            var result = await doctor_Repository.GetEntityBy(id);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -37,9 +37,9 @@ namespace MedicalAppointment.Users.Api.Controllers
 
         // POST api/<DoctorsController>
         [HttpPost("SaveDoctors")]
-        public async Task<IActionResult> Post([FromBody] Doctors doctors)
+        public async Task<IActionResult> Post([FromBody] Doctor doctor)
         {
-            var result = await doctors_Repository.Save(doctors);
+            var result = await doctor_Repository.Save(doctor);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -48,9 +48,9 @@ namespace MedicalAppointment.Users.Api.Controllers
 
         // PUT api/<DoctorsController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Doctors doctor)
+        public async Task<IActionResult> Put(int id, [FromBody] Doctor doctor)
         {
-            var result = await doctors_Repository.Update(doctor);
+            var result = await doctor_Repository.Update(doctor);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -59,9 +59,9 @@ namespace MedicalAppointment.Users.Api.Controllers
 
         // DELETE api/<DoctorsController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Doctors doctor)
+        public async Task<IActionResult> Delete(Doctor doctor)
         {
-            var result = await doctors_Repository.Remove(doctor);
+            var result = await doctor_Repository.Remove(doctor);
 
             if (!result.Success)
                 return BadRequest(result);
