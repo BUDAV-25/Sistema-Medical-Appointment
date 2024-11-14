@@ -14,7 +14,6 @@ namespace MedicalAppointment.Application.Services.System
     {
         private readonly IStatusRepository _statusRepository;
         private readonly ILogger<StatusService> _logger;
-        private readonly IStatusService _statusService;
         
         public StatusService(IStatusRepository statusRepository, ILogger<StatusService> logger)
         {

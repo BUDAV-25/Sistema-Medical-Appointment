@@ -209,7 +209,10 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          PatientID = patient.PatientID,
                                          DoctorID = appointments.DoctorID,
                                          AppointmentDate = appointments.AppointmentDate,
-                                         StatusID = appointments.StatusID
+                                         StatusID = appointments.StatusID,
+                                         CreatedAt = appointments.CreatedAt,
+                                         UpdateAt = appointments.UpdatedAt
+                                         
 
                                      }).AsNoTracking()
                                      .ToListAsync();

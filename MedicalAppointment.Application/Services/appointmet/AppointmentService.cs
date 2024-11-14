@@ -20,7 +20,6 @@ namespace MedicalAppointment.Application.Services.appointmet
     {
         private readonly IAppointmentsRepository _appointmentsRepository;
         private readonly ILogger<AppointmentService> _logger;
-        private readonly IAppointmentsService _appointmentsService;
 
         public AppointmentService(IAppointmentsRepository appointmentsRepository, ILogger<AppointmentService> logger)
         {

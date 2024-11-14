@@ -15,7 +15,6 @@ namespace MedicalAppointment.Application.Services.System
     {
         private readonly INotificationsRepository _notificationsRepository;
         private ILogger <NotificationService> _logger;
-        private readonly INotificationService _notificationService;
 
         public NotificationService(INotificationsRepository notificationsRepository, ILogger<NotificationService> logger)
         {
@@ -38,8 +37,8 @@ namespace MedicalAppointment.Application.Services.System
 
                 if (!result.Success)
                 {
-                    notificationResponse.Messages = result.Message;
                     notificationResponse.IsSuccess = result.Success;
+                    notificationResponse.Messages = result.Message;
                     return notificationResponse;
                 }
                 notificationResponse.Data = result.Data;

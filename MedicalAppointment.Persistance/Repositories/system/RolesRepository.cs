@@ -184,7 +184,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             try
             {
-                result.Data = await (from role in medical_AppointmentContext.Roles 
+                result.Data = await (from role in medical_AppointmentContext.Roles
                                      where role.RoleID == ID
 
                                      select new RolesModel()
@@ -193,7 +193,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          RoleName = role.RoleName
 
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
 
                 result.Success = true;
             }

@@ -16,7 +16,6 @@ namespace MedicalAppointment.Application.Services.System
     {
         private readonly IRolesRepository _rolesRepository;
         private readonly ILogger<RolesService> _logger;
-        private readonly IRolesService _rolesService;
 
         public RolesService(IRolesRepository rolesRepository, ILogger<RolesService> logger)
         {
@@ -93,6 +92,9 @@ namespace MedicalAppointment.Application.Services.System
 
                 roles.RoleName = dto.RoleName;
                 roles.CreatedAt = dto.CreatedAt;
+                roles.UpdatedAt = dto.UpdateAt;
+                roles.IsActive = dto.IsActive;
+
 
                 var result = await _rolesRepository.Save(roles);
 

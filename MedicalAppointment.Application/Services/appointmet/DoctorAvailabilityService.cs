@@ -12,7 +12,6 @@ namespace MedicalAppointment.Application.Services.appointmet
     {
         private readonly IDoctorAvailabilityRepository _doctorAvailabilityRepository;
         private readonly ILogger<DoctorAvailabilityService> _logger;
-        private readonly IDoctorAvailabilityService _doctorAvailabilityService;
 
         public DoctorAvailabilityService(IDoctorAvailabilityRepository doctorAvailabilityRepository, ILogger<DoctorAvailabilityService> logger)
         {
@@ -95,9 +94,9 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 DoctorAvailability doctorAvailability = new DoctorAvailability();
                 doctorAvailability.DoctorID = dto.DoctorID;
-                doctorAvailability.AvailableDate = (DateTime)dto.AvailableDate;
-                doctorAvailability.StartTime = (DateTime)dto.StarTime;
-                doctorAvailability.EndTime = (DateTime)dto.EndTime;
+                doctorAvailability.AvailableDate = dto.AvailableDate;
+                doctorAvailability.StartTime = dto.StarTime;
+                doctorAvailability.EndTime = dto.EndTime;
 
                 var result = await _doctorAvailabilityRepository.Save(doctorAvailability);
 
@@ -122,9 +121,9 @@ namespace MedicalAppointment.Application.Services.appointmet
                 DoctorAvailability doctorAvailabilityToUpdate = (DoctorAvailability)resultEntity.Data;
 
                 doctorAvailabilityToUpdate.DoctorID = dto.DoctorID;
-                doctorAvailabilityToUpdate.AvailableDate = (DateTime)dto.AvailableDate;
-                doctorAvailabilityToUpdate.StartTime = (DateTime)dto.StarTime;
-                doctorAvailabilityToUpdate.EndTime = (DateTime)dto.EndTime;
+                doctorAvailabilityToUpdate.AvailableDate = dto.AvailableDate;
+                doctorAvailabilityToUpdate.StartTime = dto.StarTime;
+                doctorAvailabilityToUpdate.EndTime = dto.EndTime;
 
                 var result = await _doctorAvailabilityRepository.Update(doctorAvailabilityToUpdate);
             }
