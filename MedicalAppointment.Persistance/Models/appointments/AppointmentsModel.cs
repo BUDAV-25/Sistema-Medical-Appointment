@@ -9,6 +9,8 @@ namespace MedicalAppointment.Persistance.Models.appointments
         public int DoctorID { get; set; }
         public DateTime AppointmentDate { get; set; }
         public int StatusID { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdateAt { get; set;  }
 
 
     }

@@ -14,17 +14,17 @@ namespace MedicalAppointment.Application.Services.System
     public class NotificationService : INotificationService
     {
         private readonly INotificationsRepository _notificationsRepository;
-        private ILogger _logger;
+        private ILogger <NotificationService> _logger;
 
-        public NotificationService(INotificationsRepository notificationsRepository, ILogger logger)
+        public NotificationService(INotificationsRepository notificationsRepository, ILogger<NotificationService> logger)
         {
             if (notificationsRepository is null)
             {
                 throw new ArgumentNullException(nameof(notificationsRepository));
             }
 
-            this._notificationsRepository = notificationsRepository;
-            this._logger = logger;
+            _notificationsRepository = notificationsRepository;
+            _logger = logger;
         }
 
         public async Task<NotificationResponse> GetAll()
@@ -35,18 +35,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _notificationsRepository.GetAll();
 
-                List<NotificationGetDto> notifications = ((List<Notifications>)result.Data).Select(notifications => new NotificationGetDto()
-
+                if (!result.Success)
                 {
-                    NotificationID = notifications.NotificationID,
-                    UserID = notifications.UserID,
-                    Message = notifications.Message,
-                    SentAt = (DateTime)notifications.SentAt,
+                    notificationResponse.IsSuccess = result.Success;
+                    notificationResponse.Messages = result.Message;
 
-                }).ToList();
+                    return notificationResponse;
+                }
+                notificationResponse.Data = result.Data;
 
-                notificationResponse.IsSuccess = result.Success;
-                notificationResponse.Model = notifications;
 
             }
             catch (Exception ex)
@@ -66,16 +63,15 @@ namespace MedicalAppointment.Application.Services.System
             {
                 var result = await _notificationsRepository.GetEntityBy(id);
 
-                Notifications notifications = (Notifications)result.Data;
-                NotificationGetDto notificationGetDto = new NotificationGetDto()
+                if (!result.Success)
                 {
-                    NotificationID = notifications.NotificationID,
-                    UserID = notifications.UserID,
-                    Message = notifications.Message,
-                    SentAt = (DateTime)notifications.SentAt
-                };
-                notificationResponse.IsSuccess = result.Success;
-                notificationResponse.Model = notificationGetDto;
+                    notificationResponse.IsSuccess = result.Success;
+                    notificationResponse.Messages = result.Message;
+
+                    return notificationResponse;
+                }
+
+                notificationResponse.Data = result.Data;
 
             }
             catch (Exception ex)
@@ -94,7 +90,6 @@ namespace MedicalAppointment.Application.Services.System
             try
             {
                 Notifications notifications = new Notifications();
-                notifications.NotificationID = dto.NotificationID;
                 notifications.UserID = dto.UserID;
                 notifications.Message = dto.Message;
                 notifications.SentAt = dto.SentAt;
@@ -110,9 +105,41 @@ namespace MedicalAppointment.Application.Services.System
             return notificationResponse;
         }
 
-        public Task<NotificationResponse> UpdateAsync(NotificationUpdateDto dto)
+        public async Task<NotificationResponse> UpdateAsync(NotificationUpdateDto dto)
         {
-            throw new NotImplementedException();
+            NotificationResponse notificationResponse = new NotificationResponse();
+
+            try
+            {
+                var resultGetById = await _notificationsRepository.GetEntityBy(dto.NotificationID);
+
+                if (!resultGetById.Success)
+                {
+                    notificationResponse.IsSuccess = resultGetById.Success;
+                    notificationResponse.Messages = resultGetById.Message;
+
+                    return notificationResponse;
+                }
+
+                Notifications notifications = new();
+
+                notifications.NotificationID = dto.NotificationID;
+                notifications.UserID = dto.UserID;
+                notifications.Message = dto.Message;
+                notifications.SentAt = dto.SentAt;
+
+                var result = await _notificationsRepository.Update(notifications);
+
+
+            }
+            catch (Exception ex)
+            {
+                notificationResponse.IsSuccess = false;
+                notificationResponse.Messages = "Error actualizando la notificacion";
+                _logger.LogError(notificationResponse.Messages, ex.ToString());
+            }
+            return notificationResponse;
         }
+           
     }
 }
