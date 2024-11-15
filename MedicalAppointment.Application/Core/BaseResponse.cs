@@ -1,5 +1,3 @@
-﻿
-
 namespace MedicalAppointment.Application.Core
 {
     public abstract class BaseResponse

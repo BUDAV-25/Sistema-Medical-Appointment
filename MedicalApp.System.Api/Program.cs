@@ -2,6 +2,10 @@ using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.EntityFrameworkCore;
+using MedicalAppointment.IOC.Dependencies.system;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Services.System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
+
 // El registro de cada una de las dependencias 
 
-builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
-builder.Services.AddScoped<IRolesRepository, RolesRepository>();    
-builder.Services.AddScoped<IStatusRepository, StatusRepository>();  
+builder.Services.AddSystemDependency();
 
 
 builder.Services.AddControllers();
