@@ -29,16 +29,12 @@ namespace MedicalAppointment.Application.Services.medical
             {
                 var result = await medicalRecords_Repository.GetAll();
 
-                List<GetMedicalRecordsDto> getMedicals = ((List<MedicalRecords>)result.Data)
-                                                .Select(records => new GetMedicalRecordsDto()
-                                                {
-                                                    PatientID = records.PatientID,
-                                                    DoctorID = records.DoctorID,
-                                                    Diagnosis = records.Diagnosis,
-                                                    Treatment = records.Treatment,
-                                                    DateOfVisit = records.DateOfVisit
-                                                }).ToList();
-                recordResponse.IsSuccess = true;
+                if (!result.Success)
+                {
+                    recordResponse.IsSuccess = result.Success;
+                    recordResponse.Messages = result.Message;
+                    return recordResponse;
+                }
                 recordResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -55,18 +51,14 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var result = await medicalRecords_Repository.GetEntityBy(id);
-                MedicalRecords record = (MedicalRecords)result.Data;
-                GetMedicalRecordsDto getRecordsDto = new GetMedicalRecordsDto()
+                
+                if (!result.Success)
                 {
-                    PatientID = record.PatientID,
-                    DoctorID = record.DoctorID,
-                    Diagnosis = record.Diagnosis,
-                    Treatment = record.Treatment,
-                    DateOfVisit = record.DateOfVisit
-                };
-                recordResponse.IsSuccess = true;
+                    recordResponse.IsSuccess = result.Success;
+                    recordResponse.Messages = result.Message;
+                    return recordResponse;
+                }
                 recordResponse.Model = result.Data;
-
             }
             catch (Exception ex)
             {
@@ -105,7 +97,15 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var resultEntity = await medicalRecords_Repository.GetEntityBy(dto.RecordID);
-                MedicalRecords recordToUpdate = (MedicalRecords)resultEntity.Data;
+
+                if (!resultEntity.Success)
+                {
+                    recordResponse.IsSuccess = resultEntity.Success;
+                    recordResponse.Messages = resultEntity.Message;
+                    return recordResponse;
+                }
+
+                MedicalRecords recordToUpdate = new MedicalRecords();
 
                 recordToUpdate.PatientID = dto.PatientID;
                 recordToUpdate.DoctorID = dto.DoctorID;
@@ -113,7 +113,6 @@ namespace MedicalAppointment.Application.Services.medical
                 recordToUpdate.Treatment = dto.Treatment;
                 recordToUpdate.DateOfVisit = dto.DateOfVisit;
                 recordToUpdate.UpdatedAt = dto.UpdatedAt;
-                recordToUpdate.IsActive = dto.IsActive;
 
                 var result = await medicalRecords_Repository.Update(recordToUpdate);
             }

@@ -29,15 +29,12 @@ namespace MedicalAppointment.Application.Services.users
             {
                 var result = await user_Repository.GetAll();
 
-                List<GetUserDto> users = ((List<User>)result.Data).Select(user => new GetUserDto()
-                                            {
-                                              FirstName = user.FirstName,
-                                              LastName = user.LastName,
-                                              Email = user.Email,
-                                              RoleID = user.RoleID,
-                                              CreatedAt = user.CreatedAt
-                                            }).ToList();
-                userResponse.IsSuccess = result.Success;
+                if (!result.Success)
+                {
+                    userResponse.IsSuccess = result.Success;
+                    userResponse.Messages = result.Message;
+                    return userResponse;
+                }
                 userResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -55,18 +52,12 @@ namespace MedicalAppointment.Application.Services.users
             {
                 var result = await user_Repository.GetEntityBy(id);
 
-                User user = (User)result.Data;
-                GetUserDto userDto = new GetUserDto()
+                if (!result.Success)
                 {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    RoleID = user.RoleID,
-                    CreatedAt = user.CreatedAt
-                };
-
-                userResponse.IsSuccess = result.Success;
-                userResponse.Model = userDto;
+                    userResponse.IsSuccess = result.Success;
+                    userResponse.Messages = result.Message;
+                }
+                userResponse.Model = result.Data;
             }
             catch (Exception ex)
             {
@@ -82,12 +73,14 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 User user = new User();
+
                 user.FirstName = dto.FirstName;
                 user.LastName = dto.LastName;
                 user.Email = dto.Email;
                 user.Password = dto.Password;
                 user.RoleID = dto.RoleID;
                 user.CreatedAt = dto.CreatedAt;
+                user.IsActive = true;
 
                 var result = await user_Repository.Save(user);
             }
@@ -105,8 +98,15 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 var resultEntity = await user_Repository.GetEntityBy(dto.UserID);
-                User userToUpdate = (User)resultEntity.Data;
+                if (!resultEntity.Success)
+                {
+                    userResponse.IsSuccess = resultEntity.Success;
+                    userResponse.Messages = resultEntity.Message;
+                    return userResponse;
+                }
+                User userToUpdate = new User();
 
+                userToUpdate.UserID = dto.UserID;
                 userToUpdate.FirstName = dto.FirstName;
                 userToUpdate.LastName = dto.LastName;
                 userToUpdate.Email = dto.Email;

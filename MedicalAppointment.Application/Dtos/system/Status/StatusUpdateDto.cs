@@ -2,6 +2,6 @@
 {
     public class StatusUpdateDto : StatusBaseDto
     {
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -29,13 +29,12 @@ namespace MedicalAppointment.Application.Services.medical
             {
                 var result = await availability_ModesRepository.GetAll();
 
-                List<GetAvailabilityModesDto> AvailabilityModes = ((List<AvailabilityModes>)result.Data)
-                                                .Select(availabilityMod => new GetAvailabilityModesDto()
-                                                {
-                                                    SAvailabilityModeID = availabilityMod.SAvailabilityModeID,
-                                                    AvailabilityMode = availabilityMod.AvailabilityMode
-                                                }).ToList();
-                availabilityModesResponse.IsSuccess = true;
+                if (!result.Success)
+                {
+                    availabilityModesResponse.IsSuccess = result.Success;
+                    availabilityModesResponse.Messages = result.Message;
+                    return availabilityModesResponse;
+                }
                 availabilityModesResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -52,14 +51,14 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var result = await availability_ModesRepository.GetEntityBy(id);
-                AvailabilityModes availabilityMod = (AvailabilityModes)result.Data;
-                GetAvailabilityModesDto availabilityModesDto = new GetAvailabilityModesDto()
+
+                if (!result.Success)
                 {
-                    SAvailabilityModeID = availabilityMod.SAvailabilityModeID,
-                    AvailabilityMode = availabilityMod.AvailabilityMode
-                };
-                availabilityModesResponse.IsSuccess = true;
-                availabilityModesResponse.Model= result.Data;
+                    availabilityModesResponse.IsSuccess = result.Success;
+                    availabilityModesResponse.Messages = result.Message;
+                    return availabilityModesResponse;
+                }
+                availabilityModesResponse.Model = result.Data;
             }
             catch (Exception ex)
             {
@@ -75,8 +74,11 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 AvailabilityModes availability = new AvailabilityModes();
+
                 availability.AvailabilityMode = dto.AvailabilityMode;
                 availability.CreatedAt = dto.CreatedAt;
+                availability.UpdatedAt = dto.CreatedAt;
+                availability.IsActive = true;
 
                 var result = await availability_ModesRepository.Save(availability);
             }
@@ -94,7 +96,15 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var resultEntity = await availability_ModesRepository.GetEntityBy(dto.SAvailabilityModeID);
-                AvailabilityModes availability = (AvailabilityModes)resultEntity.Data;
+                
+                if (!resultEntity.Success)
+                {
+                    availabilityModesResponse.IsSuccess = resultEntity.Success;
+                    availabilityModesResponse.Messages = resultEntity.Message;
+                    return availabilityModesResponse;
+                }
+
+                AvailabilityModes availability = new AvailabilityModes();
 
                 availability.AvailabilityMode = dto.AvailabilityMode;
                 availability.UpdatedAt = dto.UpdatedAt;

@@ -181,7 +181,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
                                          Treatment = records.Treatment,
                                          DateOfVisit = records.DateOfVisit
                                      }).AsNoTracking()
-                                    .ToListAsync();
+                                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

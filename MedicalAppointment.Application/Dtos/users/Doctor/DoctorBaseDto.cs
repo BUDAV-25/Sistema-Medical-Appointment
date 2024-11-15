@@ -2,6 +2,7 @@
 {
     public class DoctorBaseDto
     {
+        public int DoctorID { get; set; }
         public short SpecialtyID { get; set; }
         public string? LicenseNumber { get; set; }
         public string? PhoneNumber { get; set; }

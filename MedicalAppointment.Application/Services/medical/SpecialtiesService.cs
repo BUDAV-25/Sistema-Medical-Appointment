@@ -28,13 +28,13 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var result = await specialties_Repository.GetAll();
-                List<GetSpecialtiesDto> getSpecialties = ((List<Specialties>)result.Data)
-                                                .Select(specialties => new GetSpecialtiesDto()
-                                                {
-                                                    SpecialtyID = specialties.SpecialtyID,
-                                                    SpecialtyName = specialties.SpecialtyName
-                                                }).ToList();
-                specialtiesResponse.IsSuccess = true;
+
+                if (!result.Success)
+                {
+                    specialtiesResponse.IsSuccess = result.Success;
+                    specialtiesResponse.Messages = result.Message;
+                    return specialtiesResponse;
+                }
                 specialtiesResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -51,14 +51,14 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var result = await specialties_Repository.GetEntityBy(id);
-                Specialties specialties = (Specialties)result.Data;
-                GetSpecialtiesDto special = new GetSpecialtiesDto()
+
+                if (!result.Success)
                 {
-                    SpecialtyID = specialties.SpecialtyID,
-                    SpecialtyName = specialties.SpecialtyName
-                };
-                specialtiesResponse.IsSuccess= true;
-                specialtiesResponse.Model = result.Data;
+                    specialtiesResponse.IsSuccess = result.Success;
+                    specialtiesResponse.Messages = result.Message;
+                    return specialtiesResponse;
+                }
+                specialtiesResponse.Model= result.Data;
             }
             catch (Exception ex)
             {
@@ -76,6 +76,8 @@ namespace MedicalAppointment.Application.Services.medical
                 Specialties specialties = new Specialties();
                 specialties.SpecialtyName = dto.SpecialtyName;
                 specialties.CreatedAt = dto.CreatedAt;
+                specialties.UpdatedAt = dto.CreatedAt;
+                specialties.IsActive = true;
 
                 var result = await specialties_Repository.Save(specialties);
             }
@@ -93,7 +95,14 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var resultEntity = await specialties_Repository.GetEntityBy(dto.SpecialtyID);
-                Specialties specialtiesToUpdate = (Specialties)resultEntity.Data;
+                if (!resultEntity.Success)
+                {
+                    specialtiesResponse.IsSuccess = resultEntity.Success;
+                    specialtiesResponse.Messages = resultEntity.Message;
+                    return specialtiesResponse;
+                }
+
+                Specialties specialtiesToUpdate = new Specialties();
 
                 specialtiesToUpdate.SpecialtyName = dto.SpecialtyName;
                 specialtiesToUpdate.UpdatedAt = dto.UpdatedAt;

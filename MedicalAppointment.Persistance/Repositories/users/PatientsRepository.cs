@@ -274,7 +274,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          Address = patient.Address,
                                          BloodType = patient.BloodType
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

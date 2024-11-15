@@ -29,19 +29,12 @@ namespace MedicalAppointment.Application.Services.users
             {
                 var result = await patient_Repository.GetAll();
 
-                List<GetPatientDto> patients = ((List<Patient>)result.Data).Select(patient => new GetPatientDto()
-                                                  {
-                                                    DateOfBirth = patient.DateOfBirth,
-                                                    Gender = patient.Gender,
-                                                    PhoneNumber = patient.PhoneNumber,
-                                                    Address = patient.Address,
-                                                    EmergencyContactName = patient.EmergencyContactName,
-                                                    EmergencyContactPhone = patient.EmergencyContactPhone,
-                                                    BloodType = patient.BloodType,
-                                                    Allergies = patient.Allergies,
-                                                    InsuranceProviderID = patient.InsuranceProviderID
-                                                  }).ToList();
-                patientResponse.IsSuccess = true;
+                if (!result.Success)
+                {
+                    patientResponse.IsSuccess = result.Success;
+                    patientResponse.Messages = result.Message;
+                    return patientResponse;
+                }
                 patientResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -58,21 +51,13 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 var result = await patient_Repository.GetEntityBy(id);
-                Patient patient = (Patient)result.Data;
-                GetPatientDto patientDto = new GetPatientDto()
+                if (!result.Success)
                 {
-                    DateOfBirth = patient.DateOfBirth,
-                    Gender = patient.Gender,
-                    PhoneNumber = patient.PhoneNumber,
-                    Address = patient.Address,
-                    EmergencyContactName = patient.EmergencyContactName,
-                    EmergencyContactPhone = patient.EmergencyContactPhone,
-                    BloodType = patient.BloodType,
-                    Allergies = patient.Allergies,
-                    InsuranceProviderID = patient.InsuranceProviderID
-                };
-                patientResponse.IsSuccess = true;
-                patientResponse.Model = patientDto;
+                    patientResponse.IsSuccess = result.Success;
+                    patientResponse.Messages = result.Message;
+                    return patientResponse;
+                }
+                patientResponse.Model = result.Data;
             }
             catch (Exception ex)
             {
@@ -88,6 +73,7 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 Patient patient = new Patient();
+
                 patient.DateOfBirth = dto.DateOfBirth;
                 patient.Gender = dto.Gender;
                 patient.PhoneNumber = dto.PhoneNumber;
@@ -98,6 +84,8 @@ namespace MedicalAppointment.Application.Services.users
                 patient.Allergies = dto.Allergies;
                 patient.InsuranceProviderID = dto.InsuranceProviderID;
                 patient.CreatedAt = dto.CreatedAt;
+                patient.UpdatedAt = patient.CreatedAt;
+                patient.IsActive = true;
 
                 var result = await patient_Repository.Save(patient);
             }
@@ -115,7 +103,13 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 var resultEntity = await patient_Repository.GetEntityBy(dto.PatientID);
-                Patient patientToUpdate = (Patient)resultEntity.Data;
+                if (!resultEntity.Success)
+                {
+                    patientResponse.IsSuccess = resultEntity.Success;
+                    patientResponse.Messages = resultEntity.Message;
+                    return patientResponse;
+                }
+                Patient patientToUpdate = new Patient();
 
                 patientToUpdate.DateOfBirth = dto.DateOfBirth;
                 patientToUpdate.Gender = dto.Gender;

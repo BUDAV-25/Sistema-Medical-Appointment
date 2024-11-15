@@ -1,6 +1,7 @@
 ﻿using MedicalAppointment.Application.Contracts.users;
 using MedicalAppointment.Application.Dtos.users.Doctor;
 using MedicalAppointment.Application.Response.users.Doctor;
+using MedicalAppointment.Application.Response.users.User;
 using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Persistance.Interfaces.users;
 using Microsoft.Extensions.Logging;
@@ -29,15 +30,12 @@ namespace MedicalAppointment.Application.Services.users
             {
                 var result = await doctor_Repository.GetAll();
 
-                List<GetDoctorDto> doctors = ((List<Doctor>)result.Data).Select(doctor => new GetDoctorDto()
-                                                {
-                                                 SpecialtyID = doctor.SpecialtyID,
-                                                 PhoneNumber = doctor.PhoneNumber,
-                                                 ConsultationFee = doctor.ConsultationFee,
-                                                 ClinicAddress = doctor.ClinicAddress,
-                                                 AvailabilityModeId = doctor.AvailabilityModeId
-                                                }).ToList();
-                doctorResponse.IsSuccess = true;
+                if (!result.Success)
+                {
+                    doctorResponse.IsSuccess = result.Success;
+                    doctorResponse.Messages = result.Message;
+                    return doctorResponse;
+                }
                 doctorResponse.Model = result.Data;
             }
             catch (Exception ex)
@@ -54,17 +52,13 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 var result = await doctor_Repository.GetEntityBy(id);
-                Doctor doctor = (Doctor)result.Data;
-                GetDoctorDto doctorDto = new GetDoctorDto()
+                if (!result.Success)
                 {
-                    SpecialtyID = doctor.SpecialtyID,
-                    PhoneNumber = doctor.PhoneNumber,
-                    ConsultationFee = doctor.ConsultationFee,
-                    ClinicAddress = doctor.ClinicAddress,
-                    AvailabilityModeId = doctor.AvailabilityModeId
-                };
-                doctorResponse.IsSuccess= true;
-                doctorResponse.Model = doctorDto;
+                    doctorResponse.IsSuccess = result.Success;
+                    doctorResponse.Messages = result.Message;
+                    return doctorResponse;
+                }
+                doctorResponse.Model = result.Data;
             }
             catch (Exception ex)
             {
@@ -80,6 +74,8 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 Doctor doctor = new Doctor();
+
+                doctor.DoctorID = dto.DoctorID;
                 doctor.SpecialtyID = dto.SpecialtyID;
                 doctor.LicenseNumber = dto.LicenseNumber;
                 doctor.PhoneNumber = dto.PhoneNumber;
@@ -91,9 +87,10 @@ namespace MedicalAppointment.Application.Services.users
                 doctor.AvailabilityModeId = dto.AvailabilityModeId;
                 doctor.LicenseExpirationDate = dto.LicenseExpirationDate;
                 doctor.CreatedAt = dto.CreatedAt;
+                doctor.UpdatedAt = dto.CreatedAt;
+                doctor.IsActive = true;
 
                 var result = await doctor_Repository.Save(doctor);
-
             }
             catch (Exception ex)
             {
@@ -109,8 +106,14 @@ namespace MedicalAppointment.Application.Services.users
             try
             {
                 var resultEntity = await doctor_Repository.GetEntityBy(dto.DoctorID);
-                Doctor doctorUpdate = (Doctor)resultEntity.Data;
+                if (!resultEntity.Success)
+                {
+                    doctorResponse.IsSuccess = resultEntity.Success;
+                    doctorResponse.Messages = resultEntity.Message;
+                }
+                Doctor doctorUpdate = new Doctor();
 
+                doctorUpdate.DoctorID = dto.DoctorID;
                 doctorUpdate.SpecialtyID = dto.SpecialtyID;
                 doctorUpdate.LicenseNumber = dto.LicenseNumber;
                 doctorUpdate.PhoneNumber = dto.PhoneNumber;

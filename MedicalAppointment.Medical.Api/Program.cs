@@ -1,7 +1,6 @@
 
 using MedicalAppointment.Persistance.Context;
-using MedicalAppointment.Persistance.Interfaces.medical;
-using MedicalAppointment.Persistance.Repositories.medical;
+using MedicalAppointment.IOC.Dependencies.medical;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalAppointment.Medical.Api
@@ -16,9 +15,7 @@ namespace MedicalAppointment.Medical.Api
             builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalAppDB")));
 
             // -----Registro de cada una de las dependencias-----
-            builder.Services.AddScoped<IAvailabilityModesRepository, AvailabilityModesRepository>();
-            builder.Services.AddScoped<IMedicalRecordsRepository, MedicalRecordsRepository>();
-            builder.Services.AddScoped<ISpecialtiesRepository, SpecialtiesRepository>();
+            builder.Services.AddMedicalDependency();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

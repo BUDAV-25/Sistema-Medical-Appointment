@@ -9,11 +9,11 @@ using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
-    public sealed class DoctorsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<DoctorsRepository> logger) : BaseRepository<Doctor>(medicalAppointmentContext), IDoctorRepository
+    public sealed class DoctorRepository(MedicalAppointmentContext medicalAppointmentContext,
+        ILogger<DoctorRepository> logger) : BaseRepository<Doctor>(medicalAppointmentContext), IDoctorRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
-        private readonly ILogger<DoctorsRepository> logger = logger;
+        private readonly ILogger<DoctorRepository> logger = logger;
         public async override Task<OperationResult> Save(Doctor entity)
         {
             OperationResult result = new OperationResult();
