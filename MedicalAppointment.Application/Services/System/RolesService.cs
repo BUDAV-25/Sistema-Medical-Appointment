@@ -92,7 +92,7 @@ namespace MedicalAppointment.Application.Services.System
 
                 roles.RoleName = dto.RoleName;
                 roles.CreatedAt = dto.CreatedAt;
-                roles.UpdatedAt = dto.UpdateAt;
+                roles.UpdatedAt = roles.CreatedAt;
                 roles.IsActive = dto.IsActive;
 
 

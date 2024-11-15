@@ -3,7 +3,7 @@ using MedicalAppointment.Application.Dtos.system.Notification;
 using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Persistance.Interfaces.system;
 using Microsoft.AspNetCore.Mvc;
-using MedicalAppointment.IOC.Dependencies.System;
+using MedicalAppointment.IOC.Dependencies.system;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -71,20 +71,5 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        /*
-        // Remove Notifications
-        [HttpDelete("RemoveNotifications")]
-        public async Task<IActionResult> Delete([FromBody] Notifications notifications)
-        {
-            var result = await _notificationsRepository.Remove(notifications);
-
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-            
-        }
-        */
     }
 }

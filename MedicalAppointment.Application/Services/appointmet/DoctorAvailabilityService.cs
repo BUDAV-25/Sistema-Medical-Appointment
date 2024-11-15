@@ -32,18 +32,14 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 var result = await _doctorAvailabilityRepository.GetAll();
 
-                List<DoctorAvailabilityGetDto> doctorAvailabilities = ((List<DoctorAvailability>)result.Data).Select(doctorAvailabilities => new DoctorAvailabilityGetDto()
+                if (!result.Success)
                 {
-                    AvailabilityID = doctorAvailabilities.AvailabilityID,
-                    DoctorID = doctorAvailabilities.DoctorID,
-                    AvailableDate = doctorAvailabilities.AvailableDate,
-                    StarTime = doctorAvailabilities.StartTime,
-                    EndTime = doctorAvailabilities.EndTime
+                    doctorAvailabilityResponse.IsSuccess = result.Success;
+                    doctorAvailabilityResponse.Messages = result.Message;
+                    return doctorAvailabilityResponse;
+                }                
+                doctorAvailabilityResponse.Data = result.Data;
 
-                }).ToList();
-
-                doctorAvailabilityResponse.IsSuccess = result.Success;
-                doctorAvailabilityResponse.Data = doctorAvailabilities;
             }
             catch (Exception ex)
             {
@@ -62,18 +58,16 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 var result = await _doctorAvailabilityRepository.GetEntityBy(id);
 
-                DoctorAvailability doctorAvailability = (DoctorAvailability)result.Data;
-                DoctorAvailabilityGetDto doctorAvailabilityGetDto = new DoctorAvailabilityGetDto()
+                if (!result.Success)
                 {
-                    AvailabilityID = doctorAvailability.AvailabilityID,
-                    DoctorID = doctorAvailability.DoctorID,
-                    AvailableDate = doctorAvailability.AvailableDate,
-                    StarTime = doctorAvailability.StartTime,
-                    EndTime = doctorAvailability.EndTime,
-                };
+                    doctorAvailabilityResponse.IsSuccess = result.Success;
+                    doctorAvailabilityResponse.Messages = result.Message;
 
-                doctorAvailabilityResponse.IsSuccess = false;
-                doctorAvailabilityResponse.Data = doctorAvailabilityGetDto;
+                    return doctorAvailabilityResponse;
+                }
+
+                doctorAvailabilityResponse.Data = result.Data;
+
 
             }
             catch (Exception ex)
@@ -118,14 +112,23 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 var resultEntity = await _doctorAvailabilityRepository.GetEntityBy(dto.AvailabilityID);
 
-                DoctorAvailability doctorAvailabilityToUpdate = (DoctorAvailability)resultEntity.Data;
+                if (resultEntity != null)
+                {
+                    doctorAvailabilityResponse.IsSuccess = resultEntity.Success;
+                    doctorAvailabilityResponse.Messages = resultEntity.Message;
 
-                doctorAvailabilityToUpdate.DoctorID = dto.DoctorID;
-                doctorAvailabilityToUpdate.AvailableDate = dto.AvailableDate;
-                doctorAvailabilityToUpdate.StartTime = dto.StarTime;
-                doctorAvailabilityToUpdate.EndTime = dto.EndTime;
+                    return doctorAvailabilityResponse;
+                }
 
-                var result = await _doctorAvailabilityRepository.Update(doctorAvailabilityToUpdate);
+                DoctorAvailability doctorAvailability = new DoctorAvailability();
+
+                doctorAvailability.AvailabilityID = dto.AvailabilityID;
+                doctorAvailability.DoctorID = dto.DoctorID;
+                doctorAvailability.AvailableDate = dto.AvailableDate;
+                doctorAvailability.StartTime = dto.StarTime;
+                doctorAvailability.EndTime = dto.EndTime;
+
+                var result = await _doctorAvailabilityRepository.Update(doctorAvailability);
             }
             catch (Exception ex)
             {

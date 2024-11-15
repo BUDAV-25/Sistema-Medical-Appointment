@@ -162,7 +162,10 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                      select new RolesModel()
                                      {
                                          RoleID = role.RoleID,
-                                         RoleName = role.RoleName
+                                         RoleName = role.RoleName,
+                                         CreatedAt = role.CreatedAt,
+                                         UpdatedAt = role.UpdatedAt,
+                                         IsActive = role.IsActive
 
                                      }).AsNoTracking()
                                      .ToListAsync();

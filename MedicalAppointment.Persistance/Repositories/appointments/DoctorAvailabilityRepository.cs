@@ -209,7 +209,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          EndTime = availability.EndTime
 
                                      }).AsNoTracking()
-                                      .ToListAsync();
+                                      .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

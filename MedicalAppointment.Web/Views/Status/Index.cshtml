@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Status List</h1>
+<h1>List Statuses</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.StatusName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.StatusID  }) |
+                @Html.ActionLink("Edit", "Edit", new { id=item.StatusID}) |
                 @Html.ActionLink("Details", "Details", new { id=item.StatusID }) 
             </td>
         </tr>

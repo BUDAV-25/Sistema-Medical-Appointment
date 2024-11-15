@@ -42,20 +42,15 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 var result = await _appointmentsRepository.GetAll();
 
-                List<AppointmentsGetDto> appointment = ((List<EntityAppointment>)result.Data).Select(appointments => new AppointmentsGetDto()
+                if (!result.Success)
                 {
-                    AppointmentID = appointments.AppointmentID,
-                    PatientID = appointments.PatientID,
-                    DoctorID = appointments.DoctorID,
-                    AppointmentDate = appointments.AppointmentDate,
-                    StatusID = appointments.StatusID
+                    appointmentsResponse.IsSuccess = result.Success;
+                    appointmentsResponse.Messages = result.Message;
 
-                }).ToList();
+                    return appointmentsResponse;
+                }
 
-                appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Data = appointment;
-
-
+                appointmentsResponse.Data = result.Data;
 
             }
             catch (Exception ex)
@@ -78,18 +73,15 @@ namespace MedicalAppointment.Application.Services.appointmet
             {
                 var result = await _appointmentsRepository.GetEntityBy(id);
 
-                EntityAppointment appointment = (EntityAppointment)result.Data;
-                AppointmentsGetDto appointmentsGetDto = new AppointmentsGetDto()
+                if (!result.Success)
                 {
-                    AppointmentID = appointment.AppointmentID,
-                    PatientID = appointment.PatientID,
-                    DoctorID = appointment.DoctorID,
-                    AppointmentDate = appointment.AppointmentDate,
-                    StatusID = appointment.StatusID,
-                };
+                    appointmentsResponse.IsSuccess = result.Success;
+                    appointmentsResponse.Messages = result.Message;
 
-                appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Data = appointmentsGetDto;
+                    return appointmentsResponse;
+                }
+
+                appointmentsResponse.Data = result.Data;
             }
             catch (Exception ex)
             {
@@ -109,12 +101,11 @@ namespace MedicalAppointment.Application.Services.appointmet
             try
             {
                 EntityAppointment appointment = new EntityAppointment();
-
                 appointment.PatientID = dto.PatientID;
                 appointment.DoctorID = dto.DoctorID;
-                appointment.AppointmentDate = (DateTime)dto.AppointmentDate;
+                appointment.AppointmentDate = dto.AppointmentDate;
                 appointment.StatusID = dto.StatusID;
-                appointment.CreatedAt = (DateTime)dto.CreatedAt;
+                appointment.CreatedAt = dto.CreatedAt;
 
                 var result = await _appointmentsRepository.Save(appointment);
 
@@ -136,15 +127,26 @@ namespace MedicalAppointment.Application.Services.appointmet
 
             try
             {
-                var resultEntity = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
+                var resultGetById = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
 
-                EntityAppointment appointmentToUpdate = (EntityAppointment)resultEntity.Data;
+                if (!resultGetById.Success)
+                {
+                    appointmentsResponse.IsSuccess = resultGetById.Success;
+                    appointmentsResponse.Messages = resultGetById.Message;
 
-                appointmentToUpdate.PatientID = dto.PatientID;
-                appointmentToUpdate.DoctorID = dto.DoctorID;
-                appointmentToUpdate.AppointmentDate = dto.AppointmentDate;
-                appointmentToUpdate.StatusID = dto.StatusID;
-                appointmentToUpdate.UpdatedAt = dto.UpdateAt;
+                    return appointmentsResponse;
+                }
+
+                Appointment appointment = new Appointment();
+
+                appointment.AppointmentID = dto.AppointmentID;
+                appointment.PatientID = dto.PatientID;
+                appointment.DoctorID = dto.DoctorID;
+                appointment.AppointmentDate = dto.AppointmentDate;
+                appointment.StatusID = dto.StatusID;
+                appointment.CreatedAt = dto.UpdateAt;
+                appointment.UpdatedAt = dto.UpdateAt;
+
 
             }
             catch (Exception ex)

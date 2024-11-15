@@ -39,6 +39,7 @@ namespace MedicalAppointment.Application.Services.System
                 {
                     notificationResponse.IsSuccess = result.Success;
                     notificationResponse.Messages = result.Message;
+
                     return notificationResponse;
                 }
                 notificationResponse.Data = result.Data;
@@ -64,8 +65,8 @@ namespace MedicalAppointment.Application.Services.System
 
                 if (!result.Success)
                 {
-                    notificationResponse.Messages = result.Message;
                     notificationResponse.IsSuccess = result.Success;
+                    notificationResponse.Messages = result.Message;
 
                     return notificationResponse;
                 }

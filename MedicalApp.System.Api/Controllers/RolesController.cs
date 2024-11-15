@@ -70,19 +70,5 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        /*
-        // Delete Roles
-        [HttpDelete("RemoveRoles")]
-        public async Task<IActionResult> Delete([FromBody] Roles roles)
-        {
-            var result = await _rolesRepository.Remove(roles);
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        
-        }
-        */
     }
 }

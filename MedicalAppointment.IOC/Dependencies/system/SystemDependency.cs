@@ -4,11 +4,11 @@ using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MedicalAppointment.IOC.Dependencies.System
+namespace MedicalAppointment.IOC.Dependencies.system
 {
-    public static class StatusDependency
+    public static class SystemDependency
     {
-        public static void AddStatusDependency(this IServiceCollection service)
+        public static void AddSystemDependency(this IServiceCollection service)
         {
             service.AddScoped<INotificationsRepository, NotificationsRepository>();
 

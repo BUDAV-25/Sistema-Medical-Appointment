@@ -74,19 +74,5 @@ namespace MedicalApp.System.Api.Controllers
             return Ok(result);
         }
 
-        /*
-        // Delete Status
-        [HttpDelete("RemoveStatus")]
-        public async Task<IActionResult> Delete([FromBody] Status status)
-        {
-            var result = await _statusRepository.Remove(status);
-
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-        */
     }
 }

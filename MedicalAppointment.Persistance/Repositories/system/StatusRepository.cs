@@ -177,7 +177,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          StatusName = status.StatusName
 
                                      }).AsNoTracking()
-                                   .ToListAsync();
+                                   .FirstOrDefaultAsync();
 
             }
             catch (Exception ex)

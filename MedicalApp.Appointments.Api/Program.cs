@@ -1,4 +1,5 @@
 using MedicalAppointment.Persistance.Context;
+using MedicalAppointment.IOC.Dependencies.appointmens;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Repositories.appointments;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,7 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseS
 
 // El registro de cada una de las dependencias
 
-builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
-builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
+builder.Services.AddAppointmentsDependency();
 
 
 builder.Services.AddControllers();

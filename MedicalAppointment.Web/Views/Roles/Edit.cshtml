@@ -1,4 +1,4 @@
-﻿@model MedicalAppointment.Persistance.Models.system.NotificationsModel
+﻿@model MedicalAppointment.Persistance.Models.system.RolesModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,24 +12,25 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NotificationID" class="control-label"></label>
-                <input asp-for="NotificationID" class="form-control" />
-                <span asp-validation-for="NotificationID" class="text-danger"></span>
+                <label asp-for="RoleID" class="control-label"></label>
+                <input asp-for="RoleID" class="form-control" />
+                <span asp-validation-for="RoleID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" class="form-control" />
-                <span asp-validation-for="UserID" class="text-danger"></span>
+                <label asp-for="RoleName" class="control-label"></label>
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
+                <label asp-for="UpdatedAt" class="control-label"></label>
+                <input asp-for="UpdatedAt" class="form-control" />
+                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SentAt" class="control-label"></label>
-                <input asp-for="SentAt" class="form-control" />
-                <span asp-validation-for="SentAt" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

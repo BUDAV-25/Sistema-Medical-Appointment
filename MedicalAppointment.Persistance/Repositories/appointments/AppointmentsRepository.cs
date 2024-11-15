@@ -246,7 +246,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          StatusID = appointments.StatusID
 
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
 
             }
             catch (Exception ex)

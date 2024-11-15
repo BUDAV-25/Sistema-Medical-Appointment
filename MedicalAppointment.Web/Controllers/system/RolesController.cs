@@ -91,7 +91,8 @@ namespace MedicalAppointment.Web.Controllers.system
         public async Task<IActionResult> Edit(RolesUpdateDto rolesUpdateDto)
         {
             try
-            {
+                
+            {   rolesUpdateDto.UpdateAt = DateTime.Now;
                 var result = await _rolesService.UpdateAsync(rolesUpdateDto);
 
                 if (result.IsSuccess)
