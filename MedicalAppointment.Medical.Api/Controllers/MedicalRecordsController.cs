@@ -1,9 +1,6 @@
-﻿using MedicalAppointment.Domain.Entities.medical;
-using MedicalAppointment.Persistance.Interfaces.medical;
-using MedicalAppointment.Persistance.Repositories.medical;
+﻿using MedicalAppointment.Application.Contracts.medical;
+using MedicalAppointment.Application.Dtos.medical.MedicalRecords;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MedicalAppointment.Medical.Api.Controllers
 {
@@ -11,18 +8,18 @@ namespace MedicalAppointment.Medical.Api.Controllers
     [ApiController]
     public class MedicalRecordsController : ControllerBase
     {
-        private readonly IMedicalRecordsRepository medical_RecordsRepository;
-        public  MedicalRecordsController(IMedicalRecordsRepository medicalRecordsRepository)
+        private readonly IMedicalRecordsService medical_RecordsService;
+        public  MedicalRecordsController(IMedicalRecordsService medicalRecordsService)
         {
-            medical_RecordsRepository = medicalRecordsRepository;
+            medical_RecordsService = medicalRecordsService;
         }
         // GET: api/<MedicalRecordsController>
         [HttpGet("Get All Medical records")]
         public async Task<IActionResult> Get()
         {
-            var result = await medical_RecordsRepository.GetAll();
+            var result = await medical_RecordsService.GetAll();
 
-            if (!result.Success)
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
@@ -31,44 +28,32 @@ namespace MedicalAppointment.Medical.Api.Controllers
         [HttpGet("Get Medical records by{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await medical_RecordsRepository.GetEntityBy(id);
+            var result = await medical_RecordsService.GetById(id);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
 
         // POST api/<MedicalRecordsController>
         [HttpPost("Save Medical record")]
-        public async Task<IActionResult> Post([FromBody] MedicalRecords records)
+        public async Task<IActionResult> Post([FromBody] MedicalRecordsSaveDto dto)
         {
-            var result = await medical_RecordsRepository.Save(records);
+            var result = await medical_RecordsService.SaveAsync(dto);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }
 
         // PUT api/<MedicalRecordsController>/5
         [HttpPut("Update  Record by{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] MedicalRecords records)
+        public async Task<IActionResult> Put(int id, [FromBody] MedicalRecordsUpdateDto dto)
         {
-            records.RecordID = id;
-            var result = await medical_RecordsRepository.Update(records);
+            dto.RecordID = id;
+            var result = await medical_RecordsService.UpdateAsync(dto);
 
-            if (!result.Success)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        // DELETE api/<MedicalRecordsController>/5
-        [HttpDelete("Remove by {id}")]
-        public async Task<IActionResult> Delete(int id, MedicalRecords records)
-        {
-            records.RecordID = id;
-            var result = await medical_RecordsRepository.Remove(records);
-
-            if (!result.Success)
+            if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
         }

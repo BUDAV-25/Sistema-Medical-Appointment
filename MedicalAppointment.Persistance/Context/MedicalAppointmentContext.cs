@@ -37,8 +37,8 @@ namespace MedicalAppointment.Persistance.Context
         #endregion
 
         #region "users Entities"
-        public DbSet<Doctors> Doctors { get; set; }
-        public DbSet<Patients> Patients { get; set; }
+        public DbSet<Doctor> Doctor { get; set; }
+        public DbSet<Patient> Patient { get; set; }
         public DbSet<User> User { get; set; }
         #endregion
     }
