@@ -1,13 +1,16 @@
+using MedicalAppointment.Application.Contracts.appointments;
 using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Services.appointmet;
 using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Persistance.Context;
+using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Interfaces.system;
+using MedicalAppointment.Persistance.Repositories.appointments;
 using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 // Add services to the container.
 
@@ -28,6 +31,17 @@ builder.Services.AddTransient<IRolesService, RolesService>();
 
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddTransient<IStatusService, StatusService>();
+
+// Dependencias de Notifications
+
+builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddTransient<IAppointmentsService, AppointmentService>();
+
+// Dependencia de DoctorAvailability
+
+builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
+builder.Services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityService>();
+
 
 
 

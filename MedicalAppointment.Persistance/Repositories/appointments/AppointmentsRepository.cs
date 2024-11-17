@@ -203,6 +203,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                      join patient in medical_AppointmentContext.Patients on appointments.PatientID equals patient.PatientID
                                      join doctor in medical_AppointmentContext.Doctors on appointments.DoctorID equals doctor.DoctorID
 
+                                     orderby appointments.CreatedAt descending
+
                                      select new AppointmentsModel()
 
                                      { AppointmentID = appointments.AppointmentID,

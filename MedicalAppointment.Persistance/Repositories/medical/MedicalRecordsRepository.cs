@@ -128,7 +128,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
 
                 result = await base.Update(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.Success = false;
                 result.Message = "Error al actualizar el Record Medico";

@@ -159,6 +159,8 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 result.Data = await (from role in medical_AppointmentContext.Roles
 
+                                     orderby role.RoleID descending
+
                                      select new RolesModel()
                                      {
                                          RoleID = role.RoleID,

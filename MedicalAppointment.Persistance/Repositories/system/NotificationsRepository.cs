@@ -176,6 +176,8 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Data = await (from system in medical_AppointmentContext.Notifications
                                      join user in medical_AppointmentContext.User on system.UserID equals user.UserID
 
+                                     orderby system.NotificationID descending
+
                                      select new NotificationsModel()
                                      {
                                          NotificationID = system.NotificationID,

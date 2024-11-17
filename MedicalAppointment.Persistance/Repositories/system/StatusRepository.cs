@@ -141,6 +141,8 @@ namespace MedicalAppointment.Persistance.Repositories.system
             try
             {
                 result.Data = await (from status in medical_AppointmentContext.Status
+                                     
+                                     orderby status.StatusID descending
 
                                      select new StatusModel()
 

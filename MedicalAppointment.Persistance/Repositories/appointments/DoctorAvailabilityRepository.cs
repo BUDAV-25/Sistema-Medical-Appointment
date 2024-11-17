@@ -2,6 +2,7 @@
 
 using Azure.Core;
 using MedicalAppointment.Domain.Entities.appointments;
+using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
@@ -168,6 +169,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             {
                 result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
                                      join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+
+                                     orderby availability.AvailabilityID descending
+
                                      select new DoctorAvailabilityModel()
 
                                      {
