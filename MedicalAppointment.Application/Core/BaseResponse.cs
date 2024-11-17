@@ -1,10 +1,8 @@
-﻿
-
 namespace MedicalAppointment.Application.Core
 {
     public abstract class BaseResponse
     {
-        public BaseResponse()
+        protected BaseResponse()
         {
             this.IsSuccess = true;
         }
