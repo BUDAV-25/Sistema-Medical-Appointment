@@ -142,8 +142,8 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             try
             {
                 result.Data = await (from records in medical_AppointmentContext.MedicalRecords
-                                     join patient in medical_AppointmentContext.Patients on records.PatientID equals patient.PatientID
-                                     join doctor in medical_AppointmentContext.Doctors on records.DoctorID equals doctor.DoctorID
+                                     join patient in medical_AppointmentContext.Patient on records.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctor on records.DoctorID equals doctor.DoctorID
                                      select new MedicalRecordsModel()
                                      {
                                          RecordID = records.RecordID,
@@ -169,8 +169,8 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             try
             {
                 result.Data = await (from records in medical_AppointmentContext.MedicalRecords
-                                     join patient in medical_AppointmentContext.Patients on records.PatientID equals patient.PatientID
-                                     join doctor in medical_AppointmentContext.Doctors on records.DoctorID equals doctor.DoctorID
+                                     join patient in medical_AppointmentContext.Patient on records.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctor on records.DoctorID equals doctor.DoctorID
                                      where records.RecordID == Id
                                      select new MedicalRecordsModel()
                                      {
@@ -181,7 +181,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
                                          Treatment = records.Treatment,
                                          DateOfVisit = records.DateOfVisit
                                      }).AsNoTracking()
-                                    .ToListAsync();
+                                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

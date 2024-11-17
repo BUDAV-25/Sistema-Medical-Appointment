@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class PatientsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<PatientsRepository> logger) : BaseRepository<Patients>(medicalAppointmentContext), IPatientsRepository
+        ILogger<PatientsRepository> logger) : BaseRepository<Patient>(medicalAppointmentContext), IPatientRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<PatientsRepository> logger = logger;
-        public async override Task<OperationResult> Save(Patients entity)
+        public async override Task<OperationResult> Save(Patient entity)
         {
             OperationResult result = new OperationResult();
             if (entity == null)
@@ -95,7 +95,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             return result;
         }
-        public async override Task<OperationResult> Update(Patients entity)
+        public async override Task<OperationResult> Update(Patient entity)
         {
             OperationResult result = new OperationResult();
             if (entity == null)
@@ -166,16 +166,16 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             try
             {
-                Patients? patients = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
-                patients.DateOfBirth = entity.DateOfBirth;
-                patients.Gender = entity.Gender;
-                patients.PhoneNumber = entity.PhoneNumber;
-                patients.Address = entity.Address;
-                patients.EmergencyContactName = entity.EmergencyContactName;
-                patients.EmergencyContactPhone = entity.EmergencyContactPhone;
-                patients.BloodType = entity.BloodType;
-                patients.Allergies = entity.Allergies;
-                patients.InsuranceProviderID = entity.InsuranceProviderID;
+                Patient? patient = await medical_AppointmentContext.Patient.FindAsync(entity.PatientID);
+                patient.DateOfBirth = entity.DateOfBirth;
+                patient.Gender = entity.Gender;
+                patient.PhoneNumber = entity.PhoneNumber;
+                patient.Address = entity.Address;
+                patient.EmergencyContactName = entity.EmergencyContactName;
+                patient.EmergencyContactPhone = entity.EmergencyContactPhone;
+                patient.BloodType = entity.BloodType;
+                patient.Allergies = entity.Allergies;
+                patient.InsuranceProviderID = entity.InsuranceProviderID;
                 //patients.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(entity);
@@ -188,7 +188,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             return result;
         }
-        public async override Task<OperationResult> Remove(Patients entity)
+        public async override Task<OperationResult> Remove(Patient entity)
         {
             OperationResult result = new OperationResult();
 
@@ -206,12 +206,12 @@ namespace MedicalAppointment.Persistance.Repositories.users
             }
             try
             {
-                Patients? patientsToRemove = await medical_AppointmentContext.Patients.FindAsync(entity.PatientID);
-                patientsToRemove.IsActive = false;
-                patientsToRemove.UpdatedAt = entity.UpdatedAt;
+                Patient? patientToRemove = await medical_AppointmentContext.Patient.FindAsync(entity.PatientID);
+                patientToRemove.IsActive = false;
+                patientToRemove.UpdatedAt = entity.UpdatedAt;
                // patientsToRemove.UserUpdate = entity.UserUpdate;
 
-                await base.Update(patientsToRemove);
+                await base.Update(patientToRemove);
             }
             catch (Exception ex)
             {
@@ -228,7 +228,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await (from user in medical_AppointmentContext.User
-                                     join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                     join patient in medical_AppointmentContext.Patient on user.UserID equals patient.PatientID
                                      join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                      where patient.IsActive == true
                                      select new UserPatientModel()
@@ -259,7 +259,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await (from user in medical_AppointmentContext.User
-                                     join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                     join patient in medical_AppointmentContext.Patient on user.UserID equals patient.PatientID
                                      join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                      where patient.IsActive == true
                                      && patient.PatientID == Id
@@ -274,7 +274,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          Address = patient.Address,
                                          BloodType = patient.BloodType
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -292,7 +292,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await(from user in medical_AppointmentContext.User
-                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join patient in medical_AppointmentContext.Patient on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
                                     && patient.BloodType == bloodType
@@ -324,7 +324,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await(from user in medical_AppointmentContext.User
-                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join patient in medical_AppointmentContext.Patient on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
                                     && patient.InsuranceProviderID == insuranceProviderId
@@ -356,7 +356,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 result.Data = await(from user in medical_AppointmentContext.User
-                                    join patient in medical_AppointmentContext.Patients on user.UserID equals patient.PatientID
+                                    join patient in medical_AppointmentContext.Patient on user.UserID equals patient.PatientID
                                     join insuranceP in medical_AppointmentContext.InsuranceProviders on patient.InsuranceProviderID equals insuranceP.InsuranceProviderID
                                     where patient.IsActive == true
                                     && patient.Gender == gender
