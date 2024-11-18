@@ -137,7 +137,7 @@ namespace MedicalAppointment.Application.Services.appointmet
                     return appointmentsResponse;
                 }
 
-                Appointment appointment = new Appointment();
+                EntityAppointment appointment = new EntityAppointment();
 
                 appointment.AppointmentID = dto.AppointmentID;
                 appointment.PatientID = dto.PatientID;
@@ -147,6 +147,7 @@ namespace MedicalAppointment.Application.Services.appointmet
                 appointment.CreatedAt = dto.UpdateAt;
                 appointment.UpdatedAt = dto.UpdateAt;
 
+                var result = await _appointmentsRepository.Update(appointment);
 
             }
             catch (Exception ex)

@@ -1,6 +1,4 @@
-﻿
-
-using MedicalAppointment.Domain.Entities.system;
+﻿using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
@@ -28,7 +26,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "La entidad es requerida";
                 return result;
             }
-
             if (string.IsNullOrEmpty(entity.RoleName) || entity.RoleName.Length > 50)
             {
                 result.Success = false;
@@ -52,7 +49,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
         }
 
-
         public async override Task<OperationResult> Update(Roles entity)
         {
 
@@ -64,21 +60,18 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "Se requiere la entidad";
                 return result;
             }
-
             if (string.IsNullOrEmpty(entity.RoleName) || entity.RoleName.Length > 50)
             {
                 result.Success = false;
                 result.Message = "Debe de tener un nombre con un maximo de 50 caracteres";
                 return result;
             }
-
             if (entity.UpdatedAt == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la fecha de modificacion";
                 return result;
             }
-
             if (entity.IsActive == null)
             {
 
@@ -119,7 +112,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "La entidad es requerida";
                 return result;
             }
-
             if (entity.RoleID <= 0)
             {
                 result.Success = false;
@@ -150,7 +142,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
         }
 
-        
+
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
@@ -158,7 +150,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             try
             {
                 result.Data = await (from role in medical_AppointmentContext.Roles
-
                                      orderby role.RoleID descending
 
                                      select new RolesModel()
@@ -191,11 +182,13 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 result.Data = await (from role in medical_AppointmentContext.Roles
                                      where role.RoleID == ID
-
                                      select new RolesModel()
                                      {
                                          RoleID = role.RoleID,
-                                         RoleName = role.RoleName
+                                         RoleName = role.RoleName,
+                                         CreatedAt = role.CreatedAt,
+                                         UpdatedAt = role.UpdatedAt,
+                                         IsActive = role.IsActive
 
                                      }).AsNoTracking()
                                      .FirstOrDefaultAsync();
@@ -210,9 +203,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             }
             return result;
         }
-
-
-
 
         public Task<OperationResult> AssignRoleToUser(int userId, int roleId)
         {

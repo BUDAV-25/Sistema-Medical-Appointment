@@ -1,6 +1,4 @@
-﻿
-
-using MedicalAppointment.Domain.Entities.appointments;
+﻿using MedicalAppointment.Domain.Entities.appointments;
 using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
@@ -31,28 +29,24 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
 
                 return result;
             }
-
             if (entity.PatientID <= 0)
             {
                 result.Success = false;
                 result.Message = "El ID del paciente es requerido.";
                 return result;
             }
-
             if (entity.DoctorID <= 0)
             {
                 result.Success = false;
                 result.Message = "El ID del doctor es requerido";
                 return result;
             }
-
             if (entity.AppointmentDate == null)
             {
                 result.Success = false;
                 result.Message = "La fecha es requerida";
                 return result;
             }
-
             if (entity.StatusID <= 0)
             {
                 result.Success = false;
@@ -63,57 +57,53 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result = await base.Save(entity);
-
             }
-
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = "Error al guardar el appointments";
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public async override Task<OperationResult> Update(Appointment entity)
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null) {
+            if (entity == null)
+            {
 
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
 
                 return result;
             }
-
             if (entity.AppointmentID <= 0)
             {
                 result.Success = false;
                 result.Message = "El AppointmentID es requerido";
                 return result;
             }
-
             if (entity.PatientID <= 0)
             {
                 result.Success = false;
                 result.Message = "El ID del paciente es requerido.";
                 return result;
             }
-
             if (entity.DoctorID <= 0)
             {
                 result.Success = false;
                 result.Message = "El ID del doctor es requerido";
                 return result;
             }
-
             if (entity.AppointmentDate == null)
             {
                 result.Success = false;
                 result.Message = "La fecha es requerida";
                 return result;
             }
-
             if (entity.StatusID <= 0)
             {
                 result.Success = false;
@@ -121,7 +111,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 return result;
             }
 
-            
             try
             {
                 Appointment? appointmentsToUpdate = await medical_AppointmentContext.Appointments.FindAsync(entity.AppointmentID);
@@ -130,11 +119,11 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 appointmentsToUpdate.PatientID = entity.PatientID;
                 appointmentsToUpdate.DoctorID = entity.DoctorID;
                 appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
-                appointmentsToUpdate.StatusID = entity.AppointmentID;
+                appointmentsToUpdate.StatusID = entity.StatusID;
                 appointmentsToUpdate.CreatedAt = entity.CreatedAt;
                 appointmentsToUpdate.UpdatedAt = entity.UpdatedAt;
 
-                result = await base.Save(appointmentsToUpdate);
+                result = await base.Update(appointmentsToUpdate);
 
             }
 
@@ -145,10 +134,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
-        
 
-
-    }
+        }
 
         public async override Task<OperationResult> Remove(Appointment entity)
         {
@@ -160,7 +147,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result.Message = "La entidad es requerida";
                 return result;
             }
-
             if (entity.AppointmentID <= 0)
             {
                 result.Success = false;
@@ -185,14 +171,14 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             }
             catch (Exception ex)
             {
-
                 result.Success = false;
                 result.Message = "Error al remover el Appointment";
                 logger.LogError(result.Message, ToString());
             }
             return result;
+
         }
-        
+
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
@@ -202,19 +188,19 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result.Data = await (from appointments in medical_AppointmentContext.Appointments
                                      join patient in medical_AppointmentContext.Patient on appointments.PatientID equals patient.PatientID
                                      join doctor in medical_AppointmentContext.Doctor on appointments.DoctorID equals doctor.DoctorID
-
                                      orderby appointments.CreatedAt descending
 
                                      select new AppointmentsModel()
 
-                                     { AppointmentID = appointments.AppointmentID,
+                                     {
+                                         AppointmentID = appointments.AppointmentID,
                                          PatientID = patient.PatientID,
                                          DoctorID = appointments.DoctorID,
                                          AppointmentDate = appointments.AppointmentDate,
                                          StatusID = appointments.StatusID,
                                          CreatedAt = appointments.CreatedAt,
                                          UpdateAt = appointments.UpdatedAt
-                                         
+
 
                                      }).AsNoTracking()
                                      .ToListAsync();
@@ -226,6 +212,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public async override Task<OperationResult> GetEntityBy(int ID)
@@ -238,6 +225,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                      join patient in medical_AppointmentContext.Patient on appointments.PatientID equals patient.PatientID
                                      join doctor in medical_AppointmentContext.Doctor on appointments.DoctorID equals doctor.DoctorID
                                      where appointments.AppointmentID == ID
+
                                      select new AppointmentsModel()
 
                                      {
@@ -245,7 +233,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          PatientID = patient.PatientID,
                                          DoctorID = appointments.DoctorID,
                                          AppointmentDate = appointments.AppointmentDate,
-                                         StatusID = appointments.StatusID
+                                         StatusID = appointments.StatusID,
+                                         CreatedAt = appointments.CreatedAt,
+                                         UpdateAt = appointments.UpdatedAt
 
                                      }).AsNoTracking()
                                      .FirstOrDefaultAsync();

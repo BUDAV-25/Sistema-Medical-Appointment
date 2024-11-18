@@ -74,6 +74,7 @@ namespace MedicalAppointment.Application.Services.users
             {
                 Patient patient = new Patient();
 
+                patient.PatientID = dto.PatientID;
                 patient.DateOfBirth = dto.DateOfBirth;
                 patient.Gender = dto.Gender;
                 patient.PhoneNumber = dto.PhoneNumber;

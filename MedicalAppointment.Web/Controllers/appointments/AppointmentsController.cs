@@ -71,8 +71,15 @@ namespace MedicalAppointment.Web.Controllers.appointments
             }
         }
 
-        public ActionResult Edit(int id)
+        public async Task <IActionResult> Edit(int id)
         {
+            var result = await _appointmentsService.GetById(id);
+            if (result.IsSuccess) 
+            {
+                AppointmentsModel appointmentsModel = (AppointmentsModel)result.Data;
+
+                return View(appointmentsModel);
+            }
             return View();
         }
 

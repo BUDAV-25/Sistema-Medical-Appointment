@@ -17,8 +17,8 @@ namespace MedicalAppointment.Persistance.Repositories.system
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<StatusRepository> logger = logger;
 
-        public async override Task<OperationResult> Save(Status entity) 
-        { 
+        public async override Task<OperationResult> Save(Status entity)
+        {
             OperationResult result = new OperationResult();
 
             if (entity == null)
@@ -27,9 +27,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "La entidad es requerida";
                 return result;
             }
-
-
-
             if (string.IsNullOrEmpty(entity.StatusName))
             {
                 result.Success = false;
@@ -50,27 +47,25 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
-        
+
         }
 
-
-        public async override Task<OperationResult> Update(Status entity) 
+        public async override Task<OperationResult> Update(Status entity)
         {
             OperationResult result = new OperationResult();
-            
+
             if (entity == null)
             {
                 result.Success = false;
                 result.Message = "Se requiere la entidad";
                 return result;
             }
-
             if (entity.StatusID <= 0)
-            {   result.Success = false;
+            {
+                result.Success = false;
                 result.Message = "Se requiere el StatusID";
                 return result;
             }
-
             if (string.IsNullOrEmpty(entity.StatusName) || entity.StatusName.Length == 50)
             {
                 result.Success = false;
@@ -94,6 +89,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public async override Task<OperationResult> Remove(Status entity)
@@ -106,7 +102,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "Se requiere la entidad";
                 return result;
             }
-
             if (entity.StatusID <= 0)
             {
                 result.Success = false;
@@ -133,7 +128,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
         }
 
-
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
@@ -141,7 +135,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             try
             {
                 result.Data = await (from status in medical_AppointmentContext.Status
-                                     
                                      orderby status.StatusID descending
 
                                      select new StatusModel()
@@ -155,12 +148,13 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             }
             catch (Exception ex)
-            { 
+            {
                 result.Success = false;
                 result.Message = "Error obteniendo los datos";
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
@@ -171,7 +165,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 result.Data = await (from status in medical_AppointmentContext.Status
                                      where status.StatusID == id
-
                                      select new StatusModel()
 
                                      {
@@ -189,6 +182,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public Task<OperationResult> GetActiveStatuses()

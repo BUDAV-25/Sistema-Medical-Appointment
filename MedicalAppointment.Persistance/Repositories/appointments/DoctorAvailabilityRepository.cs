@@ -25,13 +25,13 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null) {
-            result.Success = false;
-            result.Message = "La entidad es requerida.";
-            return result;
-            
-            }
+            if (entity == null)
+            {
+                result.Success = false;
+                result.Message = "La entidad es requerida.";
+                return result;
 
+            }
             if (entity.DoctorID <= 0)
             {
                 result.Success = false;
@@ -57,44 +57,45 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
         public async override Task<OperationResult> Update(DoctorAvailability entity)
         {
             OperationResult result = new OperationResult();
-            
-            if (entity == null) {
+
+            if (entity == null)
+            {
                 result.Success = false;
                 result.Message = "La entidad es requerida.";
                 return result;
             }
-
             if (entity.AvailabilityID <= 0)
             {
                 result.Success = false;
                 result.Message = "La disponivilidad es requerida.";
                 return result;
             }
-
-            if (entity.DoctorID <= 0){
+            if (entity.DoctorID <= 0)
+            {
                 result.Success = false;
                 result.Message = "Es requerido el ID del doctor para realizar esta acción.";
                 return result;
             }
-
-            if (entity.AvailableDate == null){
+            if (entity.AvailableDate == null)
+            {
                 result.Success = false;
                 result.Message = "La fecha es requerida.";
                 return result;
             }
-
-            if (entity.StartTime == null){
+            if (entity.StartTime == null)
+            {
                 result.Success = false;
                 result.Message = "La fecha inicial es requerida.";
                 return result;
             }
-
-            if (entity.EndTime == null){
+            if (entity.EndTime == null)
+            {
                 result.Success = false;
                 result.Message = "La fecha final es requerida.";
                 return result;
@@ -113,7 +114,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result = await base.Update(doctorAvailabilityToUpdate);
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = "Error al actualizar disponibilidad";
                 logger.LogError(result.Message, ex.ToString());
@@ -125,16 +127,17 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null){
+            if (entity == null)
+            {
                 result.Success = false;
                 result.Message = "La entidad es requerida.";
                 return result;
             }
-
-            if (entity.AvailabilityID <= 0) { 
+            if (entity.AvailabilityID <= 0)
+            {
                 result.Success = false;
                 result.Message = "Se requiere el ID de la disponibilidad para realizar esta acción.";
-                return result; 
+                return result;
             }
 
             try
@@ -155,7 +158,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result.Message = "Error al remover la disponibilidad.";
                 logger.LogError(result.Message, ex.ToString());
             }
-
             return result;
 
         }
@@ -168,30 +170,30 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
-                                     join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
-
+                                     join doctor in medical_AppointmentContext.Doctor on availability.DoctorID equals doctor.DoctorID
                                      orderby availability.AvailabilityID descending
 
                                      select new DoctorAvailabilityModel()
 
                                      {
-                                        AvailabilityID = availability.AvailabilityID,
-                                        DoctorID = doctor.DoctorID,
-                                        AvailableDate = availability.AvailableDate,
-                                        StartTime = availability.StartTime,
-                                        EndTime = availability.EndTime
+                                         AvailabilityID = availability.AvailabilityID,
+                                         DoctorID = doctor.DoctorID,
+                                         AvailableDate = availability.AvailableDate,
+                                         StartTime = availability.StartTime,
+                                         EndTime = availability.EndTime
 
                                      }).AsNoTracking()
                                      .ToListAsync();
-                                     
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                result.Success=false;
+                result.Success = false;
                 result.Message = "Error al obtener las disponibilidades";
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
+
         }
 
 
@@ -208,7 +210,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                      {
                                          AvailabilityID = availability.AvailabilityID,
                                          DoctorID = doctor.DoctorID,
-                                         AvailableDate = availability.AvailableDate, 
+                                         AvailableDate = availability.AvailableDate,
                                          StartTime = availability.StartTime,
                                          EndTime = availability.EndTime
 
@@ -221,8 +223,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result.Message = "Error al obtener el dato espesifico";
                 logger.LogError(result.Message, ex.ToString());
             }
-
             return result;
+
         }
 
         public Task<OperationResult> SetDoctorAvailability(int doctorId, DateTime startDateTime, DateTime endDateTime)
