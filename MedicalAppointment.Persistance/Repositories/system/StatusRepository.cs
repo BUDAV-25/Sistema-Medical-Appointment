@@ -148,12 +148,40 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          StatusID = status.StatusID,
                                          StatusName = status.StatusName
 
-                                     })
-                                        .ToListAsync();
+                                     }).AsNoTracking()
+                                   .ToListAsync();
 
             }
             catch (Exception ex)
             { 
+                result.Success = false;
+                result.Message = "Error obteniendo los datos";
+                logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+
+        public async override Task<OperationResult> GetEntityBy(int id)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                result.Data = await (from status in medical_AppointmentContext.Status
+                                     where status.StatusID == id
+
+                                     select new StatusModel()
+
+                                     {
+                                         StatusID = status.StatusID,
+                                         StatusName = status.StatusName
+
+                                     }).AsNoTracking()
+                                   .FirstOrDefaultAsync();
+
+            }
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = "Error obteniendo los datos";
                 logger.LogError(result.Message, ex.ToString());

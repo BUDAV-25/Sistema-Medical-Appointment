@@ -215,7 +215,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          SentAt = system.SentAt
 
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

@@ -2,6 +2,9 @@
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.AspNetCore.Mvc;
+using MedicalAppointment.Application.Services.System;
+using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Dtos.system.Status;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,11 +14,11 @@ namespace MedicalApp.System.Api.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        private readonly IStatusRepository _statusRepository;
+        private readonly IStatusService _statusService;
 
-        public StatusController(IStatusRepository statusRepository)
+        public StatusController(IStatusService statusService)
         {
-            _statusRepository = statusRepository;
+            _statusService = statusService;
         }
 
 
@@ -23,9 +26,9 @@ namespace MedicalApp.System.Api.Controllers
         [HttpGet("GetAllStatus")]
         public async Task<IActionResult> Get()
         {
-            var result = await _statusRepository.GetAll();
+            var result = await _statusService.GetAll();
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -36,9 +39,9 @@ namespace MedicalApp.System.Api.Controllers
         [HttpGet("GetRolesBy{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _statusRepository.GetEntityBy(id);
+            var result = await _statusService.GetById(id);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -47,10 +50,11 @@ namespace MedicalApp.System.Api.Controllers
 
         // Save Status
         [HttpPost("SaveStatus")]
-        public async Task<IActionResult> Post([FromBody] Status status)
+        public async Task<IActionResult> Post([FromBody] StatusSaveDto statusSaveDto)
         {
-            var result = await _statusRepository.Save(status);
-            if (!result.Success)
+            var result = await _statusService.SaveAsync(statusSaveDto);
+            
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -59,28 +63,16 @@ namespace MedicalApp.System.Api.Controllers
 
         // Update Status
         [HttpPut("UpdateStatus{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Status status)
+        public async Task<IActionResult> Put(int id, [FromBody] StatusUpdateDto statusUpdateDto)
         {
-            var result = await _statusRepository.Update(status);
+            var result = await _statusService.UpdateAsync(statusUpdateDto);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
 
-        // Delete Status
-        [HttpDelete("RemoveStatus")]
-        public async Task<IActionResult> Delete([FromBody] Status status)
-        {
-            var result = await _statusRepository.Remove(status);
-
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
     }
 }

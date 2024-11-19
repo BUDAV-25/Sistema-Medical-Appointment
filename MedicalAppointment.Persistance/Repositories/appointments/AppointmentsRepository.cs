@@ -200,8 +200,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result.Data = await (from appointments in medical_AppointmentContext.Appointments
-                                     join patient in medical_AppointmentContext.Patients on appointments.PatientID equals patient.PatientID
-                                     join doctor in medical_AppointmentContext.Doctors on appointments.DoctorID equals doctor.DoctorID
+                                     join patient in medical_AppointmentContext.Patient on appointments.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctor on appointments.DoctorID equals doctor.DoctorID
 
                                      select new AppointmentsModel()
 
@@ -209,7 +209,10 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          PatientID = patient.PatientID,
                                          DoctorID = appointments.DoctorID,
                                          AppointmentDate = appointments.AppointmentDate,
-                                         StatusID = appointments.StatusID
+                                         StatusID = appointments.StatusID,
+                                         CreatedAt = appointments.CreatedAt,
+                                         UpdateAt = appointments.UpdatedAt
+                                         
 
                                      }).AsNoTracking()
                                      .ToListAsync();
@@ -230,8 +233,8 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result.Data = await (from appointments in medical_AppointmentContext.Appointments
-                                     join patient in medical_AppointmentContext.Patients on appointments.PatientID equals patient.PatientID
-                                     join doctor in medical_AppointmentContext.Doctors on appointments.DoctorID equals doctor.DoctorID
+                                     join patient in medical_AppointmentContext.Patient on appointments.PatientID equals patient.PatientID
+                                     join doctor in medical_AppointmentContext.Doctor on appointments.DoctorID equals doctor.DoctorID
                                      where appointments.AppointmentID == ID
                                      select new AppointmentsModel()
 
@@ -243,7 +246,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          StatusID = appointments.StatusID
 
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
 
             }
             catch (Exception ex)

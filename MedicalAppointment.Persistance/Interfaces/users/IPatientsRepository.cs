@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.Result;
 
 namespace MedicalAppointment.Persistance.Interfaces.users
 {
-    public interface IPatientsRepository : IBaseRepository<Patients>
+    public interface IPatientRepository : IBaseRepository<Patient>
     {
         Task<OperationResult> FindBloodType(char bloodType);
         Task<OperationResult> FindInsuranceProvider(int insuranceProviderId);
