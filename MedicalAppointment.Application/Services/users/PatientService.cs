@@ -74,6 +74,7 @@ namespace MedicalAppointment.Application.Services.users
             {
                 Patient patient = new Patient();
 
+                patient.PatientID = dto.PatientID;
                 patient.DateOfBirth = dto.DateOfBirth;
                 patient.Gender = dto.Gender;
                 patient.PhoneNumber = dto.PhoneNumber;
@@ -84,7 +85,6 @@ namespace MedicalAppointment.Application.Services.users
                 patient.Allergies = dto.Allergies;
                 patient.InsuranceProviderID = dto.InsuranceProviderID;
                 patient.CreatedAt = dto.CreatedAt;
-                patient.UpdatedAt = patient.CreatedAt;
                 patient.IsActive = true;
 
                 var result = await patient_Repository.Save(patient);
@@ -111,6 +111,7 @@ namespace MedicalAppointment.Application.Services.users
                 }
                 Patient patientToUpdate = new Patient();
 
+                patientToUpdate.PatientID = dto.PatientID;
                 patientToUpdate.DateOfBirth = dto.DateOfBirth;
                 patientToUpdate.Gender = dto.Gender;
                 patientToUpdate.PhoneNumber = dto.PhoneNumber;

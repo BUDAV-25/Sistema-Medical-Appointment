@@ -206,15 +206,19 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 result.Data = await (from user in medical_AppointmentContext.User
                                      join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
+                                     join availability in medical_AppointmentContext.AvailabilityModes on doctor.AvailabilityModeId equals availability.SAvailabilityModeID
                                      where doctor.IsActive == true
                                      orderby doctor.CreatedAt descending
-                                     select new UserDoctorModel()
+                                     select new DoctorsModel()
                                      {
+                                         DoctorID = doctor.DoctorID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          SpecialtyName = specialty.SpecialtyName,
-                                         LicenseNumber = doctor.LicenseNumber,
+                                         AvailabilityMode = availability.AvailabilityMode,
+                                         ConsultationFee = doctor.ConsultationFee,
                                          PhoneNumber = doctor.PhoneNumber,
+                                         ClinicAddress = doctor.ClinicAddress,
                                          Email = user.Email
                                      }).AsNoTracking()
                                      .ToListAsync();
@@ -236,16 +240,28 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 result.Data = await (from user in medical_AppointmentContext.User
                                      join doctor in medical_AppointmentContext.Doctor on user.UserID equals doctor.DoctorID
                                      join specialty in medical_AppointmentContext.Specialties on doctor.SpecialtyID equals specialty.SpecialtyID
-                                     where doctor.IsActive == true
-                                     && doctor.DoctorID == Id
-                                     select new UserDoctorModel()
+                                     join availability in medical_AppointmentContext.AvailabilityModes on doctor.AvailabilityModeId equals availability.SAvailabilityModeID
+                                     where doctor.DoctorID == Id
+                                     select new DoctorDetailsModel()
                                      {
+                                         DoctorID = doctor.DoctorID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
+                                         SpecialtyID = doctor.SpecialtyID,
                                          SpecialtyName = specialty.SpecialtyName,
+                                         Email = user.Email,
                                          LicenseNumber = doctor.LicenseNumber,
                                          PhoneNumber = doctor.PhoneNumber,
-                                         Email = user.Email
+                                         YearsOfExperience = doctor.YearsOfExperience,
+                                         Education = doctor.Education,
+                                         Bio = doctor.Bio,
+                                         ConsultationFee = doctor.ConsultationFee,
+                                         ClinicAddress = doctor.ClinicAddress,
+                                         AvailabilityModeId = doctor.AvailabilityModeId,
+                                         AvailabilityMode = availability.AvailabilityMode,
+                                         LicenseExpirationDate = doctor.LicenseExpirationDate,
+                                         IsActive = doctor.IsActive
+
                                      }).AsNoTracking()
                                      .FirstOrDefaultAsync();
             }
