@@ -93,16 +93,16 @@ namespace MedicalAppointment.Persistance.Repositories.Insurance
 
             try
             {
-                NetworkType? networkTypeUPdate = await medical_AppointmentContext.NetworkTypes.FindAsync(entity.NetworkTypeId);
+                NetworkType? networkTypeUpdate = await medical_AppointmentContext.NetworkTypes.FindAsync(entity.NetworkTypeId);
 
-                networkTypeUPdate.NetworkTypeId = entity.NetworkTypeId;
-                networkTypeUPdate.Name = entity.Name;
-                networkTypeUPdate.Description = entity.Description;
-                networkTypeUPdate.CreatedAt = entity.CreatedAt;
-                networkTypeUPdate.UpdatedAt = entity.UpdatedAt;
-                networkTypeUPdate.IsActive = entity.IsActive;
+                networkTypeUpdate.NetworkTypeId = entity.NetworkTypeId;
+                networkTypeUpdate.Name = entity.Name;
+                networkTypeUpdate.Description = entity.Description;
+                networkTypeUpdate.CreatedAt = entity.CreatedAt;
+                networkTypeUpdate.UpdatedAt = entity.UpdatedAt;
+                networkTypeUpdate.IsActive = entity.IsActive;
 
-                result = await base.Update(networkTypeUPdate);
+                result = await base.Update(networkTypeUpdate);
 
             }
             catch (Exception ex)

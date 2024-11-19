@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\Insurance\" />
     <Folder Include="Dtos\appointments\Appointments\" />
+    <Folder Include="Dtos\Insurance\" />
     <Folder Include="Response\appointments\Appointments\" />
+    <Folder Include="Response\Insurance\" />
+    <Folder Include="Services\Insurance\" />
   </ItemGroup>
 
   <ItemGroup>
