@@ -6,7 +6,7 @@ namespace MedicalAppointment.Application.Response.system.Notification
 {
     public class NotificationResponse : BaseResponse
     {
-        public dynamic? Model { get; set; }
+        public dynamic? Data { get; set; }
 
     }
 }

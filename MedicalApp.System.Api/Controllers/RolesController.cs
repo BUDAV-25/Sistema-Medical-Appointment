@@ -1,4 +1,6 @@
-﻿using MedicalAppointment.Domain.Entities.system;
+﻿using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Dtos.system.Roles;
+using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Persistance.Interfaces.system;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,20 +12,20 @@ namespace MedicalApp.System.Api.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly IRolesRepository _rolesRepository;
+        private readonly IRolesService _rolesService;
 
-        public RolesController(IRolesRepository rolesRepository)
+        public RolesController(IRolesService rolesService)
         {
-            _rolesRepository = rolesRepository;
+            _rolesService = rolesService;
         }
 
         // GetAll Roles
         [HttpGet("GetAllRoles")]
         public async Task<IActionResult> Get()
         {
-            var result = await _rolesRepository.GetAll();
+            var result = await _rolesService.GetAll();
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -34,9 +36,9 @@ namespace MedicalApp.System.Api.Controllers
         [HttpGet("GetRolesBy{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _rolesRepository.GetEntityBy(id);
+            var result = await _rolesService.GetById(id);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -45,10 +47,11 @@ namespace MedicalApp.System.Api.Controllers
 
         // Save Roles
         [HttpPost("SaveRoles")]
-        public async Task<IActionResult> Post([FromBody] Roles roles)
+        public async Task<IActionResult> Post([FromBody] RolesSaveDto rolesSaveDto)
         {
-            var result = await _rolesRepository.Save(roles);
-            if (!result.Success)
+            var result = await _rolesService.SaveAsync(rolesSaveDto);
+
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
@@ -57,26 +60,15 @@ namespace MedicalApp.System.Api.Controllers
 
         // Update Roles
         [HttpPut("UpdateRoles{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Roles roles)
+        public async Task<IActionResult> Put(int id, [FromBody] RolesUpdateDto rolesUpdateDto)
         {
-            var result = await _rolesRepository.Update(roles);
-            if (!result.Success)
+            var result = await _rolesService.UpdateAsync(rolesUpdateDto);
+            if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
 
-        // Delete Roles
-        [HttpDelete("RemoveRoles")]
-        public async Task<IActionResult> Delete([FromBody] Roles roles)
-        {
-            var result = await _rolesRepository.Remove(roles);
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
     }
 }

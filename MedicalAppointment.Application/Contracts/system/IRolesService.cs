@@ -6,7 +6,7 @@ using MedicalAppointment.Application.Response.system.Roles;
 
 namespace MedicalAppointment.Application.Contracts.system
 {
-    public interface IRolesService
+    public interface IRolesService : IBaseService<RolesResponse, RolesSaveDto, RolesUpdateDto>
     {
     }
 }

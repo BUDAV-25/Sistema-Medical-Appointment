@@ -167,13 +167,15 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
-                                     join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+                                     join doctor in medical_AppointmentContext.Doctor on availability.DoctorID equals doctor.DoctorID
                                      select new DoctorAvailabilityModel()
 
                                      {
-                                         AvailableDate = availability.AvailableDate,
-                                         StartTime = availability.StartTime,
-                                         EndTime = availability.EndTime
+                                        AvailabilityID = availability.AvailabilityID,
+                                        DoctorID = doctor.DoctorID,
+                                        AvailableDate = availability.AvailableDate,
+                                        StartTime = availability.StartTime,
+                                        EndTime = availability.EndTime
 
                                      }).AsNoTracking()
                                      .ToListAsync();
@@ -196,17 +198,18 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
             try
             {
                 result.Data = await (from availability in medical_AppointmentContext.DoctorAvailability
-                                     join doctor in medical_AppointmentContext.Doctors on availability.DoctorID equals doctor.DoctorID
+                                     join doctor in medical_AppointmentContext.Doctor on availability.DoctorID equals doctor.DoctorID
                                      where availability.AvailabilityID == ID
                                      select new DoctorAvailabilityModel()
                                      {
-
+                                         AvailabilityID = availability.AvailabilityID,
+                                         DoctorID = doctor.DoctorID,
                                          AvailableDate = availability.AvailableDate, 
                                          StartTime = availability.StartTime,
                                          EndTime = availability.EndTime
 
                                      }).AsNoTracking()
-                                      .ToListAsync();
+                                      .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

@@ -36,33 +36,11 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 return result;
             }
 
-            if (entity.CreatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere una fecha de creacion";
-                return result;
-            }
-
-            if (entity.UpdatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere fecha de actualizacion";
-                return result;
-            }
-
-            if (entity.IsActive == null)
-            {
-
-                result.Success = false;
-                result.Message = "Se requiere la activacion";
-                return result;
-            }
-
             try
             {
                 await base.Save(entity);
                 result.Data = entity;
-                result.Message = "role Saved Suceffully! ";
+                result.Message = "Rol guardado correctamente";
             }
             catch (Exception ex)
             {
@@ -184,7 +162,10 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                      select new RolesModel()
                                      {
                                          RoleID = role.RoleID,
-                                         RoleName = role.RoleName
+                                         RoleName = role.RoleName,
+                                         CreatedAt = role.CreatedAt,
+                                         UpdatedAt = role.UpdatedAt,
+                                         IsActive = role.IsActive
 
                                      }).AsNoTracking()
                                      .ToListAsync();
@@ -206,7 +187,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             try
             {
-                result.Data = await (from role in medical_AppointmentContext.Roles 
+                result.Data = await (from role in medical_AppointmentContext.Roles
                                      where role.RoleID == ID
 
                                      select new RolesModel()
@@ -215,7 +196,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                                          RoleName = role.RoleName
 
                                      }).AsNoTracking()
-                                     .ToListAsync();
+                                     .FirstOrDefaultAsync();
 
                 result.Success = true;
             }

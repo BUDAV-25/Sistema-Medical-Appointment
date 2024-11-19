@@ -207,7 +207,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          RoleName = role.RoleName,
                                          IsActive = user.IsActive
                                      }).AsNoTracking()
-                                    .ToListAsync();
+                                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

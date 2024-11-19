@@ -150,7 +150,7 @@ namespace MedicalAppointment.Persistance.Repositories.medical
                                          SpecialtyID = specialties.SpecialtyID,
                                          SpecialtyName = specialties.SpecialtyName
                                      }).AsNoTracking()
-                                    .ToListAsync();
+                                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

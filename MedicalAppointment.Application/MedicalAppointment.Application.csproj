@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\appointments\Appointments\" />
-    <Folder Include="Response\appointments\Appointments\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj" />
   </ItemGroup>
 
