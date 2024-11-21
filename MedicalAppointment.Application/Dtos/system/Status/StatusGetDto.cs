@@ -1,9 +1,7 @@
 ﻿namespace MedicalAppointment.Application.Dtos.system.Status
 {
-    public class StatusGetDto
+    public class StatusGetDto : StatusBaseDto
     {
-        public int StatusID { get; set; }
-        public string? StatusName { get; set; }
 
     }
 }

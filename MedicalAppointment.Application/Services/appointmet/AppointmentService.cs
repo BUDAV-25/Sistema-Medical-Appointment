@@ -144,7 +144,6 @@ namespace MedicalAppointment.Application.Services.appointmet
                 appointment.DoctorID = dto.DoctorID;
                 appointment.AppointmentDate = dto.AppointmentDate;
                 appointment.StatusID = dto.StatusID;
-                appointment.CreatedAt = dto.UpdateAt;
                 appointment.UpdatedAt = dto.UpdateAt;
 
                 var result = await _appointmentsRepository.Update(appointment);

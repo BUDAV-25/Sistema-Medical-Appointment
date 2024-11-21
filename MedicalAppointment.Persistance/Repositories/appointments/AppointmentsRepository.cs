@@ -120,7 +120,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 appointmentsToUpdate.DoctorID = entity.DoctorID;
                 appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
                 appointmentsToUpdate.StatusID = entity.StatusID;
-                appointmentsToUpdate.CreatedAt = entity.CreatedAt;
                 appointmentsToUpdate.UpdatedAt = entity.UpdatedAt;
 
                 result = await base.Update(appointmentsToUpdate);
@@ -188,6 +187,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                 result.Data = await (from appointments in medical_AppointmentContext.Appointments
                                      join patient in medical_AppointmentContext.Patient on appointments.PatientID equals patient.PatientID
                                      join doctor in medical_AppointmentContext.Doctor on appointments.DoctorID equals doctor.DoctorID
+
                                      orderby appointments.CreatedAt descending
 
                                      select new AppointmentsModel()
@@ -199,8 +199,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
                                          AppointmentDate = appointments.AppointmentDate,
                                          StatusID = appointments.StatusID,
                                          CreatedAt = appointments.CreatedAt,
-                                         UpdateAt = appointments.UpdatedAt
-
+                                         UpdateAt = appointments.UpdatedAt,
 
                                      }).AsNoTracking()
                                      .ToListAsync();

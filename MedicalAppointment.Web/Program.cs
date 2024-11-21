@@ -45,6 +45,8 @@ builder.Services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityServ
 
 
 
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
