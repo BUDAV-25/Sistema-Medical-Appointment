@@ -1,11 +1,10 @@
 ﻿using MedicalAppointment.Application.Dtos.appointments.Appointments;
-using MedicalAppointment.Application.Dtos.appointments.DoctorAvailability;
-using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Web.Models.appointments.AppointmentsTaskModel;
 using MedicalAppointment.Web.Models.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace MedicalAppointment.Web.Controllers.appointments.Adm
@@ -13,9 +12,9 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
     public class AppointmentsAdmController : Controller
     {
         // GET: AppointmentsAdmController
-        public async Task <IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            const string url = "http://localhost:5110/api/Appointments/GetAllAppointments";
+            const string url = "http://localhost:5120/api/Appointments/GetAllAppointments";
             AppointmentsGetAllModel appointmentsGetAll = new AppointmentsGetAllModel();
 
             try
@@ -40,18 +39,18 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
                 ViewBag.Message = $"Error: {ex.Message}";
             }
 
-            return View(appointmentsGetAll);
+            return View(appointmentsGetAll.data);
         }
 
         // GET: AppointmentsAdmController/Details/5
-        public async Task <IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/Appointments/GetEntityByAppointments";
+            const string url = "http://localhost:5120/api/Appointments/GetEntityByAppointments";
             AppointmentsGetByIdModel appointmentsGetById = new AppointmentsGetByIdModel();
 
             try
             {
-                using (var client = new HttpClient()) 
+                using (var client = new HttpClient())
                 {
                     var response = await client.GetAsync($"{url}{id}");
 
@@ -82,9 +81,9 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         // POST: AppointmentsAdmController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <IActionResult> Create(AppointmentsSaveDto appointmentsSaveDto)
+        public async Task<IActionResult> Create(AppointmentsSaveDto appointmentsSaveDto)
         {
-            const string url = "http://localhost:5110/api/Appointments/SaveAppointments";
+            const string url = "http://localhost:5120/api/Appointments/SaveAppointments";
             BaseProperties baseProperties = new BaseProperties();
 
             try
@@ -98,7 +97,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
                         string response = await responseTask.Content.ReadAsStringAsync();
                         baseProperties = JsonConvert.DeserializeObject<BaseProperties>(response);
 
-                        if (baseProperties.isSuccess)
+                        if (!baseProperties.isSuccess)
                         {
                             ViewBag.Message = baseProperties.messages;
                             return View();
@@ -123,9 +122,9 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         }
 
         // GET: AppointmentsAdmController/Edit/5
-        public async Task <IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            const string url = "http://localhost:5110/api/Appointments/GetEntityByAppointments";
+            const string url = "http://localhost:5120/api/Appointments/GetEntityByAppointments";
             AppointmentsGetByIdModel appointmentsGetById = new AppointmentsGetByIdModel();
 
             try
@@ -155,33 +154,45 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         // POST: AppointmentsAdmController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <IActionResult> Edit(AppointmentsUpdateDto appointmentsUpdateDto)
+        public async Task<IActionResult> Edit(AppointmentsUpdateDto appointmentsUpdateDto)
         {
-            const string url = "http://localhost:5110/api/Roles/UpdateRoles";
-            using (var client = new HttpClient())
+            BaseProperties baseProperties = new BaseProperties();
+
+            try
             {
-                var content = new StringContent(JsonConvert.SerializeObject(appointmentsUpdateDto), Encoding.UTF8, "application/json");
-
-                var response = await client.PutAsync($"{url}{appointmentsUpdateDto.AppointmentID}", content);
-
-                if (response.IsSuccessStatusCode)
+                const string url = "http://localhost:5120/api/Appointments/UpdateAppointments";
+                using (var client = new HttpClient())
                 {
-                    var result = JsonConvert.DeserializeObject<BaseProperties>(await response.Content.ReadAsStringAsync());
+                    appointmentsUpdateDto.UpdateAt = DateTime.Now;
+                    var responseTask = await client.PutAsJsonAsync<AppointmentsUpdateDto>(url, appointmentsUpdateDto);
 
-                    if (!result.isSuccess)
+                    if (responseTask.IsSuccessStatusCode)
                     {
-                        ViewBag.Message = result.messages;
-                        return View(appointmentsUpdateDto);
-                    }
+                        string response = await responseTask.Content.ReadAsStringAsync();
+                        baseProperties = JsonConvert.DeserializeObject<BaseProperties>(response);
 
-                    return RedirectToAction(nameof(Index));
+                        if (!baseProperties.isSuccess)
+                        {
+                            ViewBag.Message = baseProperties.messages;
+                            return View();
+                        }
+                        else
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Message = baseProperties.messages;
+                    }
                 }
-                else
-                {
-                    ViewBag.Message = "Error al actualizar el status.";
-                }
+                return RedirectToAction(nameof(Index));
+
             }
-            return View(appointmentsUpdateDto);
+            catch
+            {
+                return View();
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         // GET: DoctorAvailabilityAdmController
         public async Task<IActionResult> Index()
         {
-            const string url = "http://localhost:5110/api/DoctorAvailability/GetAllDoctorAvailabity";
+            const string url = "http://localhost:5120/api/DoctorAvailability/GetAllDoctorAvailabity";
             DoctorAvailabilityGetAllModel doctorAvailabilityGetAll = new DoctorAvailabilityGetAllModel();
 
             try
@@ -48,7 +48,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         // GET: DoctorAvailabilityAdmController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/DoctorAvailability/GetEntityBy";
+            const string url = "http://localhost:5120/api/DoctorAvailability/GetEntityBy";
             DoctorAvailabilityGetByIdModel doctorAvailabilityGetBy = new DoctorAvailabilityGetByIdModel();
 
             try
@@ -87,7 +87,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DoctorAvailabilitySaveDto doctorAvailabilitySaveDto)
         {
-            const string url = "http://localhost:5110/api/DoctorAvailability/SaveDoctorAvailability";
+            const string url = "http://localhost:5120/api/DoctorAvailability/SaveDoctorAvailability";
             BaseProperties model = new BaseProperties();
 
             try
@@ -101,7 +101,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
                         string response = await responseTask.Content.ReadAsStringAsync();
                         model = JsonConvert.DeserializeObject<BaseProperties>(response);
 
-                        if (model.isSuccess)
+                        if (!model.isSuccess)
                         {
                             ViewBag.Message = model.messages;
                             return View();
@@ -128,7 +128,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         // GET: DoctorAvailabilityAdmController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            const string url = "http://localhost:5110/api/DoctorAvailability/GetEntityBy";
+            const string url = "http://localhost:5120/api/DoctorAvailability/GetEntityBy";
             DoctorAvailabilityGetByIdModel doctorAvailabilityGetBy = new DoctorAvailabilityGetByIdModel();
 
             try
@@ -160,12 +160,11 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         [ValidateAntiForgeryToken]
         public async Task <IActionResult> Edit(DoctorAvailabilityUpdateDto doctorAvailabilityUpdateDto)
         {
-            const string url = "http://localhost:5110/api/DoctorAvailability/UpdateDoctorAvailability";
+            const string url = "http://localhost:5120/api/DoctorAvailability/UpdateDoctorAvailability";
             using (var client = new HttpClient())
             {
                 var content = new StringContent(JsonConvert.SerializeObject(doctorAvailabilityUpdateDto), Encoding.UTF8, "application/json");
-
-                var response = await client.PutAsync($"{url}{doctorAvailabilityUpdateDto.AvailabilityID}", content);
+                var response = await client.PutAsync($"{url}?{doctorAvailabilityUpdateDto.AvailabilityID}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -181,7 +180,7 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
                 }
                 else
                 {
-                    ViewBag.Message = "Error al actualizar el status.";
+                    ViewBag.Message = "Error al actualizar el doctoravailability.";
                 }
             }
             return View(doctorAvailabilityUpdateDto);

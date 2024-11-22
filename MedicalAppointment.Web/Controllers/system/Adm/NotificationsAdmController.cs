@@ -13,7 +13,6 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class NotificationsAdmController : Controller
     {
-        // GET: NotificationsAdmController
         public async Task<IActionResult> Index()
         {
             const string url = "http://localhost:5110/api/Notifications/GetAllNotifications";
@@ -43,7 +42,6 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             return View(notificationsGetAllModel.data);
         }
 
-        // GET: NotificationsAdmController/Details/5
         public async Task<IActionResult> Details(int id)
         {
             const string url = "http://localhost:5110/api/Notifications/GetNotificationsBy";
@@ -73,13 +71,11 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             return View(notificationsGetById.data);
         }
 
-        // GET: NotificationsAdmController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: NotificationsAdmController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NotificationSaveDto notificationSaveDto)
@@ -123,7 +119,6 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
 
         }
 
-        // GET: NotificationsAdmController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             const string url = "http://localhost:5110/api/Notifications/GetNotificationsBy";
@@ -153,7 +148,6 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             return View(notificationsGetById.data);
         }
 
-        // POST: NotificationsAdmController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(NotificationUpdateDto notificationUpdateDto)
@@ -178,7 +172,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                 }
                 else
                 {
-                    ViewBag.Message = "Error al actualizar el status.";
+                    ViewBag.Message = "Error al actualizar la notificaion.";
                 }
             }
             return View(notificationUpdateDto);

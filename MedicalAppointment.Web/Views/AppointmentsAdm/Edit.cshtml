@@ -13,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="AppointmentID" class="control-label"></label>
-                <input asp-for="AppointmentID" class="form-control" />
+                <input asp-for="AppointmentID" class="form-control" readonly/>
                 <span asp-validation-for="AppointmentID" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -35,16 +35,6 @@
                 <label asp-for="StatusID" class="control-label"></label>
                 <input asp-for="StatusID" class="form-control" />
                 <span asp-validation-for="StatusID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdateAt" class="control-label"></label>
-                <input asp-for="UpdateAt" class="form-control" />
-                <span asp-validation-for="UpdateAt" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
