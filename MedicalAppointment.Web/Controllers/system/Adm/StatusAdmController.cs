@@ -70,7 +70,6 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             catch (Exception ex)
             {
                 ViewBag.Message = $"Error: {ex.Message}";
-
             }
             return View(statusGetByIdModel.data);
         }
@@ -163,7 +162,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             {
                 var content = new StringContent(JsonConvert.SerializeObject(statusUpdateDto), Encoding.UTF8, "application/json");
 
-                var response = await client.PutAsync(url, content);
+                var response = await client.PutAsync($"{url}{statusUpdateDto.StatusID}", content);
 
                 if (response.IsSuccessStatusCode)
                 {

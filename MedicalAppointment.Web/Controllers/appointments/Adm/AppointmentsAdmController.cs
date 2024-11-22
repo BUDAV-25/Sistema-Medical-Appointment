@@ -1,23 +1,22 @@
-﻿using MedicalAppointment.Application.Dtos.system.Notification;
+﻿using MedicalAppointment.Application.Dtos.appointments.Appointments;
+using MedicalAppointment.Application.Dtos.appointments.DoctorAvailability;
 using MedicalAppointment.Application.Dtos.system.Roles;
-using MedicalAppointment.Application.Dtos.system.Status;
+using MedicalAppointment.Web.Models.appointments.AppointmentsTaskModel;
 using MedicalAppointment.Web.Models.Core;
-using MedicalAppointment.Web.Models.system.NotificationsTaskModel;
-using MedicalAppointment.Web.Models.system.StatusTaskModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Policy;
 using System.Text;
 
-namespace MedicalAppointment.Web.Controllers.system.Adm
+namespace MedicalAppointment.Web.Controllers.appointments.Adm
 {
-    public class NotificationsAdmController : Controller
+    public class AppointmentsAdmController : Controller
     {
-        // GET: NotificationsAdmController
-        public async Task<IActionResult> Index()
+        // GET: AppointmentsAdmController
+        public async Task <IActionResult> Index()
         {
-            const string url = "http://localhost:5110/api/Notifications/GetAllNotifications";
-            NotificationsGetAllModel notificationsGetAllModel = new NotificationsGetAllModel();
+            const string url = "http://localhost:5110/api/Appointments/GetAllAppointments";
+            AppointmentsGetAllModel appointmentsGetAll = new AppointmentsGetAllModel();
 
             try
             {
@@ -28,11 +27,11 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                     if (response.IsSuccessStatusCode)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        notificationsGetAllModel = JsonConvert.DeserializeObject<NotificationsGetAllModel>(responseContent);
+                        appointmentsGetAll = JsonConvert.DeserializeObject<AppointmentsGetAllModel>(responseContent);
                     }
                     else
                     {
-                        ViewBag.Message = "Error al obtener las notificaciones.";
+                        ViewBag.Message = "Error al obtener los appointments.";
                     }
                 }
             }
@@ -40,29 +39,30 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             {
                 ViewBag.Message = $"Error: {ex.Message}";
             }
-            return View(notificationsGetAllModel.data);
+
+            return View(appointmentsGetAll);
         }
 
-        // GET: NotificationsAdmController/Details/5
-        public async Task<IActionResult> Details(int id)
+        // GET: AppointmentsAdmController/Details/5
+        public async Task <IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/Notifications/GetNotificationsBy";
-            NotificationsGetByIdModel notificationsGetById = new NotificationsGetByIdModel();
+            const string url = "http://localhost:5110/api/Appointments/GetEntityByAppointments";
+            AppointmentsGetByIdModel appointmentsGetById = new AppointmentsGetByIdModel();
 
             try
             {
-                using (var client = new HttpClient())
+                using (var client = new HttpClient()) 
                 {
                     var response = await client.GetAsync($"{url}{id}");
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        notificationsGetById = JsonConvert.DeserializeObject<NotificationsGetByIdModel>(responseContent);
+                        appointmentsGetById = JsonConvert.DeserializeObject<AppointmentsGetByIdModel>(responseContent);
                     }
                     else
                     {
-                        ViewBag.Message = "Error al obtener los detalles de la notificacion.";
+                        ViewBag.Message = "Error al obtener los detalles del status.";
                     }
                 }
             }
@@ -70,37 +70,37 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             {
                 ViewBag.Message = $"Error: {ex.Message}";
             }
-            return View(notificationsGetById.data);
+            return View(appointmentsGetById.data);
         }
 
-        // GET: NotificationsAdmController/Create
+        // GET: AppointmentsAdmController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: NotificationsAdmController/Create
+        // POST: AppointmentsAdmController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NotificationSaveDto notificationSaveDto)
+        public async Task <IActionResult> Create(AppointmentsSaveDto appointmentsSaveDto)
         {
-            const string url = "http://localhost:5110/api/Notifications/SaveNotifications";
-            BaseProperties model = new BaseProperties();
+            const string url = "http://localhost:5110/api/Appointments/SaveAppointments";
+            BaseProperties baseProperties = new BaseProperties();
 
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var responseTask = await client.PostAsJsonAsync(url, notificationSaveDto);
+                    var responseTask = await client.PostAsJsonAsync(url, appointmentsSaveDto);
 
                     if (responseTask.IsSuccessStatusCode)
                     {
                         string response = await responseTask.Content.ReadAsStringAsync();
-                        model = JsonConvert.DeserializeObject<BaseProperties>(response);
+                        baseProperties = JsonConvert.DeserializeObject<BaseProperties>(response);
 
-                        if (!model.isSuccess)
+                        if (baseProperties.isSuccess)
                         {
-                            ViewBag.Message = model.messages;
+                            ViewBag.Message = baseProperties.messages;
                             return View();
                         }
                         else
@@ -110,7 +110,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                     }
                     else
                     {
-                        ViewBag.Message = "Error al crear el status.";
+                        ViewBag.Message = baseProperties.messages;
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -120,14 +120,13 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                 ViewBag.Message = "Error en la solicitud: " + ex.Message;
             }
             return View();
-
         }
 
-        // GET: NotificationsAdmController/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        // GET: AppointmentsAdmController/Edit/5
+        public async Task <IActionResult> Edit(int id)
         {
-            const string url = "http://localhost:5110/api/Notifications/GetNotificationsBy";
-            NotificationsGetByIdModel notificationsGetById = new NotificationsGetByIdModel();
+            const string url = "http://localhost:5110/api/Appointments/GetEntityByAppointments";
+            AppointmentsGetByIdModel appointmentsGetById = new AppointmentsGetByIdModel();
 
             try
             {
@@ -138,11 +137,11 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                     if (response.IsSuccessStatusCode)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        notificationsGetById = JsonConvert.DeserializeObject<NotificationsGetByIdModel>(responseContent);
+                        appointmentsGetById = JsonConvert.DeserializeObject<AppointmentsGetByIdModel>(responseContent);
                     }
                     else
                     {
-                        ViewBag.Message = "Error al obtener los detalles de la notificacion.";
+                        ViewBag.Message = "Error al obtener los detalles del status.";
                     }
                 }
             }
@@ -150,19 +149,20 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             {
                 ViewBag.Message = $"Error: {ex.Message}";
             }
-            return View(notificationsGetById.data);
+            return View(appointmentsGetById.data);
         }
 
-        // POST: NotificationsAdmController/Edit/5
+        // POST: AppointmentsAdmController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(NotificationUpdateDto notificationUpdateDto)
+        public async Task <IActionResult> Edit(AppointmentsUpdateDto appointmentsUpdateDto)
         {
-            const string url = "http://localhost:5110/api/Notifications/UpdateNotifications";
+            const string url = "http://localhost:5110/api/Roles/UpdateRoles";
             using (var client = new HttpClient())
             {
-                var content = new StringContent(JsonConvert.SerializeObject(notificationUpdateDto), Encoding.UTF8, "application/json");
-                var response = await client.PutAsync($"{url}{notificationUpdateDto.NotificationID}", content);
+                var content = new StringContent(JsonConvert.SerializeObject(appointmentsUpdateDto), Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync($"{url}{appointmentsUpdateDto.AppointmentID}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -171,7 +171,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                     if (!result.isSuccess)
                     {
                         ViewBag.Message = result.messages;
-                        return View(notificationUpdateDto);
+                        return View(appointmentsUpdateDto);
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -181,12 +181,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
                     ViewBag.Message = "Error al actualizar el status.";
                 }
             }
-            return View(notificationUpdateDto);
-
+            return View(appointmentsUpdateDto);
         }
     }
 }
-
-
-
-

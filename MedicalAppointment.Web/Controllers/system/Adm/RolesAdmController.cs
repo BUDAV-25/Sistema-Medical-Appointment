@@ -156,7 +156,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
             {
                 var content = new StringContent(JsonConvert.SerializeObject(rolesUpdateDto), Encoding.UTF8, "application/json");
 
-                var response = await client.PutAsync(url, content);
+                var response = await client.PutAsync($"{url}{rolesUpdateDto.RoleID}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
