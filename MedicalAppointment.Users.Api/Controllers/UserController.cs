@@ -14,7 +14,7 @@ namespace MedicalAppointment.Users.Api.Controllers
             user_Service = userService;
         }
         // GET: api/<UsersController>
-        [HttpGet("Get All Users")]
+        [HttpGet("GetAllUsers")]
         public async Task<IActionResult> Get()
         {
             var result = await user_Service.GetAll();
@@ -27,7 +27,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("Get User By {id}")]
+        [HttpGet("GetUserBy{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await user_Service.GetById(id);
@@ -51,7 +51,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }*/
 
         // POST api/<UsersController>
-        [HttpPost ("Save User")]
+        [HttpPost ("SaveUser")]
         public async Task<IActionResult> Post([FromBody] UserSaveDto dto)
         {
             var result = await user_Service.SaveAsync(dto);
@@ -64,10 +64,9 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("Update User By {id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UserUpdateDto dto)
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> Put([FromBody] UserUpdateDto dto)
         {
-            dto.UserID = id;
             var result = await user_Service.UpdateAsync(dto);
 
             if (!result.IsSuccess)

@@ -48,7 +48,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
 
         // PUT api/<AvailabilityModesController>/5
         [HttpPut("Update Availability {id}")]
-        public async Task<IActionResult> Put(short id, [FromBody] AvailabilityModesUpdateDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] AvailabilityModesUpdateDto dto)
         {
             dto.SAvailabilityModeID = id;
             var result = await availability_ModesService.UpdateAsync(dto);

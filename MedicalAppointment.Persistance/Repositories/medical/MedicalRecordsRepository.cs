@@ -1,5 +1,4 @@
 ﻿using MedicalAppointment.Domain.Entities.medical;
-using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
