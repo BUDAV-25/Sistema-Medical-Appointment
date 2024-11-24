@@ -1,73 +1,36 @@
 ﻿using MedicalAppointment.Application.Dtos.system.Notification;
 using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Application.Dtos.system.Status;
+using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Web.Models.Core;
-using MedicalAppointment.Web.Models.system.NotificationsTaskModel;
-using MedicalAppointment.Web.Models.system.StatusTaskModel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Policy;
+using MedicalAppointment.Consumption.ModelsMethods.system.Notifications;
 using System.Text;
+using MedicalAppointment.Consumption.IClientService.system;
+
 
 namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class NotificationsAdmController : Controller
     {
+        private readonly INotificationsClientService _notificationsClientService;
+
+        public NotificationsAdmController(INotificationsClientService notificationsClientService )
+        {
+                _notificationsClientService = notificationsClientService;
+        }
+
         public async Task<IActionResult> Index()
         {
-            const string url = "http://localhost:5110/api/Notifications/GetAllNotifications";
-            NotificationsGetAllModel notificationsGetAllModel = new NotificationsGetAllModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync(url);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        notificationsGetAllModel = JsonConvert.DeserializeObject<NotificationsGetAllModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener las notificaciones.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
-            return View(notificationsGetAllModel.data);
+            NotificationsGetAllModel notificationsGetAll = await _notificationsClientService.GetNotifications();
+            return View( notificationsGetAll.data);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/Notifications/GetNotificationsBy";
-            NotificationsGetByIdModel notificationsGetById = new NotificationsGetByIdModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync($"{url}{id}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        notificationsGetById = JsonConvert.DeserializeObject<NotificationsGetByIdModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los detalles de la notificacion.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
+            NotificationsGetByIdModel notificationsGetById = await _notificationsClientService.GetNotificationsById();
             return View(notificationsGetById.data);
         }
 

@@ -1,6 +1,6 @@
 ﻿using MedicalAppointment.Persistance.Models.system;
 using MedicalAppointment.Web.Models.Core;
-
+/*
 namespace MedicalAppointment.Web.Models.system.NotificationsTaskModel
 {
     public class NotificationsGetByIdModel : BaseProperties
@@ -9,3 +9,4 @@ namespace MedicalAppointment.Web.Models.system.NotificationsTaskModel
 
     }
 }
+*/

@@ -16,6 +16,7 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseS
 
 // El registro de cada una de las dependencias 
 
+builder.Services.AddHttpClient();
 builder.Services.AddSystemDependency();
 
 
