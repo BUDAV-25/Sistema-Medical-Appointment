@@ -27,36 +27,32 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "La entidad es requerida";
                 return result;
             }
-
-            if (entity.UserID <= 0) 
+            if (entity.UserID <= 0)
             {
                 result.Success = false;
                 result.Message = "El UserID es requerido";
                 return result;
             }
-
             if (string.IsNullOrEmpty(entity.Message))
             {
                 result.Success = false;
                 result.Message = "Se requiere un mensaje";
                 return result;
             }
-
-            if (entity.SentAt == null) 
-            { 
+            if (entity.SentAt == null)
+            {
                 result.Success = false;
                 result.Message = "Se requiere la fecha";
                 return result;
             }
-
             if (await base.Exists(notifications => notifications.NotificationID == entity.NotificationID
-            && notifications.UserID == entity.UserID)){
-                
+            && notifications.UserID == entity.UserID))
+            {
+
                 result.Success = false;
                 result.Message = "Esta notificacion ya existe";
                 return result;
             }
-
             try
             {
                 result = await base.Save(entity);
@@ -67,6 +63,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "Error al crear la notificacion";
                 logger.LogError(result.Message, ex.ToString());
             }
+
             return result;
 
         }
@@ -82,28 +79,24 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result.Message = "Se requiere la entidad";
                 return result;
             }
-
             if (entity.NotificationID <= 0)
             {
                 result.Success = false;
                 result.Message = "El NotificationID es requerido";
                 return result;
             }
-
             if (string.IsNullOrEmpty(entity.Message))
-            { 
+            {
                 result.Success = false;
                 result.Message = "Se requiere un mensaje";
                 return result;
             }
-
-            if (entity.SentAt == null) 
-            { 
+            if (entity.SentAt == null)
+            {
                 result.Success = false;
                 result.Message = "La fecha es requerida";
                 return result;
             }
-
             try
             {
                 Notifications? notificationsToUpdate = await medical_AppointmentContext.Notifications.FindAsync(entity.NotificationID);
@@ -115,14 +108,13 @@ namespace MedicalAppointment.Persistance.Repositories.system
                 result = await base.Update(notificationsToUpdate);
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = "Error al actualizar la notificacion";
                 logger.LogError(result.Message, ex.ToString());
             }
             return result;
-
-
         }
         /*
         public async override Task<OperationResult> Remove(Notifications entity)
@@ -166,7 +158,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             }
         */
 
-
         public async override Task<OperationResult> GetAll()
         {
             OperationResult result = new OperationResult();
@@ -175,6 +166,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
             {
                 result.Data = await (from system in medical_AppointmentContext.Notifications
                                      join user in medical_AppointmentContext.User on system.UserID equals user.UserID
+                                     orderby system.NotificationID descending
 
                                      select new NotificationsModel()
                                      {
@@ -194,7 +186,6 @@ namespace MedicalAppointment.Persistance.Repositories.system
             }
             return result;
         }
-
 
 
         public async override Task<OperationResult> GetEntityBy(int ID)

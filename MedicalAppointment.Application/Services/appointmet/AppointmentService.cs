@@ -1,16 +1,12 @@
-﻿using MedicalAppointment.Application.Base;
-using MedicalAppointment.Application.Contracts.appointments;
+﻿using MedicalAppointment.Application.Contracts.appointments;
 using MedicalAppointment.Application.Dtos.appointments.Appointments;
 using MedicalAppointment.Application.Response.appointments.Appointments;
 using MedicalAppointment.Domain.Entities.appointments;
-using MedicalAppointment.Domain.Entities.system;
-using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using Microsoft.Extensions.Logging;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-// using MedicalAppointment.Domain.Entities.appointments;
-using EntityAppointment = MedicalAppointment.Domain.Entities.appointments.Appointment;
+//using EntityAppointment = MedicalAppointment.Domain.Entities.appointments.Appointment;
 
 
 
@@ -100,7 +96,7 @@ namespace MedicalAppointment.Application.Services.appointmet
 
             try
             {
-                EntityAppointment appointment = new EntityAppointment();
+                Appointment appointment = new Appointment();
                 appointment.PatientID = dto.PatientID;
                 appointment.DoctorID = dto.DoctorID;
                 appointment.AppointmentDate = dto.AppointmentDate;
@@ -144,9 +140,9 @@ namespace MedicalAppointment.Application.Services.appointmet
                 appointment.DoctorID = dto.DoctorID;
                 appointment.AppointmentDate = dto.AppointmentDate;
                 appointment.StatusID = dto.StatusID;
-                appointment.CreatedAt = dto.UpdateAt;
                 appointment.UpdatedAt = dto.UpdateAt;
 
+                var result = await _appointmentsRepository.Update(appointment);
 
             }
             catch (Exception ex)

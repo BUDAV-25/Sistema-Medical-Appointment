@@ -2,7 +2,7 @@
 {
     public class StatusBaseDto
     {
-        public string? StatusName { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public int StatusID { get; set; }
+        public string StatusName { get; set; }
     }
 }

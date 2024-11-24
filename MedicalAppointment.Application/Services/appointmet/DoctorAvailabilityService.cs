@@ -37,7 +37,8 @@ namespace MedicalAppointment.Application.Services.appointmet
                     doctorAvailabilityResponse.IsSuccess = result.Success;
                     doctorAvailabilityResponse.Messages = result.Message;
                     return doctorAvailabilityResponse;
-                }                
+                }        
+                
                 doctorAvailabilityResponse.Data = result.Data;
 
             }
@@ -89,7 +90,7 @@ namespace MedicalAppointment.Application.Services.appointmet
                 DoctorAvailability doctorAvailability = new DoctorAvailability();
                 doctorAvailability.DoctorID = dto.DoctorID;
                 doctorAvailability.AvailableDate = dto.AvailableDate;
-                doctorAvailability.StartTime = dto.StarTime;
+                doctorAvailability.StartTime = dto.StartTime;
                 doctorAvailability.EndTime = dto.EndTime;
 
                 var result = await _doctorAvailabilityRepository.Save(doctorAvailability);
@@ -110,12 +111,12 @@ namespace MedicalAppointment.Application.Services.appointmet
 
             try
             {
-                var resultEntity = await _doctorAvailabilityRepository.GetEntityBy(dto.AvailabilityID);
+                var resultGetById = await _doctorAvailabilityRepository.GetEntityBy(dto.AvailabilityID);
 
-                if (resultEntity != null)
+                if (!resultGetById.Success)
                 {
-                    doctorAvailabilityResponse.IsSuccess = resultEntity.Success;
-                    doctorAvailabilityResponse.Messages = resultEntity.Message;
+                    doctorAvailabilityResponse.IsSuccess = resultGetById.Success;
+                    doctorAvailabilityResponse.Messages = resultGetById.Message;
 
                     return doctorAvailabilityResponse;
                 }
@@ -125,7 +126,7 @@ namespace MedicalAppointment.Application.Services.appointmet
                 doctorAvailability.AvailabilityID = dto.AvailabilityID;
                 doctorAvailability.DoctorID = dto.DoctorID;
                 doctorAvailability.AvailableDate = dto.AvailableDate;
-                doctorAvailability.StartTime = dto.StarTime;
+                doctorAvailability.StartTime = dto.StartTime;
                 doctorAvailability.EndTime = dto.EndTime;
 
                 var result = await _doctorAvailabilityRepository.Update(doctorAvailability);

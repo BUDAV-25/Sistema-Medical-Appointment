@@ -36,7 +36,7 @@ namespace MedicalApp.System.Api.Controllers
         }
 
         // GetEntityBy Status
-        [HttpGet("GetRolesBy{id}")]
+        [HttpGet("GetStatusBy{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _statusService.GetById(id);

@@ -1,3 +1,4 @@
+using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Application.Contracts.medical;
 using MedicalAppointment.Application.Contracts.system;
 using MedicalAppointment.Application.Contracts.users;
@@ -12,30 +13,34 @@ using MedicalAppointment.Persistance.Repositories.medical;
 using MedicalAppointment.Persistance.Repositories.system;
 using MedicalAppointment.Persistance.Repositories.users;
 using Microsoft.EntityFrameworkCore;
+using MedicalAppointment.IOC.Dependencies.system;
+using MedicalAppointment.IOC.Dependencies.appointmens;
+using MedicalAppointment.Consumption.ServicesConsumption.system;
+using MedicalAppointment.Consumption.Base;
+using MedicalAppointment.Consumption.IClientService.system;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 // Add services to the container.
 
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
+// Dependencia del esquema system
+builder.Services.AddSystemDependency();
 
-// Dependencia de Notification
+// Dendencia del esquema appointments
+builder.Services.AddAppointmentsDependency();
 
-builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
-builder.Services.AddTransient<INotificationService, NotificationService>();
+// Constructor HttpClient
+builder.Services.AddHttpClient<IBaseConsumption, BaseConsumption>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiConfig:UrlBase"]);
+});
 
-// Dependencia de Roles
+builder.Services.AddTransient<INotificationsClientService, NotificationsServiceConsumption>();
 
-builder.Services.AddScoped<IRolesRepository, RolesRepository>();
-builder.Services.AddTransient<IRolesService, RolesService>();
-
-// Dependencia de Status
-
-builder.Services.AddScoped<IStatusRepository, StatusRepository>();
-builder.Services.AddTransient<IStatusService, StatusService>();
 
 // Dependencias del Schema Users
 // Dependencia de User
@@ -59,6 +64,7 @@ builder.Services.AddTransient<IMedicalRecordsService, MedicalRecordsService>();
 builder.Services.AddScoped<ISpecialtiesRepository, SpecialtiesRepository>();
 builder.Services.AddTransient<ISpecialtiesService, SpecialtiesService>();
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

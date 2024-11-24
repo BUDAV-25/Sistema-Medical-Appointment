@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalAppointment.Domain.Entities.appointments
 {
     [Table("appointments", Schema = "Appointments")]
-    public class Appointment : BaseEntity
+    public class Appointment 
     {
         [Key]
         public int AppointmentID { get; set; }
@@ -13,5 +13,7 @@ namespace MedicalAppointment.Domain.Entities.appointments
         public int DoctorID { get; set; }
         public DateTime AppointmentDate { get; set; }
         public int StatusID { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -53,7 +53,6 @@ namespace MedicalAppointment.Web.Controllers.system
         {
             try
             {
-                statusSaveDto.CreatedAt = DateTime.Now;
                 var result = await _statusService.SaveAsync(statusSaveDto);
 
                 if (result.IsSuccess)

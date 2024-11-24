@@ -8,6 +8,6 @@ namespace MedicalAppointment.Application.Dtos.appointments.Appointments
         public int DoctorID { get; set; }
         public DateTime AppointmentDate { get; set; }
         public int StatusID { get; set; }
-        
+
     }
 }

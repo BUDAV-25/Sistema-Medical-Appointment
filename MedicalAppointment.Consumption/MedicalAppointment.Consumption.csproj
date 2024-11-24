@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="IClientService\appointments\" />
+    <Folder Include="ModelsMethods\appointments\DoctorAvailability\" />
+    <Folder Include="ModelsMethods\appointments\Appointments\" />
+    <Folder Include="ModelsMethods\system\Roles\" />
+    <Folder Include="ModelsMethods\system\Status\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MedicalAppointment.Application\MedicalAppointment.Application.csproj" />
+  </ItemGroup>
+
+</Project>
