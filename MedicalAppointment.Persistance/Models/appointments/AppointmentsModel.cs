@@ -12,6 +12,5 @@ namespace MedicalAppointment.Persistance.Models.appointments
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set;  }
 
-
     }
 }

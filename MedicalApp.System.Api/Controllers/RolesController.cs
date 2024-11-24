@@ -62,6 +62,8 @@ namespace MedicalApp.System.Api.Controllers
         [HttpPut("UpdateRoles{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] RolesUpdateDto rolesUpdateDto)
         {
+            rolesUpdateDto.UpdateAt = DateTime.Now;
+
             var result = await _rolesService.UpdateAsync(rolesUpdateDto);
             if (!result.IsSuccess)
             {
