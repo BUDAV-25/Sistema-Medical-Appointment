@@ -69,19 +69,12 @@ namespace MedicalAppointment.Persistance.Repositories.users
         public async override Task<OperationResult> Update(User entity)
         {
             OperationResult result = new OperationResult();
-            User? userToUpdate = await medical_AppointmentContext.User.FindAsync(entity.UserID);
             if (entity == null)
                 {
                     result.Success = false;
                     result.Message = "Se requiere la entidad";
                     return result;
                 }
-                /*if(entity.UserID <= 0)
-                {
-                    result.Success = false;
-                    result.Message = "Es necesario el id de usuario para realizar esta función";
-                    return result;
-                }*/
                 if (string.IsNullOrEmpty(entity.FirstName))
                 {
                     result.Success = false;
@@ -106,22 +99,15 @@ namespace MedicalAppointment.Persistance.Repositories.users
                     result.Message = "Por seguridad, se requiere una contraseña";
                     return result;
                 }
-                if(userToUpdate == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
             try
             {
-                
+
+                User? userToUpdate = await medical_AppointmentContext.User.FindAsync(entity.UserID);
                 userToUpdate.FirstName = entity.FirstName;
                 userToUpdate.LastName = entity.LastName;
                 userToUpdate.Email = entity.Email;
                 userToUpdate.Password = entity.Password;
                 userToUpdate.RoleID = entity.RoleID;
-
-               // userToUpdate.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(userToUpdate);
             }
@@ -137,17 +123,17 @@ namespace MedicalAppointment.Persistance.Repositories.users
         {
             OperationResult result = new OperationResult();
             if (entity == null)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere la entidad";
-                    return result;
-                }
-                if (entity.UserID <= 0)
-                {
-                    result.Success = false;
-                    result.Message = "Es necesario el id de usuario para realizar esta función";
-                    return result;
-                }
+            {
+                result.Success = false;
+                result.Message = "Se requiere la entidad";
+                return result;
+            }
+            if (entity.UserID <= 0)
+            {
+                result.Success = false;
+                result.Message = "Es necesario el id de usuario para realizar esta función";
+                return result;
+            }
             try
             {
                 User? userToRemove = await medical_AppointmentContext.User.FindAsync(entity.UserID);
@@ -173,12 +159,15 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 result.Data = await (from user in medical_AppointmentContext.User
                                      join role in medical_AppointmentContext.Roles on user.RoleID equals role.RoleID
                                      where user.IsActive == true
+                                     orderby user.CreatedAt descending
                                      select new UsersModel()
                                      {
+                                         UserID = user.UserID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          Email = user.Email,
-                                         RoleName = role.RoleName,
+                                        //Password = user.Password,
+                                         RoleID = role.RoleID,
                                          IsActive = user.IsActive
                                      }).AsNoTracking()
                                     .ToListAsync();
@@ -201,10 +190,12 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                      where user.UserID == Id
                                      select new UsersModel()
                                      {
+                                         UserID = user.UserID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          Email = user.Email,
-                                         RoleName = role.RoleName,
+                                         Password = user.Password,
+                                         RoleID = role.RoleID,
                                          IsActive = user.IsActive
                                      }).AsNoTracking()
                                     .FirstOrDefaultAsync();
@@ -231,7 +222,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          Email = user.Email,
-                                         RoleName = role.RoleName,
+                                         RoleID = role.RoleID,
                                          IsActive = user.IsActive
                                      }).AsNoTracking()
                                     .ToListAsync();

@@ -15,7 +15,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
         
         // GET: api/<DoctorsController>
-        [HttpGet("Get All Doctors")]
+        [HttpGet("GetAllDoctors")]
         public async Task<IActionResult> Get()
         {
             var result = await doctor_Service.GetAll();
@@ -28,7 +28,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         // GET api/<DoctorsController>/5
-        [HttpGet("Get Doctor by {id}")]
+        [HttpGet("GetDoctorby{id}")]
         public async Task<IActionResult> GetEntityBy(int id)
         {
             var result = await doctor_Service.GetById(id);
@@ -54,10 +54,9 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         // PUT api/<DoctorsController>/5
-        [HttpPut("UpdateDoctor by {id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] DoctorUpdateDto dto)
+        [HttpPut("UpdateDoctorby")]
+        public async Task<IActionResult> Put([FromBody] DoctorUpdateDto dto)
         {
-            dto.DoctorID = id;
             var result = await doctor_Service.UpdateAsync(dto);
 
             if (!result.IsSuccess)

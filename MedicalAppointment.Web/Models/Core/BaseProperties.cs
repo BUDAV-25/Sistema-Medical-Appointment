@@ -2,7 +2,6 @@
 {
     public class BaseProperties
     {
-
         public bool isSuccess { get; set; }
         public string? messages { get; set; }
     }

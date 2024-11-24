@@ -1,5 +1,17 @@
-
 using MedicalAppointment.Persistance.Context;
+using MedicalAppointment.Application.Contracts.medical;
+using MedicalAppointment.Application.Contracts.system;
+using MedicalAppointment.Application.Contracts.users;
+using MedicalAppointment.Application.Services.medical;
+using MedicalAppointment.Application.Services.System;
+using MedicalAppointment.Application.Services.users;
+using MedicalAppointment.Persistance.Context;
+using MedicalAppointment.Persistance.Interfaces.medical;
+using MedicalAppointment.Persistance.Interfaces.system;
+using MedicalAppointment.Persistance.Interfaces.users;
+using MedicalAppointment.Persistance.Repositories.medical;
+using MedicalAppointment.Persistance.Repositories.system;
+using MedicalAppointment.Persistance.Repositories.users;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointment.IOC.Dependencies.system;
 using MedicalAppointment.IOC.Dependencies.appointmens;
@@ -30,7 +42,27 @@ builder.Services.AddHttpClient<IBaseConsumption, BaseConsumption>(client =>
 builder.Services.AddTransient<INotificationsClientService, NotificationsServiceConsumption>();
 
 
+// Dependencias del Schema Users
+// Dependencia de User
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddTransient<IUserService, UserService>();
+// Dependencia de Doctor
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddTransient<IDoctorService, DoctorService>();
+// Dependencia de Patient
+builder.Services.AddScoped<IPatientRepository, PatientsRepository>();
+builder.Services.AddTransient<IPatientService, PatientService>();
 
+// Dependencias del Schema Medical
+// Dependencia de AvailabilityModes
+builder.Services.AddScoped<IAvailabilityModesRepository, AvailabilityModesRepository>();
+builder.Services.AddTransient<IAvailabilityModesService, AvailabilityModesService>();
+// Dependencia de MedicalRecords
+builder.Services.AddScoped<IMedicalRecordsRepository, MedicalRecordsRepository>();
+builder.Services.AddTransient<IMedicalRecordsService, MedicalRecordsService>();
+// Dependencia de Specialties
+builder.Services.AddScoped<ISpecialtiesRepository, SpecialtiesRepository>();
+builder.Services.AddTransient<ISpecialtiesService, SpecialtiesService>();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 builder.Services.AddControllersWithViews();

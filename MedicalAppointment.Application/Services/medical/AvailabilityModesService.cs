@@ -75,9 +75,9 @@ namespace MedicalAppointment.Application.Services.medical
             {
                 AvailabilityModes availability = new AvailabilityModes();
 
+                //availability.SAvailabilityModeID = dto.SAvailabilityModeID;
                 availability.AvailabilityMode = dto.AvailabilityMode;
                 availability.CreatedAt = dto.CreatedAt;
-                availability.UpdatedAt = dto.CreatedAt;
                 availability.IsActive = true;
 
                 var result = await availability_ModesRepository.Save(availability);

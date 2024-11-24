@@ -87,7 +87,6 @@ namespace MedicalAppointment.Application.Services.users
                 doctor.AvailabilityModeId = dto.AvailabilityModeId;
                 doctor.LicenseExpirationDate = dto.LicenseExpirationDate;
                 doctor.CreatedAt = dto.CreatedAt;
-                doctor.UpdatedAt = dto.CreatedAt;
                 doctor.IsActive = true;
 
                 var result = await doctor_Repository.Save(doctor);

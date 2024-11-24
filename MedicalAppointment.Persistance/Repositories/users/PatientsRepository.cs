@@ -167,6 +167,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
             try
             {
                 Patient? patient = await medical_AppointmentContext.Patient.FindAsync(entity.PatientID);
+
                 patient.DateOfBirth = entity.DateOfBirth;
                 patient.Gender = entity.Gender;
                 patient.PhoneNumber = entity.PhoneNumber;
@@ -178,7 +179,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 patient.InsuranceProviderID = entity.InsuranceProviderID;
                 //patients.UserUpdate = entity.UserUpdate;
 
-                result = await base.Update(entity);
+                result = await base.Update(patient);
             }
             catch (Exception ex)
             {
@@ -233,14 +234,13 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                      where patient.IsActive == true
                                      select new UserPatientModel()
                                      {
+                                         PatientID = patient.PatientID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
-                                         DateOfBirth = patient.DateOfBirth,
                                          Gender = patient.Gender,
                                          PhoneNumber = patient.PhoneNumber,
                                          Email = user.Email,
-                                         Address = patient.Address,
-                                         BloodType = patient.BloodType
+                                         Address = patient.Address
                                      }).AsNoTracking()
                                      .ToListAsync();
             }
@@ -265,6 +265,7 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                      && patient.PatientID == Id
                                      select new UserPatientModel()
                                      {
+                                         PatientID = patient.PatientID,
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          DateOfBirth = patient.DateOfBirth,
@@ -272,7 +273,13 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          PhoneNumber = patient.PhoneNumber,
                                          Email = user.Email,
                                          Address = patient.Address,
-                                         BloodType = patient.BloodType
+                                         BloodType = patient.BloodType,
+                                         EmergencyContactName = patient.EmergencyContactName,
+                                         EmergencyContactPhone = patient.EmergencyContactPhone,
+                                         Allergies = patient.Allergies,
+                                         InsuranceProviderID = insuranceP.InsuranceProviderID,
+                                         InsuranceProviderName = insuranceP.Name,
+                                         IsActive = patient.IsActive
                                      }).AsNoTracking()
                                      .FirstOrDefaultAsync();
             }
