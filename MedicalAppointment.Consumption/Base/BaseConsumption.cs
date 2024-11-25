@@ -18,7 +18,7 @@ namespace MedicalAppointment.Consumption.Base
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<T>();
         }
-        public async Task<T> GetByIdConsumption<T>(string url)
+        public virtual async Task<T> GetByIdConsumption<T>(string url)
         {
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -36,5 +36,6 @@ namespace MedicalAppointment.Consumption.Base
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<T>();
         }
+
     }
 }

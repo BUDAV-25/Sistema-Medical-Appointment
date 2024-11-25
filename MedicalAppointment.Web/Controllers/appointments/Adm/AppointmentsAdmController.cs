@@ -1,12 +1,11 @@
 ﻿using MedicalAppointment.Application.Dtos.appointments.Appointments;
-using MedicalAppointment.Web.Models.appointments.AppointmentsTaskModel;
 using MedicalAppointment.Web.Models.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Text;
-
+/*
 namespace MedicalAppointment.Web.Controllers.appointments.Adm
 {
     public class AppointmentsAdmController : Controller
@@ -196,3 +195,4 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         }
     }
 }
+*/

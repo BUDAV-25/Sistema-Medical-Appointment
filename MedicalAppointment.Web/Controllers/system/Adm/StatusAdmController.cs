@@ -2,76 +2,33 @@
 using MedicalAppointment.Web.Models.Core;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using MedicalAppointment.Web.Models.system.StatusTaskModel;
 using Azure;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http.Json;
+using MedicalAppointment.Consumption.IClientService.system;
+using MedicalAppointment.Consumption.ModelsMethods.system.Status;
 
 namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class StatusAdmController : Controller
     {
-        // GET: StatusAdmController
-        public async Task<IActionResult> Index()
+        private readonly IStatusClientService _statusClientService;
+        public StatusAdmController(IStatusClientService statusClientService)
         {
-            const string url = "http://localhost:5110/api/Status/GetAllStatus";
-            StatusGetAllModel statusGetAllModel = new StatusGetAllModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync(url);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        statusGetAllModel = JsonConvert.DeserializeObject<StatusGetAllModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los status.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
-
-            return View(statusGetAllModel.data);
+                _statusClientService = statusClientService;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            StatusGetAllModel statusGetAll = await _statusClientService.GetStatus();
+            return View(statusGetAll.data);
+        }
 
-        // GET: StatusAdmController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/Status/GetStatusBy";
-            StatusGetByIdModel statusGetByIdModel = new StatusGetByIdModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync($"{url}{id}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        statusGetByIdModel = JsonConvert.DeserializeObject<StatusGetByIdModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los detalles del status.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
-            return View(statusGetByIdModel.data);
+            StatusGetByIdModel statusGetById = await _statusClientService.GetStatusById();
+            return View(statusGetById.data);
         }
 
         // GET: StatusAdmController/Create

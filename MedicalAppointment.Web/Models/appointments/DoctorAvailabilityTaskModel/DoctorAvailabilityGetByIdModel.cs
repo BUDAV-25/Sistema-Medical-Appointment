@@ -1,5 +1,5 @@
 ﻿using MedicalAppointment.Persistance.Models;
-
+/*
 namespace MedicalAppointment.Web.Models.appointments.DoctorAvailabilityTaskModel
 {
     public class DoctorAvailabilityGetByIdModel
@@ -8,3 +8,4 @@ namespace MedicalAppointment.Web.Models.appointments.DoctorAvailabilityTaskModel
 
     }
 }
+*/

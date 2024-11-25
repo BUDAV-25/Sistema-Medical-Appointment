@@ -8,7 +8,8 @@ namespace MedicalAppointment.Consumption.IClientService.system
     public interface INotificationsClientService
     {
         Task<NotificationsGetAllModel> GetNotifications();
-        Task<NotificationsGetByIdModel> GetNotificationsById();
+        Task<NotificationsGetByIdModel> GetNotificationsById(int id);
         Task<NotificationSaveDto> SaveNotification(NotificationSaveDto notificationSaveDto);
+        Task<NotificationUpdateDto> UpdateNotification(NotificationUpdateDto notificationUpdateDto);
     }
 }

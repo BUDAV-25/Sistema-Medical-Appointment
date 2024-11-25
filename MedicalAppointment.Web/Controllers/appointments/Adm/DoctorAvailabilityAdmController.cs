@@ -2,14 +2,12 @@
 using MedicalAppointment.Application.Dtos.system.Notification;
 using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Domain.Entities.appointments;
-using MedicalAppointment.Web.Models.appointments.DoctorAvailabilityTaskModel;
 using MedicalAppointment.Web.Models.Core;
-using MedicalAppointment.Web.Models.system.StatusTaskModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
-
+/*
 namespace MedicalAppointment.Web.Controllers.appointments.Adm
 {
     public class DoctorAvailabilityAdmController : Controller
@@ -188,3 +186,4 @@ namespace MedicalAppointment.Web.Controllers.appointments.Adm
         }
     }
 }
+*/

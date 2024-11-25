@@ -1,8 +1,8 @@
 ﻿using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Application.Dtos.system.Status;
+using MedicalAppointment.Consumption.IClientService.system;
+using MedicalAppointment.Consumption.ModelsMethods.system.Roles;
 using MedicalAppointment.Web.Models.Core;
-using MedicalAppointment.Web.Models.system.RolesTaskModel;
-using MedicalAppointment.Web.Models.system.StatusTaskModel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
@@ -12,63 +12,20 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class RolesAdmController : Controller
     {
-        // GET: RolesAdmController
+        private readonly IRolesClientService _rolesClientService;
+        public RolesAdmController(IRolesClientService rolesClientService)
+        {
+                _rolesClientService = rolesClientService;
+        }
         public async Task<IActionResult> Index()
         {
-            const string ulr = "http://localhost:5110/api/Roles/GetAllRoles";
-            RolesGetAllModel rolesGetAllModel = new RolesGetAllModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync(ulr);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        rolesGetAllModel = JsonConvert.DeserializeObject<RolesGetAllModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los roles.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
-            return View(rolesGetAllModel.data);
+            RolesGetAllModel rolesGetAll = await _rolesClientService.GetRoles();
+            return View(rolesGetAll.data);
         }
 
-        // GET: RolesAdmController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            const string url = "http://localhost:5110/api/Roles/GetRolesBy";
-            RolesGetByIdModel rolesGetById = new RolesGetByIdModel();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync($"{url}{id}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        rolesGetById = JsonConvert.DeserializeObject<RolesGetByIdModel>(responseContent);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los detalles del rol.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = $"Error: {ex.Message}";
-            }
+            RolesGetByIdModel rolesGetById = await _rolesClientService.GetRolesById();
             return View(rolesGetById.data);
         }
 
