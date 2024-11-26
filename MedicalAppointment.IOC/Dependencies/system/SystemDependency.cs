@@ -3,7 +3,6 @@ using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Repositories.system;
 using Microsoft.Extensions.DependencyInjection;
-using MedicalAppointment.Consumption.ServicesConsumption.system;
 
 namespace MedicalAppointment.IOC.Dependencies.system
 {

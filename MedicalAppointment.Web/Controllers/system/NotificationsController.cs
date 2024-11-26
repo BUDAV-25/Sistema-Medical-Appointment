@@ -1,10 +1,6 @@
 ﻿using MedicalAppointment.Application.Contracts.system;
-using MedicalAppointment.Application.Dtos.appointments.Appointments;
 using MedicalAppointment.Application.Dtos.system.Notification;
-using MedicalAppointment.Application.Dtos.system.Status;
-using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Persistance.Models.system;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.Web.Controllers.system

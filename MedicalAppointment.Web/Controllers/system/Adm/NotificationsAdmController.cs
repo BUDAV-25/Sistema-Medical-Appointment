@@ -1,29 +1,28 @@
 ﻿using MedicalAppointment.Application.Dtos.system.Notification;
 using Microsoft.AspNetCore.Mvc;
 using MedicalAppointment.Consumption.ModelsMethods.system.Notifications;
-using System.Text;
-using MedicalAppointment.Consumption.IClientService.system;
+using MedicalAppointment.Consumption.ContractsConsumption.system;
 
 
 namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class NotificationsAdmController : Controller
     {
-        private readonly INotificationsClientService _notificationsClientService;
-        public NotificationsAdmController(INotificationsClientService notificationsClientService )
+        private readonly INotificationsContracts _notificationsContracts;
+        public NotificationsAdmController(INotificationsContracts notificationsContracts )
         {
-                _notificationsClientService = notificationsClientService;
+            _notificationsContracts = notificationsContracts;
         }
 
         public async Task<IActionResult> Index()
         {
-            NotificationsGetAllModel notificationsGetAll = await _notificationsClientService.GetNotifications();
+            NotificationsGetAllModel notificationsGetAll = await _notificationsContracts.GetAll();
             return View( notificationsGetAll.data);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            NotificationsGetByIdModel notificationsGetById = await _notificationsClientService.GetNotificationsById(id);
+            NotificationsGetByIdModel notificationsGetById = await _notificationsContracts.GetById(id);
             return View(notificationsGetById.data);
         }
 
@@ -36,13 +35,13 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NotificationSaveDto notificationSaveDto)
         {
-            NotificationSaveDto notificationSave = await _notificationsClientService.SaveNotification(notificationSaveDto);
+            NotificationSaveDto notificationSave = await _notificationsContracts.Save(notificationSaveDto);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            NotificationsGetByIdModel notificationsGetById = await _notificationsClientService.GetNotificationsById(id);
+            NotificationsGetByIdModel notificationsGetById = await _notificationsContracts.GetById(id);
             return View(notificationsGetById.data);
         }
 
@@ -50,7 +49,7 @@ namespace MedicalAppointment.Web.Controllers.system.Adm
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(NotificationUpdateDto notificationUpdateDto)
         {
-            NotificationUpdateDto notificationUpdate = await _notificationsClientService.UpdateNotification(notificationUpdateDto);
+            NotificationUpdateDto notificationUpdate = await _notificationsContracts.Update(notificationUpdateDto);
             return RedirectToAction(nameof(Index));
         }
     }

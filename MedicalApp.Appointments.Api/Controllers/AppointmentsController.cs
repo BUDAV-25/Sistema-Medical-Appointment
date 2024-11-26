@@ -5,7 +5,6 @@ using MedicalAppointment.Persistance.Interfaces.appointments;
 using Microsoft.AspNetCore.Mvc;
 
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MedicalApp.Appointments.Api.Controllers
 {
@@ -35,7 +34,7 @@ namespace MedicalApp.Appointments.Api.Controllers
         }
 
         // GetEntityBy Appointments
-        [HttpGet("GetEntityByAppointments{id}")]
+        [HttpGet("GetByAppointments{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _appointmentsService.GetById(id);
@@ -62,7 +61,7 @@ namespace MedicalApp.Appointments.Api.Controllers
 
         // Update Appointments
         [HttpPut("UpdateAppointments")]
-        public async Task<IActionResult> Put([FromBody] AppointmentsUpdateDto appointmentsUpdateDto)
+        public async Task<IActionResult> Put(int id, [FromBody] AppointmentsUpdateDto appointmentsUpdateDto)
         {
             var result = await _appointmentsService.UpdateAsync(appointmentsUpdateDto);
 

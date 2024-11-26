@@ -1,146 +1,56 @@
 ﻿using MedicalAppointment.Application.Dtos.system.Status;
-using MedicalAppointment.Web.Models.Core;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Azure;
-using System.Text;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Http.Json;
-using MedicalAppointment.Consumption.IClientService.system;
 using MedicalAppointment.Consumption.ModelsMethods.system.Status;
+using MedicalAppointment.Consumption.ContractsConsumption.system;
 
 namespace MedicalAppointment.Web.Controllers.system.Adm
 {
     public class StatusAdmController : Controller
     {
-        private readonly IStatusClientService _statusClientService;
-        public StatusAdmController(IStatusClientService statusClientService)
+        private readonly IStatusContracts _statusContracts;
+        public StatusAdmController(IStatusContracts statusContracts)
         {
-                _statusClientService = statusClientService;
+            _statusContracts = statusContracts;
         }
 
         public async Task<IActionResult> Index()
         {
-            StatusGetAllModel statusGetAll = await _statusClientService.GetStatus();
+            StatusGetAllModel statusGetAll = await _statusContracts.GetAll();
             return View(statusGetAll.data);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            StatusGetByIdModel statusGetById = await _statusClientService.GetStatusById();
+            StatusGetByIdModel statusGetById = await _statusContracts.GetById(id);
             return View(statusGetById.data);
         }
 
-        // GET: StatusAdmController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: StatusAdmController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StatusSaveDto statusSaveDto)
         {
-            const string url = "http://localhost:5110/api/Status/SaveStatus";
-            BaseProperties model = new BaseProperties();
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var responseTask = await client.PostAsJsonAsync(url, statusSaveDto);
-
-                    if (responseTask.IsSuccessStatusCode)
-                    {
-                        string response = await responseTask.Content.ReadAsStringAsync();
-                        model = JsonConvert.DeserializeObject<BaseProperties>(response);
-
-                        if (!model.isSuccess)
-                        {
-                            ViewBag.Message = model.messages;
-                            return View();
-                        }
-                        else
-                        {
-                            return RedirectToAction(nameof(Index));
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al crear el status.";
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Error en la solicitud: " + ex.Message;
-            }
-            return View();
+            StatusSaveDto statusSave = await _statusContracts.Save(statusSaveDto);
+            return RedirectToAction(nameof(Index));
 
         }
 
-
-        // GET: StatusAdmController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            const string url = "http://localhost:5110/api/Status/GetStatusBy";
-            StatusGetByIdModel statusGetById = new StatusGetByIdModel();
-
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync($"{url}{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    statusGetById = JsonConvert.DeserializeObject<StatusGetByIdModel>(responseContent);
-                }
-                else
-                {
-                    ViewBag.Message = "Error al obtener el status para edición.";
-                }
-            }
-
+            StatusGetByIdModel statusGetById = await _statusContracts.GetById(id);
             return View(statusGetById.data);
         }
 
-        // NO FUNCIONA
-
-        // POST: StatusAdmController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(StatusUpdateDto statusUpdateDto)
         {
-            const string url = "http://localhost:5110/api/Status/UpdateStatus";
-
-            using (var client = new HttpClient())
-            {
-                var content = new StringContent(JsonConvert.SerializeObject(statusUpdateDto), Encoding.UTF8, "application/json");
-
-                var response = await client.PutAsync($"{url}{statusUpdateDto.StatusID}", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = JsonConvert.DeserializeObject<BaseProperties>(await response.Content.ReadAsStringAsync());
-
-                    if (!result.isSuccess)
-                    {
-                        ViewBag.Message = result.messages;
-                        return View(statusUpdateDto);
-                    }
-
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    ViewBag.Message = "Error al actualizar el status.";
-                }
-            }
-            return View(statusUpdateDto);
+            StatusUpdateDto statusUpdate = await _statusContracts.Update(statusUpdateDto);
+            return RedirectToAction(nameof(Index));
         }
-
     }
-
 }

@@ -1,8 +1,6 @@
 ﻿using MedicalAppointment.Application.Contracts.appointments;
 using MedicalAppointment.Application.Dtos.appointments.DoctorAvailability;
-using MedicalAppointment.Application.Services.appointmet;
 using MedicalAppointment.Persistance.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.Web.Controllers.appointments

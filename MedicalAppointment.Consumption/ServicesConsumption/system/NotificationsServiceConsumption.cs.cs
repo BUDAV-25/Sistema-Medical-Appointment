@@ -1,14 +1,14 @@
 ﻿using MedicalAppointment.Consumption.Base;
-using MedicalAppointment.Application.Dtos.system.Notification;
-using MedicalAppointment.Consumption.ModelsMethods.system.Notifications;
-using MedicalAppointment.Consumption.IClientService.system;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using MedicalAppointment.Consumption.ModelsMethods.system.Notifications;
+using MedicalAppointment.Application.Dtos.system.Notification;
 using MedicalAppointment.Consumption.ModelsMethods.Core;
+using MedicalAppointment.Consumption.ContractsConsumption.system;
 
 namespace MedicalAppointment.Consumption.ServicesConsumption.system
 {
-    public class NotificationsServiceConsumption : INotificationsClientService
+    public class NotificationsServiceConsumption : INotificationsContracts
     {
         private readonly IBaseConsumption _baseConsumption;
         private readonly ILogger<NotificationsServiceConsumption> _logger;
@@ -19,7 +19,8 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             _baseConsumption = baseConsumption;
             _logger = logger;
         }
-        public async Task<NotificationsGetAllModel> GetNotifications()
+
+        public async Task<NotificationsGetAllModel> GetAll()
         {
             NotificationsGetAllModel notificationsGetAll = new NotificationsGetAllModel();
 
@@ -30,13 +31,13 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             catch (Exception ex)
             {
                 notificationsGetAll.isOkay = false;
-                notificationsGetAll.mensaje = "Error obteniendo las notificaciones";
-                _logger.LogError($"{notificationsGetAll.mensaje} {ex.ToString()}");
+                notificationsGetAll.mensaje = "Error al obtener las notificaciones.";
+                _logger.LogError($"{notificationsGetAll.mensaje}{ex.ToString()}");
             }
             return notificationsGetAll;
         }
 
-        public async Task<NotificationsGetByIdModel> GetNotificationsById(int id)
+        public async Task<NotificationsGetByIdModel> GetById(int id)
         {
             NotificationsGetByIdModel notificationsGetById = new NotificationsGetByIdModel();
 
@@ -47,47 +48,46 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             catch (Exception ex)
             {
                 notificationsGetById.isOkay = false;
-                notificationsGetById.mensaje = "Error obteniendo los detalles.";
+                notificationsGetById.mensaje = "Error al obtener esta notificacion.";
                 _logger.LogError($"{notificationsGetById.mensaje} {ex.ToString()}");
-
             }
             return notificationsGetById;
         }
 
-        public async Task<NotificationSaveDto> SaveNotification(NotificationSaveDto notificationSaveDto)
-        {
-            BaseResponseConsumption baseResponse = new BaseResponseConsumption();
-            try
-            {
-                notificationSaveDto.SentAt = DateTime.Now;
-                var response = await _baseConsumption.SaveConsumption<NotificationSaveDto>("Notifications/SaveNotifications", notificationSaveDto);
-            }
-            catch (Exception ex)
-            {
-                baseResponse.isOkay = false;
-                baseResponse.mensaje = "Error obteniendo las notificaciones";
-                _logger.LogError($"{baseResponse.mensaje} {ex.ToString()}");
-            }
-            return (notificationSaveDto);
-        }
-
-        public async Task<NotificationUpdateDto> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
+        public async Task<NotificationSaveDto> Save(NotificationSaveDto saveDto)
         {
             BaseResponseConsumption baseResponse = new BaseResponseConsumption();
 
             try
             {
-                notificationUpdateDto.SentAt = DateTime.Now;
-                var response = await _baseConsumption.UpdateConsumption<NotificationUpdateDto>($"Notifications/UpdateNotifications{notificationUpdateDto.NotificationID}", notificationUpdateDto);
+                saveDto.SentAt = DateTime.Now;
+                var notificationSave = await _baseConsumption.SaveConsumption<NotificationSaveDto>("Notifications/SaveNotifications", saveDto);
             }
             catch (Exception ex)
             {
                 baseResponse.isOkay = false;
-                baseResponse.mensaje = "Error actualizando la notificacion";
+                baseResponse.mensaje = "Error al guardar la notificacion.";
+                _logger.LogError($"{baseResponse.mensaje} {ex.ToString}");
+            }
+            return saveDto;
+        }
+
+        public async Task<NotificationUpdateDto> Update(NotificationUpdateDto updateDto)
+        {
+            BaseResponseConsumption baseResponse = new BaseResponseConsumption();
+
+            try
+            {
+                updateDto.SentAt = DateTime.Now;
+                var notificationUpdate = await _baseConsumption.UpdateConsumption<NotificationUpdateDto>($"api/Notifications/UpdateNotifications{updateDto.NotificationID}", updateDto);
+            }
+            catch (Exception ex)
+            {
+                baseResponse.isOkay = false;
+                baseResponse.mensaje = "Error al actualizar la notificacion.";
                 _logger.LogError($"{baseResponse.mensaje} {ex.ToString()}");
             }
-            return (notificationUpdateDto);
+            return updateDto;
         }
-        
     }
 }

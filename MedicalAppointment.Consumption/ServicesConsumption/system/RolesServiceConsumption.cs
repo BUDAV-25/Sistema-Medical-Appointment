@@ -1,15 +1,14 @@
-﻿
-
-using MedicalAppointment.Application.Dtos.system.Roles;
+﻿using MedicalAppointment.Application.Dtos.system.Roles;
 using MedicalAppointment.Consumption.Base;
-using MedicalAppointment.Consumption.IClientService.system;
+using MedicalAppointment.Consumption.ContractsConsumption.system;
+using MedicalAppointment.Consumption.ModelsMethods.Core;
 using MedicalAppointment.Consumption.ModelsMethods.system.Roles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Consumption.ServicesConsumption.system
 {
-    public class RolesServiceConsumption : IRolesClientService
+    public class RolesServiceConsumption : IRolesContracts
     {
         private readonly IBaseConsumption _baseConsumption;
         private ILogger<RolesServiceConsumption> _logger;
@@ -21,7 +20,7 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             _logger = logger;
         }
 
-        public async Task<RolesGetAllModel> GetRoles()
+        public async Task<RolesGetAllModel> GetAll()
         {
             RolesGetAllModel rolesGetAll = new RolesGetAllModel();
 
@@ -38,32 +37,57 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             return rolesGetAll;
         }
 
-        public async Task<RolesGetByIdModel> GetRolesById()
+        public async Task<RolesGetByIdModel> GetById(int id)
         {
             RolesGetByIdModel rolesGetById = new RolesGetByIdModel();
 
             try
             {
-                rolesGetById = await _baseConsumption.GetByIdConsumption<RolesGetByIdModel>("Roles/GetRolesBy");
+                rolesGetById = await _baseConsumption.GetByIdConsumption<RolesGetByIdModel>($"Roles/GetRolesBy{id}");
             }
             catch (Exception ex)
             {
                 rolesGetById.isOkay = false;
-                rolesGetById.mensaje = "Error obteniendo los detalles.";
+                rolesGetById.mensaje = "Error al obtener el rol.";
                 _logger.LogError($"{rolesGetById.mensaje} {ex.ToString()}");
-
             }
             return rolesGetById;
         }
 
-        public Task<RolesSaveDto> SaveRoles(RolesSaveDto roleSaveDto)
+        public async Task<RolesSaveDto> Save(RolesSaveDto saveDto)
         {
-            throw new NotImplementedException();
+            BaseResponseConsumption baseResponse = new BaseResponseConsumption();
+
+            try
+            {
+                saveDto.CreatedAt = DateTime.Now;
+                var rolesSave = await _baseConsumption.SaveConsumption<RolesSaveDto>("Roles/SaveRoles", saveDto);
+            }
+            catch (Exception ex)
+            {
+                baseResponse.isOkay = false;
+                baseResponse.mensaje = "Error al guardar el rol.";
+                _logger.LogError($"{baseResponse.mensaje} {ex.ToString()}");
+            }
+            return saveDto;
         }
 
-        public Task<RolesUpdateDto> UpdateRoles(RolesUpdateDto roleUpdateDto)
+        public async Task<RolesUpdateDto> Update(RolesUpdateDto updateDto)
         {
-            throw new NotImplementedException();
+            BaseResponseConsumption baseResponse = new BaseResponseConsumption();
+
+            try
+            {
+                updateDto.UpdateAt = DateTime.Now;
+                var rolesUpdate = await _baseConsumption.UpdateConsumption<RolesUpdateDto>($"Roles/UpdateRoles{updateDto.RoleID}", updateDto);
+            }
+            catch (Exception ex)
+            {
+                baseResponse.isOkay = false;
+                baseResponse.mensaje = "Error al actualizar el rol.";
+                _logger.LogError($"{baseResponse.mensaje} {ex.ToString()}");
+            }
+            return updateDto;
         }
     }
 }

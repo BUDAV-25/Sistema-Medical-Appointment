@@ -5,7 +5,9 @@ using MedicalAppointment.IOC.Dependencies.system;
 using MedicalAppointment.IOC.Dependencies.appointmens;
 using MedicalAppointment.Consumption.ServicesConsumption.system;
 using MedicalAppointment.Consumption.Base;
-using MedicalAppointment.Consumption.IClientService.system;
+using MedicalAppointment.Consumption.ContractsConsumption.appointments;
+using MedicalAppointment.Consumption.ServicesConsumption.appointments;
+using MedicalAppointment.Consumption.ContractsConsumption.system;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +17,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
-// Dependencia del esquema system
+// Dendencia del esquema appointments usando la capa de aplicacion
+builder.Services.AddAppointmentsDependency();
+
+// Dependencia del esquema system usando la capa de aplicacion
 builder.Services.AddSystemDependency();
 
-// Dendencia del esquema appointments
-builder.Services.AddAppointmentsDependency();
 
 // Constructor HttpClient
 builder.Services.AddHttpClient<IBaseConsumption, BaseConsumption>(client =>
@@ -27,12 +30,15 @@ builder.Services.AddHttpClient<IBaseConsumption, BaseConsumption>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiConfig:UrlBase"]);
 });
 
-builder.Services.AddTransient<INotificationsClientService, NotificationsServiceConsumption>();
+// Dependencia del esquema appointments usando el api y refactorizado
+builder.Services.AddTransient<IAppointmentsContracts, AppointmentsServiceConsumption>();
+builder.Services.AddTransient<IDoctorAvailabilityContracts, DoctorAvailabilityServiceConsumption>();
 
+// Dependencia del esquema system usando el api y refactorizado
+builder.Services.AddTransient<INotificationsContracts, NotificationsServiceConsumption>();
+builder.Services.AddTransient<IRolesContracts, RolesServiceConsumption>();
+builder.Services.AddTransient<IStatusContracts, StatusServiceConsumption>();
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
