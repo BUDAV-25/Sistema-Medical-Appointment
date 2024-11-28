@@ -79,7 +79,7 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             try
             {
                 updateDto.SentAt = DateTime.Now;
-                var notificationUpdate = await _baseConsumption.UpdateConsumption<NotificationUpdateDto>($"api/Notifications/UpdateNotifications{updateDto.NotificationID}", updateDto);
+                var notificationUpdate = await _baseConsumption.UpdateConsumption<NotificationUpdateDto>($"Notifications/UpdateNotifications{updateDto.NotificationID}", updateDto);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,3 @@
-
 using MedicalAppointment.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
 using MedicalAppointment.IOC.Dependencies.system;
