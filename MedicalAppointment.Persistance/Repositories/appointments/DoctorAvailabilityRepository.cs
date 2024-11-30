@@ -9,35 +9,24 @@ using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Models;
 using MedicalAppointment.Persistance.Models.appointments;
+using MedicalAppointment.Persistance.Validations.appointments;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
 
 namespace MedicalAppointment.Persistance.Repositories.appointments
 {
-    public sealed class DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger) : BaseRepository<DoctorAvailability>(medicalAppointmentContext), IDoctorAvailabilityRepository
+    public sealed class DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger, ValidateDoctorAvailability validateDoctorAvailability) : BaseRepository<DoctorAvailability>(medicalAppointmentContext), IDoctorAvailabilityRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<DoctorAvailabilityRepository> logger = logger;
+        private readonly ValidateDoctorAvailability _doctorAvailability = validateDoctorAvailability;
 
         public async override Task<OperationResult> Save(DoctorAvailability entity)
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida.";
-                return result;
+            _doctorAvailability.ValidationSaveDoctorAvailability(entity, result);
 
-            }
-            if (entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El doctor es requerido.";
-                return result;
-            }
             if (await base.Exists(doctorAvailability => doctorAvailability.AvailabilityID == entity.AvailabilityID
             && doctorAvailability.DoctorID == entity.DoctorID))
             {
@@ -64,42 +53,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida.";
-                return result;
-            }
-            if (entity.AvailabilityID <= 0)
-            {
-                result.Success = false;
-                result.Message = "La disponivilidad es requerida.";
-                return result;
-            }
-            if (entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el ID del doctor para realizar esta acción.";
-                return result;
-            }
-            if (entity.AvailableDate == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha es requerida.";
-                return result;
-            }
-            if (entity.StartTime == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha inicial es requerida.";
-                return result;
-            }
-            if (entity.EndTime == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha final es requerida.";
-                return result;
-            }
+            _doctorAvailability.ValidationUpdateDoctorAvailability(entity, result);
 
             try
             {
@@ -127,18 +81,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida.";
-                return result;
-            }
-            if (entity.AvailabilityID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el ID de la disponibilidad para realizar esta acción.";
-                return result;
-            }
+            _doctorAvailability.ValidationRemoveDoctorAvailability(entity, result);
 
             try
             {

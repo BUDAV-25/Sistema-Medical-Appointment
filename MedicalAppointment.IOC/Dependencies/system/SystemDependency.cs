@@ -2,6 +2,7 @@
 using MedicalAppointment.Application.Services.System;
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Repositories.system;
+using MedicalAppointment.Persistance.Validations.system;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalAppointment.IOC.Dependencies.system
@@ -21,6 +22,13 @@ namespace MedicalAppointment.IOC.Dependencies.system
             service.AddTransient<IRolesService, RolesService>();
 
             service.AddTransient<INotificationService, NotificationService>();
+
+            service.AddScoped<ValidateNotifications>();
+
+            service.AddScoped<ValidateRoles>();
+
+            service.AddScoped<ValidateStatus>();
+
 
         }
     }

@@ -6,49 +6,28 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Models.system;
+using MedicalAppointment.Persistance.Validations.system;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.system
 {
-    public sealed class NotificationsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NotificationsRepository> logger) : BaseRepository<Notifications>(medicalAppointmentContext), INotificationsRepository
+    public sealed class NotificationsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NotificationsRepository> logger, ValidateNotifications validateNotifications) : BaseRepository<Notifications>(medicalAppointmentContext), INotificationsRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<NotificationsRepository> logger = logger;
+        private readonly ValidateNotifications _validateNotifications = validateNotifications;
 
         public async override Task<OperationResult> Save(Notifications entity)
         {
 
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (entity.UserID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El UserID es requerido";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Message))
-            {
-                result.Success = false;
-                result.Message = "Se requiere un mensaje";
-                return result;
-            }
-            if (entity.SentAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha";
-                return result;
-            }
+            _validateNotifications.ValidationSaveNotifications (entity, result);
+
             if (await base.Exists(notifications => notifications.NotificationID == entity.NotificationID
             && notifications.UserID == entity.UserID))
             {
-
                 result.Success = false;
                 result.Message = "Esta notificacion ya existe";
                 return result;
@@ -73,30 +52,8 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
-            if (entity.NotificationID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El NotificationID es requerido";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Message))
-            {
-                result.Success = false;
-                result.Message = "Se requiere un mensaje";
-                return result;
-            }
-            if (entity.SentAt == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha es requerida";
-                return result;
-            }
+            _validateNotifications.ValidationUpdateNotifications (entity, result);
+
             try
             {
                 Notifications? notificationsToUpdate = await medical_AppointmentContext.Notifications.FindAsync(entity.NotificationID);
@@ -116,6 +73,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
             }
             return result;
         }
+
         /*
         public async override Task<OperationResult> Remove(Notifications entity)
         {

@@ -6,32 +6,23 @@ using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Models.system;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MedicalAppointment.Persistance.Validations.system;
 
 namespace MedicalAppointment.Persistance.Repositories.system
 {
-    public sealed class RolesRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<RolesRepository> logger) : BaseRepository<Roles>(medicalAppointmentContext), IRolesRepository
+    public sealed class RolesRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<RolesRepository> logger, ValidateRoles validationRoles) : BaseRepository<Roles>(medicalAppointmentContext), IRolesRepository
     {
 
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<RolesRepository> logger = logger;
+        private readonly ValidateRoles _validateRoles = validationRoles;
 
         public async override Task<OperationResult> Save(Roles entity)
         {
 
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.RoleName) || entity.RoleName.Length > 50)
-            {
-                result.Success = false;
-                result.Message = "Debe de tener un nombre con un maximo de 50 caracteres";
-                return result;
-            }
+            _validateRoles.ValidationSaveRoles (entity, result);
 
             try
             {
@@ -54,31 +45,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.RoleName) || entity.RoleName.Length > 50)
-            {
-                result.Success = false;
-                result.Message = "Debe de tener un nombre con un maximo de 50 caracteres";
-                return result;
-            }
-            if (entity.UpdatedAt == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha de modificacion";
-                return result;
-            }
-            if (entity.IsActive == null)
-            {
-
-                result.Success = false;
-                result.Message = "Se requiere la activacion";
-                return result;
-            }
+            _validateRoles.ValidationUpdateRoles (entity, result);
 
             try
             {
@@ -106,18 +73,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
 
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (entity.RoleID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el RoleID";
-                return result;
-            }
+            _validateRoles.ValidationRemoveRoles (entity, result);
 
             try
             {

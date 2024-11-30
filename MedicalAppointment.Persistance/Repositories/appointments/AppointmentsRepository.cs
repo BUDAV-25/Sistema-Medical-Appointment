@@ -1,58 +1,29 @@
 ﻿using MedicalAppointment.Domain.Entities.appointments;
-using MedicalAppointment.Domain.Entities.users;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Models.appointments;
+using MedicalAppointment.Persistance.Validations.appointments;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
+
 
 namespace MedicalAppointment.Persistance.Repositories.appointments
 {
     public sealed class AppointmentsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<AppointmentsRepository> logger) : BaseRepository<Appointment>(medicalAppointmentContext), IAppointmentsRepository
+        ILogger<AppointmentsRepository> logger, ValidateAppointments validateAppointments) : BaseRepository<Appointment>(medicalAppointmentContext), IAppointmentsRepository
     {
 
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<AppointmentsRepository> logger = logger;
+        private readonly ValidateAppointments _validateAppointments = validateAppointments;
+
         public async override Task<OperationResult> Save(Appointment entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
 
-                return result;
-            }
-            if (entity.PatientID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El ID del paciente es requerido.";
-                return result;
-            }
-            if (entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El ID del doctor es requerido";
-                return result;
-            }
-            if (entity.AppointmentDate == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha es requerida";
-                return result;
-            }
-            if (entity.StatusID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El Estatus del ID es requerido";
-                return result;
-            }
+            _validateAppointments.ValidationSaveAppointments(entity, result);
 
             try
             {
@@ -72,44 +43,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-
-                return result;
-            }
-            if (entity.AppointmentID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El AppointmentID es requerido";
-                return result;
-            }
-            if (entity.PatientID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El ID del paciente es requerido.";
-                return result;
-            }
-            if (entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El ID del doctor es requerido";
-                return result;
-            }
-            if (entity.AppointmentDate == null)
-            {
-                result.Success = false;
-                result.Message = "La fecha es requerida";
-                return result;
-            }
-            if (entity.StatusID <= 0)
-            {
-                result.Success = false;
-                result.Message = "El Estatus del ID es requerido";
-                return result;
-            }
+            _validateAppointments.ValidationUpdateAppointments(entity, result);
 
             try
             {
@@ -140,18 +74,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointments
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (entity.AppointmentID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el AppointmentID es requerido para realizar esta acción";
-                return result;
-            }
+            _validateAppointments.ValidationRemoveAppointment(entity, result);
 
             try
             {

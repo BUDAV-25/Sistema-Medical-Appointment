@@ -1,38 +1,27 @@
-﻿
-
-using MedicalAppointment.Domain.Entities.system;
+﻿using MedicalAppointment.Domain.Entities.system;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.system;
 using MedicalAppointment.Persistance.Models.system;
+using MedicalAppointment.Persistance.Validations.system;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.system
 {
-    public sealed class StatusRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<StatusRepository> logger) : BaseRepository<Status>(medicalAppointmentContext), IStatusRepository
+    public sealed class StatusRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<StatusRepository> logger, ValidateStatus validateStatus) : BaseRepository<Status>(medicalAppointmentContext), IStatusRepository
     {
 
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<StatusRepository> logger = logger;
+        private readonly ValidateStatus _validateStatus = validateStatus;
 
         public async override Task<OperationResult> Save(Status entity)
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.StatusName))
-            {
-                result.Success = false;
-                result.Message = "El Status requiere no puedes estar vacio ni null";
-                return result;
-            }
+            _validateStatus.ValidationSaveStatus(entity, result);
 
             try
             {
@@ -54,24 +43,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
-            if (entity.StatusID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el StatusID";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.StatusName) || entity.StatusName.Length == 50)
-            {
-                result.Success = false;
-                result.Message = "El Status requiere un nombre no mayor a 50 caracteres";
-                return result;
-            }
+            _validateStatus.ValidationUpdateStatus(entity, result);
 
             try
             {
@@ -96,18 +68,7 @@ namespace MedicalAppointment.Persistance.Repositories.system
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
-            if (entity.StatusID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el StatusID";
-                return result;
-            }
+            _validateStatus.ValidationRemoveStatus(entity, result);
 
             try
             {

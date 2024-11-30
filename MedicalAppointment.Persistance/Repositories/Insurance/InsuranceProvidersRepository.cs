@@ -437,10 +437,7 @@ namespace MedicalAppointment.Persistance.Repositories.Insurance
             return result;
         }
 
-        public Task Save(InsuranceProvidersRepository insures)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
 

@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("insuranceDB")));
+builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalDB")));
 
 // registro de cada una de las dependencias Repositorios
 builder.Services.AddScoped<IInsuranceProvidersRepository, InsuranceProvidersRepository>();

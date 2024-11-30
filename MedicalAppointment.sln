@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Web", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Consumption", "MedicalAppointment.Consumption\MedicalAppointment.Consumption.csproj", "{587F09F5-489A-426C-A0A0-028C3D7CAA91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalApp.Insurance.Api", "MedicalApp.Insurance.Api\MedicalApp.Insurance.Api.csproj", "{A61DD664-CBEC-4A20-BF56-27A11C03EAA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Insurance.Api", "MedicalApp.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{A61DD664-CBEC-4A20-BF56-27A11C03EAA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
