@@ -4,78 +4,24 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.users;
 using MedicalAppointment.Persistance.Models.users;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class PatientsRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<PatientsRepository> logger) : BaseRepository<Patient>(medicalAppointmentContext), IPatientRepository
+        ILogger<PatientsRepository> logger, ValidateUsers validateUsers) : BaseRepository<Patient>(medicalAppointmentContext), IPatientRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<PatientsRepository> logger = logger;
+        private readonly ValidateUsers validatePatient = validateUsers;
         public async override Task<OperationResult> Save(Patient entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
-            if(entity.DateOfBirth == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha de nacimiento del paciente";
-                return result;
-            }
-            if(entity.Gender == null)
-            {
-                result.Success = false;
-                result.Message = "Es necesario saber el género del paciente";
-                return result;
-            }
-            if(string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
-            {
-                result.Success = false;
-                result.Message = "Para comunicarnos es necesario el número telefónico del paciente y que no pase de 15 caracteres";
-                return result;
-            }
-            if(string.IsNullOrEmpty(entity.Address) || entity.Address.Length > 255)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la direcciónn del paciente y que no sobre pase de 255 caracteres";
-                return result;
-            }
-            if(string.IsNullOrEmpty(entity.EmergencyContactName) || entity.EmergencyContactName.Length > 100)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el nombre de emergencia para el paciente y que no sobre pase de 100 caracteres";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.EmergencyContactPhone) || entity.EmergencyContactPhone.Length > 15)
-            {
-                result.Success = false;
-                result.Message = "Se requiere el número de emergencia para el paciente y que sobre pase de 15 caracteres";
-                return result;
-            }
-            if (entity.BloodType == null)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el tipo de sangre del paciente";
-                return result;
-            }
-            if(entity.Allergies == null)
-            {
-                result.Success = false;
-                result.Message = "Por la salud del paciente es necesario saber cuales son sus alergias";
-                return result;
-            }
-            if(entity.InsuranceProviderID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el seguro del paciente";
-            }
+            
+            validatePatient.ValidationsPatient(entity, result);
+
             if(await base.Exists(patient => patient.PatientID == entity.PatientID))
                 {
                     result.Success = false;
@@ -98,72 +44,15 @@ namespace MedicalAppointment.Persistance.Repositories.users
         public async override Task<OperationResult> Update(Patient entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
             if (entity.PatientID <= 0)
             {
                 result.Success = false;
                 result.Message = "El Id del paciente es requerido para esta función";
                 return result;
             }
-            if (entity.DateOfBirth == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha de nacimiento del paciente";
-                return result;
-            }
-            if (entity.Gender == null)
-            {
-                result.Success = false;
-                result.Message = "Es necesario saber el género del paciente";
-                return result;
-            }
-                if (string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
-                {
-                    result.Success = false;
-                    result.Message = "Para comunicarnos es necesario el número telefónico del paciente y que no pase de 15 caracteres";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.Address) || entity.Address.Length > 255)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere la direcciónn del paciente y que no sobre pase de 255 caracteres";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.EmergencyContactName) || entity.EmergencyContactName.Length > 100)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere el nombre de emergencia para el paciente y que no sobre pase de 100 caracteres";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.EmergencyContactPhone) || entity.EmergencyContactPhone.Length > 15)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere el número de emergencia para el paciente y que sobre pase de 15 caracteres";
-                    return result;
-                }
-            if (entity.BloodType == null)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el tipo de sangre del paciente";
-                return result;
-            }
-            if (entity.Allergies == null)
-            {
-                result.Success = false;
-                result.Message = "Por la salud del paciente es necesario saber cuales son sus alergias";
-                return result;
-            }
-            if (entity.InsuranceProviderID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el seguro del paciente";
-                return result;
-            }
+
+            validatePatient.ValidationsPatient(entity, result);
+            
             try
             {
                 Patient? patient = await medical_AppointmentContext.Patient.FindAsync(entity.PatientID);

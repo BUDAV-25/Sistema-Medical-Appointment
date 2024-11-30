@@ -4,55 +4,31 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.users;
 using MedicalAppointment.Persistance.Models.users;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class UsersRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<UsersRepository> logger) : BaseRepository<User>(medicalAppointmentContext), IUsersRepository
+        ILogger<UsersRepository> logger, ValidateUsers validateUsers) : BaseRepository<User>(medicalAppointmentContext), IUsersRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<UsersRepository> logger = logger;
+        private readonly ValidateUsers validate_User = validateUsers;
+
         public async override Task<OperationResult> Save(User entity)
         {
             OperationResult result = new OperationResult();
-            if(entity == null)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere la entidad";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.FirstName))
-                {
-                    result.Success = false;
-                    result.Message = "Es requerido el nombre del usuario";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.LastName))
-                {
-                    result.Success = false;
-                    result.Message = "Requerimos el apellido";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.Email))
-                {
-                    result.Success = false;
-                    result.Message = "Necesitamos el e-mail del usuario";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.Password))
-                {
-                    result.Success = false;
-                    result.Message = "Por seguridad, se requiere una contraseña";
-                    return result;
-                }
-                if(await base.Exists(user => user.UserID == entity.UserID))
-                {
-                    result.Success = false;
-                    result.Message = "El usuario ya est[a registrado";
-                    return result;
-                }
+
+            validate_User.ValidationsUser(entity, result);
+
+            if(await base.Exists(user => user.UserID == entity.UserID))
+            {
+                result.Success = false;
+                result.Message = "El usuario ya est[a registrado";
+                return result;
+            }
             try
             {
                 result = await base.Save(entity);
@@ -69,36 +45,9 @@ namespace MedicalAppointment.Persistance.Repositories.users
         public async override Task<OperationResult> Update(User entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-                {
-                    result.Success = false;
-                    result.Message = "Se requiere la entidad";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.FirstName))
-                {
-                    result.Success = false;
-                    result.Message = "Es requerido el nombre del usuario";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.LastName))
-                {
-                    result.Success = false;
-                    result.Message = "Requerimos el apellido";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.Email))
-                {
-                    result.Success = false;
-                    result.Message = "Necesitamos el e-mail del usuario";
-                    return result;
-                }
-                if (string.IsNullOrEmpty(entity.Password))
-                {
-                    result.Success = false;
-                    result.Message = "Por seguridad, se requiere una contraseña";
-                    return result;
-                }
+
+            validate_User.ValidationsUser(entity, result);
+
             try
             {
 
@@ -166,7 +115,6 @@ namespace MedicalAppointment.Persistance.Repositories.users
                                          FirstName = user.FirstName,
                                          LastName = user.LastName,
                                          Email = user.Email,
-                                        //Password = user.Password,
                                          RoleID = role.RoleID,
                                          IsActive = user.IsActive
                                      }).AsNoTracking()

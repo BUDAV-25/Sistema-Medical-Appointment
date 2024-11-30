@@ -4,64 +4,24 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.users;
 using MedicalAppointment.Persistance.Models.users;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.users
 {
     public sealed class DoctorRepository(MedicalAppointmentContext medicalAppointmentContext,
-        ILogger<DoctorRepository> logger) : BaseRepository<Doctor>(medicalAppointmentContext), IDoctorRepository
+        ILogger<DoctorRepository> logger, ValidateUsers validateUsers) : BaseRepository<Doctor>(medicalAppointmentContext), IDoctorRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<DoctorRepository> logger = logger;
+        private readonly ValidateUsers validateDoctor = validateUsers;
         public async override Task<OperationResult> Save(Doctor entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
+            
+            validateDoctor.ValidationsDoctor(entity, result);
 
-                return result;
-            }
-            if (entity.SpecialtyID == 0)
-            {
-                result.Success = false;
-                result.Message = "La especialidad del es requerida";
-
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.LicenseNumber) || entity.LicenseNumber.Length > 50)
-            {
-                result.Success = false;
-                result.Message = "La licencia del doctor es requerida y no puede ser mayor 50 caracteres.";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
-            {
-                result.Success = false;
-                result.Message = "Es necesario el número telefónico y no puede ser mayor a 15 caracteres.";
-                return result;
-            }
-            if (entity.YearsOfExperience <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es necesario saber los años de experiencia";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Education))
-            {
-                result.Success = false;
-                result.Message = "Es requerida la educación del doctor";
-                return result;
-            }
-            if (entity.LicenseExpirationDate == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha en que expira la licencia";
-
-                return result;
-            }
             if (await base.Exists(doctor => doctor.DoctorID == entity.DoctorID))
             {
                 result.Success = false;
@@ -89,56 +49,15 @@ namespace MedicalAppointment.Persistance.Repositories.users
         {
             OperationResult result = new OperationResult();
 
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la entidad";
-                return result;
-            }
             if (entity.DoctorID <= 0)
             {
                 result.Success = false;
                 result.Message = "Es requerido el ID del doctor para realizar esta acción";
                 return result;
             }
-            if (entity.SpecialtyID == 0)
-            {
-                result.Success = false;
-                result.Message = "La especialidad del es requerida";
 
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.LicenseNumber) || entity.LicenseNumber.Length > 50)
-                {
-                    result.Success = false;
-                    result.Message = "La licencia del doctor es requerida y no puede ser mayor 50 caracteres.";
-                    return result;
-                }
-            if (string.IsNullOrEmpty(entity.PhoneNumber) || entity.PhoneNumber.Length > 15)
-                {
-                    result.Success = false;
-                    result.Message = "Es necesario el número telefónico y no puede ser mayor a 15 caracteres.";
-                    return result;
-                }
-            if (entity.YearsOfExperience <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es necesario saber los años de experiencia";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Education))
-                {
-                    result.Success = false;
-                    result.Message = "Es requerida la educación del doctor";
-                    return result;
-            }
-                if (entity.LicenseExpirationDate == null)
-            {
-                result.Success = false;
-                result.Message = "Se requiere la fecha en que expira la licencia";
+            validateDoctor.ValidationsDoctor(entity, result);
 
-                return result;
-            }
             try
             {
                 Doctor? doctorUpdate = await medical_AppointmentContext.Doctor.FindAsync(entity.DoctorID);
@@ -152,7 +71,6 @@ namespace MedicalAppointment.Persistance.Repositories.users
                 doctorUpdate.ClinicAddress = entity.ClinicAddress;
                 doctorUpdate.AvailabilityModeId = entity.AvailabilityModeId;
                 doctorUpdate.LicenseExpirationDate = entity.LicenseExpirationDate;
-                //doctorUpdate.UserUpdate = entity.UserUpdate;
 
                 result = await base.Update(doctorUpdate);
             }

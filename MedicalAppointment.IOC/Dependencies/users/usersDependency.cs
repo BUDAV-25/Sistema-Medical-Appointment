@@ -3,6 +3,7 @@ using MedicalAppointment.Application.Contracts.users;
 using MedicalAppointment.Application.Services.users;
 using MedicalAppointment.Persistance.Interfaces.users;
 using MedicalAppointment.Persistance.Repositories.users;
+using MedicalAppointment.Persistance.Repositories.Validations;
 
 namespace MedicalAppointment.IOC.Dependencies.users
 {
@@ -17,6 +18,8 @@ namespace MedicalAppointment.IOC.Dependencies.users
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<IDoctorService, DoctorService>();
             service.AddTransient<IPatientService, PatientService>();
+
+            service.AddScoped<ValidateUsers>();
         }
     }
 }
