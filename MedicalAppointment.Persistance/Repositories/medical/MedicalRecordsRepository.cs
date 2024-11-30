@@ -4,55 +4,24 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.medical;
 using MedicalAppointment.Persistance.Models.medical;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.medical
 {
     public sealed class MedicalRecordsRepository(MedicalAppointmentContext medicalAppointmentContext, 
-        ILogger<MedicalRecordsRepository> logger): BaseRepository<MedicalRecords>(medicalAppointmentContext), IMedicalRecordsRepository
+        ILogger<MedicalRecordsRepository> logger, ValidateMedical validateMedical): BaseRepository<MedicalRecords>(medicalAppointmentContext), IMedicalRecordsRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<MedicalRecordsRepository> logger = logger;
+        private readonly ValidateMedical validateMedicalRecords = validateMedical;
         public async override Task<OperationResult> Save(MedicalRecords entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if(entity.PatientID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el paciente";
-                return result;
-            }
-            if(entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el doctor";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Diagnosis))
-            {
-                result.Success = false;
-                result.Message = "Es requerido el diagnostico del paciente";
-                return result;
-            }
-            if(string.IsNullOrEmpty(entity.Treatment))
-            {
-                result.Success = false;
-                result.Message = "Es requerido un tratamiento para el paciente";
-                return result;
-            }
-            if (entity.DateOfVisit == null)
-            {
-                result.Success = false;
-                result.Message = "Es necesario una fecha de visita";
-                return result;
-            }
+
+            validateMedicalRecords.ValidationsMedicalRecords(entity, result);
+
             if(await base.Exists( recort => recort.RecordID == entity.RecordID))
             {
                 result.Success = false;
@@ -74,48 +43,15 @@ namespace MedicalAppointment.Persistance.Repositories.medical
         public async override Task<OperationResult> Update(MedicalRecords entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "Es requerida la entidad";
-                return result;
-            }
             if (entity.RecordID <= 0)
             {
                 result.Success = false;
                 result.Message = "El id del record en necesario para esta accion";
                 return result;
             }
-            if (entity.PatientID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el paciente";
-                return result;
-            }
-            if (entity.DoctorID <= 0)
-            {
-                result.Success = false;
-                result.Message = "Es requerido el doctor";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Diagnosis))
-            {
-                result.Success = false;
-                result.Message = "Es requerido el diagnostico del paciente";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.Treatment))
-            {
-                result.Success = false;
-                result.Message = "Es requerido un tratamiento para el paciente";
-                return result;
-            }
-            if (entity.DateOfVisit == null)
-            {
-                result.Success = false;
-                result.Message = "Es necesario una fecha de visita";
-                return result;
-            }
+
+            validateMedicalRecords.ValidationsMedicalRecords(entity, result);
+
             try
             {
                 MedicalRecords? recordsToUpdate = await medical_AppointmentContext.MedicalRecords.FindAsync(entity.RecordID);

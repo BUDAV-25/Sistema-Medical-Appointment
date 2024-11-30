@@ -4,31 +4,24 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.medical;
 using MedicalAppointment.Persistance.Models.medical;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.medical
 {
     public sealed class SpecialtiesRepository(MedicalAppointmentContext medicalAppointmentContext, 
-        ILogger<SpecialtiesRepository> logger) : BaseRepository<Specialties>(medicalAppointmentContext), ISpecialtiesRepository
+        ILogger<SpecialtiesRepository> logger, ValidateMedical validateMedical) : BaseRepository<Specialties>(medicalAppointmentContext), ISpecialtiesRepository
     {
         private readonly MedicalAppointmentContext medicalAppointmentContext = medicalAppointmentContext;
         private readonly ILogger<SpecialtiesRepository> logger = logger;
+        private readonly ValidateMedical validateSpecialties = validateMedical;
         public async override Task<OperationResult> Save(Specialties entity)
         {
             OperationResult result = new OperationResult();
-            if(entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if(string.IsNullOrEmpty(entity.SpecialtyName))
-            {
-                result.Success = false;
-                result.Message = "el nombre de la especialidad es requerido";
-                return result;
-            }
+            
+            validateSpecialties.ValidationsSpecialties(entity, result);
+
             if(await base.Exists(specialty => specialty.SpecialtyID == entity.SpecialtyID) || await base.Exists(specialty => specialty.SpecialtyName == entity.SpecialtyName))
             {
                 result.Success = false;
@@ -49,24 +42,15 @@ namespace MedicalAppointment.Persistance.Repositories.medical
         public async override Task<OperationResult> Update(Specialties entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
             if (entity.SpecialtyID <= 0)
             {
                 result.Success = false;
                 result.Message = "El Id es necesario para esta accion";
                 return result;
             }
-            if(string.IsNullOrEmpty(entity.SpecialtyName))
-            {
-                result.Success = false;
-                result.Message = "El nombre de la especialidad es requerido";
-                return result;
-            }
+
+            validateSpecialties.ValidationsSpecialties(entity, result);
+
             try
             {
                 Specialties? specialtiesToUpdate = await medicalAppointmentContext.Specialties.FindAsync(entity.SpecialtyID);

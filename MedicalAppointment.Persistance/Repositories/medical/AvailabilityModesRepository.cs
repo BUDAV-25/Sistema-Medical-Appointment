@@ -4,31 +4,24 @@ using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.medical;
 using MedicalAppointment.Persistance.Models.medical;
+using MedicalAppointment.Persistance.Repositories.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositories.medical
 {
     public sealed class AvailabilityModesRepository(MedicalAppointmentContext medicalAppointmentContext, 
-        ILogger<AvailabilityModesRepository> logger) : BaseRepository<AvailabilityModes>(medicalAppointmentContext), IAvailabilityModesRepository
+        ILogger<AvailabilityModesRepository> logger, ValidateMedical validateMedical) : BaseRepository<AvailabilityModes>(medicalAppointmentContext), IAvailabilityModesRepository
     {
         private readonly MedicalAppointmentContext medical_AppointmentContext = medicalAppointmentContext;
         private readonly ILogger<AvailabilityModesRepository> logger = logger;
+        private readonly ValidateMedical validateAvailabilityModes = validateMedical;
         public async override Task<OperationResult> Save(AvailabilityModes entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.AvailabilityMode) || entity.AvailabilityMode.Length > 100)
-            {
-                result.Success = false;
-                result.Message = "El modo es necesario y debe ser menor a 100 caracteres";
-                return result;
-            }
+            
+            validateAvailabilityModes.ValidationsAvailabilityModes(entity, result);
+
             if (await base.Exists(availability => availability.SAvailabilityModeID == entity.SAvailabilityModeID))
             {
                 result.Success = false;
@@ -50,18 +43,9 @@ namespace MedicalAppointment.Persistance.Repositories.medical
         public async override Task<OperationResult> Update(AvailabilityModes entity)
         {
             OperationResult result = new OperationResult();
-            if (entity == null)
-            {
-                result.Success = false;
-                result.Message = "La entidad es requerida";
-                return result;
-            }
-            if (string.IsNullOrEmpty(entity.AvailabilityMode) || entity.AvailabilityMode.Length > 100)
-            {
-                result.Success = false;
-                result.Message = "El modo es necesario y debe ser menor a 100 caracteres";
-                return result;
-            }
+
+            validateAvailabilityModes.ValidationsAvailabilityModes(entity, result);
+
             try
             {
                 AvailabilityModes? availabilityToUpdate = await medical_AppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);
