@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<MedicalAppointment.Persistance.Models.users.UsersModel>
-
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/ViewStyle.css" asp-append-version="true" />
+</head>
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,7 +11,7 @@
 <h1>User Api List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="Create" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -55,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.UserID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.UserID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.UserID })
             </td>
         </tr>

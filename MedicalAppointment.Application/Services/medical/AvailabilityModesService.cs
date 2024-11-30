@@ -1,4 +1,4 @@
-﻿using MedicalAppointment.Application.Contracts.medical;
+using MedicalAppointment.Application.Contracts.medical;
 using MedicalAppointment.Application.Dtos.medical.AvailabilityModes;
 using MedicalAppointment.Application.Response.medical.AvailabilityModes;
 using MedicalAppointment.Domain.Entities.medical;
@@ -47,7 +47,7 @@ namespace MedicalAppointment.Application.Services.medical
         }
         public async Task<AvailabilityModesResponse> GetById(int id)
         {
-            AvailabilityModesResponse availabilityModesResponse= new AvailabilityModesResponse();
+            AvailabilityModesResponse availabilityModesResponse = new AvailabilityModesResponse();
             try
             {
                 var result = await availability_ModesRepository.GetEntityBy(id);
@@ -96,7 +96,7 @@ namespace MedicalAppointment.Application.Services.medical
             try
             {
                 var resultEntity = await availability_ModesRepository.GetEntityBy(dto.SAvailabilityModeID);
-                
+
                 if (!resultEntity.Success)
                 {
                     availabilityModesResponse.IsSuccess = resultEntity.Success;
@@ -106,6 +106,7 @@ namespace MedicalAppointment.Application.Services.medical
 
                 AvailabilityModes availability = new AvailabilityModes();
 
+                availability.SAvailabilityModeID = dto.SAvailabilityModeID;
                 availability.AvailabilityMode = dto.AvailabilityMode;
                 availability.UpdatedAt = dto.UpdatedAt;
                 availability.IsActive = dto.IsActive;

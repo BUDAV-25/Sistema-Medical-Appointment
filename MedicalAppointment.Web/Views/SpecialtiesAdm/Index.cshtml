@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MedicalAppointment.Persistance.Models.medical.SpecialtiesModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Specialties List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecialtyID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecialtyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpecialtyID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpecialtyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.SpecialtyID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.SpecialtyID })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

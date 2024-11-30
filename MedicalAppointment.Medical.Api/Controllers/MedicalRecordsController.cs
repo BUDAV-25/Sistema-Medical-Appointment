@@ -14,7 +14,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
             medical_RecordsService = medicalRecordsService;
         }
         // GET: api/<MedicalRecordsController>
-        [HttpGet("Get All Medical records")]
+        [HttpGet("GetAllMedicalRecords")]
         public async Task<IActionResult> Get()
         {
             var result = await medical_RecordsService.GetAll();
@@ -25,7 +25,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // GET api/<MedicalRecordsController>/5
-        [HttpGet("Get Medical records by{id}")]
+        [HttpGet("GetMedicalRecordsby{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await medical_RecordsService.GetById(id);
@@ -36,7 +36,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // POST api/<MedicalRecordsController>
-        [HttpPost("Save Medical record")]
+        [HttpPost("SaveMedicalRecord")]
         public async Task<IActionResult> Post([FromBody] MedicalRecordsSaveDto dto)
         {
             var result = await medical_RecordsService.SaveAsync(dto);
@@ -47,10 +47,9 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // PUT api/<MedicalRecordsController>/5
-        [HttpPut("Update  Record by{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] MedicalRecordsUpdateDto dto)
+        [HttpPut("UpdateRecordby")]
+        public async Task<IActionResult> Put([FromBody] MedicalRecordsUpdateDto dto)
         {
-            dto.RecordID = id;
             var result = await medical_RecordsService.UpdateAsync(dto);
 
             if (!result.IsSuccess)

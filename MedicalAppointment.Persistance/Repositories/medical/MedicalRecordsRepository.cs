@@ -119,13 +119,15 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             try
             {
                 MedicalRecords? recordsToUpdate = await medical_AppointmentContext.MedicalRecords.FindAsync(entity.RecordID);
+
                 recordsToUpdate.PatientID = entity.PatientID;
-                recordsToUpdate.DoctorID = entity.PatientID;
+                recordsToUpdate.DoctorID = entity.DoctorID;
                 recordsToUpdate.Diagnosis = entity.Diagnosis;
                 recordsToUpdate.Treatment = entity.Treatment;
                 recordsToUpdate.DateOfVisit = entity.DateOfVisit;
+                recordsToUpdate.UpdatedAt = entity.UpdatedAt;
 
-                result = await base.Update(entity);
+                result = await base.Update(recordsToUpdate);
             }
             catch (Exception)
             {

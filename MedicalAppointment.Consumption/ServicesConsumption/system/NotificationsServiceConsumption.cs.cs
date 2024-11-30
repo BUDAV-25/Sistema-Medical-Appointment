@@ -59,7 +59,7 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
             return notificationsGetById;
         }
         public async Task<NotificationSaveDto> SaveNotification(NotificationSaveDto notificationSaveDto)
-        {
+        {/*
             BaseResponseConsumption baseResponse = new BaseResponseConsumption();
             try
             {
@@ -72,7 +72,8 @@ namespace MedicalAppointment.Consumption.ServicesConsumption.system
                 baseResponse.mensaje = "Error obteniendo las notificaciones";
                 _logger.LogError($"{baseResponse.mensaje} {ex.ToString()}");
             }
-            return (baseResponse);
+            return (baseResponse);*/
+            throw new NotImplementedException();
         }
     }
 }

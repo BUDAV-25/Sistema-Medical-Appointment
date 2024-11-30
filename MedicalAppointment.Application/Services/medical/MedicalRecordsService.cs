@@ -107,6 +107,7 @@ namespace MedicalAppointment.Application.Services.medical
 
                 MedicalRecords recordToUpdate = new MedicalRecords();
 
+                recordToUpdate.RecordID = dto.RecordID;
                 recordToUpdate.PatientID = dto.PatientID;
                 recordToUpdate.DoctorID = dto.DoctorID;
                 recordToUpdate.Diagnosis = dto.Diagnosis;

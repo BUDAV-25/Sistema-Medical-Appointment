@@ -70,10 +70,12 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             try
             {
                 Specialties? specialtiesToUpdate = await medicalAppointmentContext.Specialties.FindAsync(entity.SpecialtyID);
+                
                 specialtiesToUpdate.SpecialtyName = entity.SpecialtyName;
-               // specialtiesToUpdate.UserUpdate = entity.UserUpdate;
+                specialtiesToUpdate.UpdatedAt = entity.UpdatedAt;
+                specialtiesToUpdate.IsActive = entity.IsActive;
 
-                result = await base.Update(entity);
+                result = await base.Update(specialtiesToUpdate);
             }
             catch (Exception ex)
             {
@@ -125,7 +127,8 @@ namespace MedicalAppointment.Persistance.Repositories.medical
                                      select new SpecialtiesModel()
                                      {
                                          SpecialtyID = specialties.SpecialtyID,
-                                         SpecialtyName = specialties.SpecialtyName
+                                         SpecialtyName = specialties.SpecialtyName,
+                                         IsActive = specialties.IsActive
                                      }).AsNoTracking()
                                     .ToListAsync();
             }
@@ -143,12 +146,12 @@ namespace MedicalAppointment.Persistance.Repositories.medical
             try
             {
                 result.Data = await (from specialties in medicalAppointmentContext.Specialties
-                                     where specialties.IsActive == true
-                                     && specialties.SpecialtyID == Id
+                                     where specialties.SpecialtyID == Id
                                      select new SpecialtiesModel()
                                      {
                                          SpecialtyID = specialties.SpecialtyID,
-                                         SpecialtyName = specialties.SpecialtyName
+                                         SpecialtyName = specialties.SpecialtyName,
+                                         IsActive = specialties.IsActive
                                      }).AsNoTracking()
                                     .FirstOrDefaultAsync();
             }

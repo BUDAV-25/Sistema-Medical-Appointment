@@ -14,7 +14,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
             availability_ModesService = availabilityModesService;
         }
         // GET: api/<AvailabilityModesController>
-        [HttpGet("Get All AvailabilityModes")]
+        [HttpGet("GetAllAvailabilityModes")]
         public async Task<IActionResult> Get()
         {
             var result = await availability_ModesService.GetAll();
@@ -25,7 +25,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // GET api/<AvailabilityModesController>/5
-        [HttpGet("Get Availability by{id}")]
+        [HttpGet("GetAvailabilityby{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await availability_ModesService.GetById(id);
@@ -36,7 +36,7 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // POST api/<AvailabilityModesController>
-        [HttpPost("Save Availability")]
+        [HttpPost("SaveAvailability")]
         public async Task<IActionResult> Post([FromBody] AvailabilityModesSaveDto dto)
         {
             var result = await availability_ModesService.SaveAsync(dto);
@@ -47,10 +47,9 @@ namespace MedicalAppointment.Medical.Api.Controllers
         }
 
         // PUT api/<AvailabilityModesController>/5
-        [HttpPut("Update Availability {id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] AvailabilityModesUpdateDto dto)
+        [HttpPut("UpdateAvailability")]
+        public async Task<IActionResult> Put([FromBody] AvailabilityModesUpdateDto dto)
         {
-            dto.SAvailabilityModeID = id;
             var result = await availability_ModesService.UpdateAsync(dto);
 
             if (!result.IsSuccess)

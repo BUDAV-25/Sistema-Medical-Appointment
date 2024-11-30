@@ -1,0 +1,54 @@
+﻿@model MedicalAppointment.Persistance.Models.medical.MedicalRecordsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Medical Records Details</h1>
+
+<div>
+    <h4>MedicalRecordsModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RecordID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RecordID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PatientID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PatientID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoctorID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoctorID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Diagnosis)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Diagnosis)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Treatment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Treatment)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfVisit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateOfVisit)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RecordID }) |
+    <a asp-action="Index">Back to List</a>
+</div>

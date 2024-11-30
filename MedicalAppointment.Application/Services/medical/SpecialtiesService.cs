@@ -104,6 +104,7 @@ namespace MedicalAppointment.Application.Services.medical
 
                 Specialties specialtiesToUpdate = new Specialties();
 
+                specialtiesToUpdate.SpecialtyID = dto.SpecialtyID;
                 specialtiesToUpdate.SpecialtyName = dto.SpecialtyName;
                 specialtiesToUpdate.UpdatedAt = dto.UpdatedAt;
                 specialtiesToUpdate.IsActive = dto.IsActive;
